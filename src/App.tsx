@@ -8,7 +8,11 @@ function App() {
   const [res, setRes] = useState(INITIAL_RESOURCES);
   return (
     <>
-      <ResourcesPanel />
+      <div className="app-header">
+		<ResourcesPanel />
+		<h1>Crucible Core: Humble Beginnings</h1>
+		<p>💲0</p>
+	  </div>
     </>
   );
 }

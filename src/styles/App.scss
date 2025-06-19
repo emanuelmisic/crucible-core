@@ -1,0 +1,13 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center	;
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  > p {
+    margin-right: 1rem;
+  }
+}

@@ -1,5 +1,16 @@
 .resources-panel {
-	width: 10rem;
-	height: 5rem;
-	background-color: blueviolet;
+	display: flex;
+	gap: 1rem;
+	padding: 1rem;
+	width: fit-content;
+	height: 3rem;
+	background-color: #571fc1;
+	color: #ffffff;
+	border-bottom-right-radius: 18px;
+
+	p {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
 }
