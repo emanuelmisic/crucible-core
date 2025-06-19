@@ -22,8 +22,18 @@ const INITIAL_ORES: GameResourceOre[] = [
   {
     amount: 0,
     miningHardness: 20,
-    name: "Gold ore",
+    name: "Silver ore",
     sellingPrice: 5,
+    type: "ore",
+    unlocked: false,
+    unlockedFor: 1000,
+    value: "silver",
+  },
+  {
+    amount: 0,
+    miningHardness: 50,
+    name: "Gold ore",
+    sellingPrice: 10,
     type: "ore",
     unlocked: false,
     unlockedFor: 2000,
@@ -44,6 +54,19 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     unlocked: false,
     unlockedFor: 10,
     value: "iron",
+  },
+  {
+    amount: 0,
+    name: "Bronze ingot",
+    smeltingDifficulty: 10,
+    smeltingRecipe: {
+      bronze: 10,
+    },
+    sellingPrice: 50,
+    type: "alloy",
+    unlocked: false,
+    unlockedFor: 200,
+    value: "bronze",
   },
 ];
 

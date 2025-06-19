@@ -9,10 +9,13 @@ function App() {
   return (
     <>
       <div className="app-header">
-		<ResourcesPanel />
-		<h1>Crucible Core: Humble Beginnings</h1>
-		<p>💲0</p>
-	  </div>
+        <ResourcesPanel
+          ores={res.filter((r) => r.type === "ore") as GameResourceOre[]}
+          alloys={res.filter((r) => r.type === "alloy") as GameResourceAlloy[]}
+        />
+        <h1>Crucible Core: Humble Beginnings</h1>
+        <p>💲0</p>
+      </div>
     </>
   );
 }
