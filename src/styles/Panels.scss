@@ -1,5 +1,6 @@
 .resources-panel {
   min-width: 15rem;
+
   .resources-panel__item {
     display: flex;
     gap: 1rem;
@@ -8,13 +9,16 @@
     height: 3rem;
     background: linear-gradient(180deg, #00aaff, #2100c8);
     color: #ffffff;
-    border-bottom-right-radius: 18px;
 
     p {
       display: flex;
       align-items: center;
       gap: 6px;
     }
+  }
+
+  .resources-panel__item:last-child {
+    border-bottom-right-radius: 18px;
   }
 }
 
