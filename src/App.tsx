@@ -4,6 +4,7 @@ import "@/styles.scss";
 
 import ResourcesPanel from "@/components/panels/ResourcesPanel";
 import MiningPanel from "@/components/panels/MiningPanel";
+import SmeltingPanel from "@/components/panels/SmeltingPanel";
 
 function App() {
   const [res, setRes] = useState(INITIAL_RESOURCES);
@@ -19,6 +20,7 @@ function App() {
       </div>
 	  <div className="app-body">
 		<MiningPanel ores={res.filter((r) => r.type === "ore") as GameResourceOre[]} />
+		<SmeltingPanel alloys={res.filter((r) => r.type === "alloy") as GameResourceAlloy[]} />
 	  </div>
     </>
   );
