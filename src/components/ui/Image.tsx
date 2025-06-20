@@ -9,9 +9,10 @@ import bronzeAlloy from "@/assets/images/alloys/bronze.png";
 interface ImageProps {
   resource: GameResource;
   type?: string;
+  className?: string;
 }
 
-function Image({ resource, type }: ImageProps) {
+function Image({ resource, type, className }: ImageProps) {
   const size = type === "icon" ? 25 : 100;
 
   function getResourceImage(res: GameResource) {
@@ -42,6 +43,7 @@ function Image({ resource, type }: ImageProps) {
 
   return (
     <img
+      className={className}
       src={getResourceImage(resource)}
       alt="image"
       width={size}

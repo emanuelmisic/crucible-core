@@ -1,7 +1,7 @@
 .app-header {
   display: flex;
   justify-content: space-between;
-  align-items: center	;
+  align-items: center;
 
   h1 {
     font-size: 1.8rem;
@@ -10,4 +10,12 @@
   > p {
     margin-right: 1rem;
   }
+}
+
+.mining-tile {
+  cursor: pointer;
+}
+
+.mining-tile:active {
+  transform: scale(1.05);
 }
