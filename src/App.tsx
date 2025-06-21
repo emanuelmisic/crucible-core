@@ -8,6 +8,7 @@ import SmeltingPanel from "@/components/panels/SmeltingPanel";
 
 function App() {
   const [res, setRes] = useState(INITIAL_RESOURCES);
+  const [miningPower] = useState(1);
   return (
     <>
       <div className="app-header">
@@ -23,6 +24,7 @@ function App() {
       <div className="app-body">
         <MiningPanel
           ores={res.filter((r) => r.type === "ore") as GameResourceOre[]}
+		  miningPower={miningPower}
         />
         <SmeltingPanel
           ores={res.filter((r) => r.type === "ore") as GameResourceOre[]}

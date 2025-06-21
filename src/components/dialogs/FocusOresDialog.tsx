@@ -20,7 +20,7 @@ function FocusOresDialog({
     >
       <div className="dialog__content">
         {ores.map((ore) => (
-          <Image resource={ore} />
+          <Image key={ore.name} resource={ore} />
         ))}
       </div>
     </Dialog>

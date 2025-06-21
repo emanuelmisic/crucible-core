@@ -42,7 +42,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   {
     amount: 0,
     miningHardness: 100,
-    name: "Gold ore",
+    name: "Platinum ore",
     sellingPrice: 35,
     type: "ore",
     unlocked: false,
@@ -52,7 +52,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   {
     amount: 0,
     miningHardness: 200,
-    name: "Gold ore",
+    name: "Diamond ore",
     sellingPrice: 100,
     type: "ore",
     unlocked: false,
@@ -62,7 +62,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   {
     amount: 0,
     miningHardness: 500,
-    name: "Gold ore",
+    name: "Titanium ore",
     sellingPrice: 250,
     type: "ore",
     unlocked: false,
