@@ -1,4 +1,5 @@
 interface GameResource {
+  active: boolean;
   amount: number;
   name: string;
   miningHardness?: number;

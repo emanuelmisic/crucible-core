@@ -14,7 +14,7 @@
     transform: translate(-50%, -50%);
     border: 2px solid #000000;
     background-color: white;
-    width: 20rem;
+    width: 26rem;
     z-index: 999;
 
     .dialog__header {
@@ -25,5 +25,27 @@
         margin-left: auto;
       }
     }
+
+    .dialog__content {
+      display: flex;
+      flex-wrap: wrap;
+	  gap: 1rem;
+	  padding: 1rem;
+    }
+  }
+
+  .dialog__ore {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 7rem;
+    height: 7rem;
+	cursor: pointer;
+
+	&--selected {
+		border-color: #00882d;
+	}
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import FocusOresDialog from "@/components/dialogs/FocusOresDialog";
@@ -18,6 +18,7 @@ function MiningPanel({ miningPower, ores }: MiningPanelProps) {
     diamond: 0,
     titanium: 0,
   });
+  const [selectedOres, setSelectedOres] = useState<GameResourceOre[]>([]);
   const [showDialog, setShowDialog] = useState(false);
 
   function mineOre(ore: GameResourceOre) {
@@ -56,6 +57,14 @@ function MiningPanel({ miningPower, ores }: MiningPanelProps) {
     });
   }
 
+  function generateInitialSelectedOres(ores: GameResourceOre[]) {
+    setSelectedOres(ores.filter((ore) => ore.active));
+  }
+
+  useEffect(() => {
+    generateInitialSelectedOres(ores);
+  }, []);
+
   return (
     <>
       <FocusOresDialog
@@ -68,7 +77,7 @@ function MiningPanel({ miningPower, ores }: MiningPanelProps) {
           <button onClick={() => setShowDialog(true)}>Focus ores</button>
         </div>
         <div className="mining-panel__ore-container">
-          {ores.map((ore) => (
+          {selectedOres.map((ore) => (
             <div key={ore.name} className="ore">
               <ResourceTile resource={ore} onClick={() => mineOre(ore)} />
               <ProgressBar
@@ -77,6 +86,12 @@ function MiningPanel({ miningPower, ores }: MiningPanelProps) {
               />
             </div>
           ))}
+          {selectedOres.length <= 3 &&
+            [...Array(3 - selectedOres.length).keys()].map((i) => (
+              <div key={`empty-${i}`} className="ore__empty">
+                ?
+              </div>
+            ))}
         </div>
       </div>
     </>

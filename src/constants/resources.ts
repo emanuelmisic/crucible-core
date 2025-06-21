@@ -1,5 +1,6 @@
 const INITIAL_ORES: GameResourceOre[] = [
   {
+    active: true,
     amount: 0,
     miningHardness: 5,
     name: "Iron ore",
@@ -10,6 +11,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     value: "iron",
   },
   {
+    active: false,
     amount: 0,
     miningHardness: 10,
     name: "Bronze ore",
@@ -20,6 +22,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     value: "bronze",
   },
   {
+    active: false,
     amount: 0,
     miningHardness: 20,
     name: "Silver ore",
@@ -30,6 +33,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     value: "silver",
   },
   {
+    active: false,
     amount: 0,
     miningHardness: 60,
     name: "Gold ore",
@@ -40,6 +44,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     value: "gold",
   },
   {
+    active: false,
     amount: 0,
     miningHardness: 100,
     name: "Platinum ore",
@@ -50,6 +55,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     value: "platinum",
   },
   {
+    active: false,
     amount: 0,
     miningHardness: 200,
     name: "Diamond ore",
@@ -60,6 +66,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     value: "diamond",
   },
   {
+    active: false,
     amount: 0,
     miningHardness: 500,
     name: "Titanium ore",
@@ -73,6 +80,7 @@ const INITIAL_ORES: GameResourceOre[] = [
 
 const INITIAL_ALLOYS: GameResourceAlloy[] = [
   {
+    active: false,
     amount: 0,
     name: "Iron ingot",
     smeltingDifficulty: 5,
@@ -86,6 +94,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     value: "iron",
   },
   {
+    active: false,
     amount: 0,
     name: "Bronze ingot",
     smeltingDifficulty: 10,
@@ -99,6 +108,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     value: "bronze",
   },
   {
+    active: false,
     amount: 0,
     name: "Silver bar",
     smeltingDifficulty: 20,
@@ -112,6 +122,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     value: "silver",
   },
   {
+    active: false,
     amount: 0,
     name: "Gold bar",
     smeltingDifficulty: 10,
@@ -125,6 +136,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     value: "gold",
   },
   {
+    active: false,
     amount: 0,
     name: "Platinum bar",
     smeltingDifficulty: 10,

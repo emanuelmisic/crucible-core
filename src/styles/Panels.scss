@@ -40,7 +40,8 @@
     display: flex;
     gap: 1rem;
     padding: 1rem;
-    .ore {
+    .ore,
+    .ore__empty {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -65,6 +66,10 @@
       height: 10rem;
       border: 7px outset #583900;
       border-radius: 50%;
+    }
+
+    .ore__empty {
+      font-size: 5rem;
     }
   }
 }
@@ -114,9 +119,9 @@
       border-radius: 2rem;
     }
 
-	.alloy-recipe {
-		display: flex;
-		flex-direction: column;
-	}
+    .alloy-recipe {
+      display: flex;
+      flex-direction: column;
+    }
   }
 }

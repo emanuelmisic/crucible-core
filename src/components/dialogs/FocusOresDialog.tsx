@@ -1,5 +1,6 @@
+import { act, useState } from "react";
 import Dialog from "@/components/ui/Dialog";
-import Image from "../ui/Image";
+import Image from "@/components/ui/Image";
 
 interface FocusOresDialogProps {
   showDialog: boolean;
@@ -12,6 +13,14 @@ function FocusOresDialog({
   closeDialog,
   ores,
 }: FocusOresDialogProps) {
+  function getDialogOreClass(ore: GameResourceOre) {
+    return `dialog__ore ${ore.active ? "dialog__ore--selected" : ""}`;
+  }
+
+  function chooseOre() {
+    // Handle the logic for choosing an ore (set active state to true)
+  }
+
   return (
     <Dialog
       title="Choose ores to mine"
@@ -20,7 +29,13 @@ function FocusOresDialog({
     >
       <div className="dialog__content">
         {ores.map((ore) => (
-          <Image key={ore.name} resource={ore} />
+          <div
+            className={getDialogOreClass(ore)}
+            key={ore.name}
+            onClick={() => chooseOre()}
+          >
+            <Image key={ore.name} resource={ore} />
+          </div>
         ))}
       </div>
     </Dialog>
