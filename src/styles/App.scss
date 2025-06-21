@@ -19,6 +19,7 @@
 
 .app-body {
   display: flex;
+  flex-direction: column;
 
   .mining-tile {
     cursor: pointer;

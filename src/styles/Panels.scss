@@ -113,5 +113,10 @@
       border: 7px outset #341500;
       border-radius: 2rem;
     }
+
+	.alloy-recipe {
+		display: flex;
+		flex-direction: column;
+	}
   }
 }
