@@ -63,6 +63,7 @@ function App() {
           }
 		  sellAll={game.sellAll}
 		  sellHalf={game.sellHalf}
+		  unlockResource={game.unlockResource}
         />
       </div>
     </>

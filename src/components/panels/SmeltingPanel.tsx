@@ -28,15 +28,13 @@ function SmeltingPanel({
         </div>
         <div className="smelting-panel__alloy-container">
           <div className="alloy-recipe">
-            <span>RECIPE:</span>
             {Object.entries(selectedAlloy.smeltingRecipe).map(
               ([key, value]) => (
                 <span key={key}>
                   <Image
-                    type="icon"
                     resource={ores.filter((ore) => ore.value === key)[0]}
                   />{" "}
-                  {value}
+                  {ores.filter((ore) => ore.value === key)[0].amount}/{value}
                 </span>
               )
             )}

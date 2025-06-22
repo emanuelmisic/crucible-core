@@ -26,14 +26,14 @@ interface GameContextType {
   smeltingPower: number;
   sellAll: (resource: GameResource) => void;
   sellHalf: (resource: GameResource) => void;
+  unlockResource: (res: GameResource) => void;
   //   unlockUpgrade: (tool: GameUpgrade) => void;
-  //   unlockResource: (res: GameResource) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
-  const [money, setMoney] = useState(0);
+  const [money, setMoney] = useState(500);
   const [storage, setStorage] = useState(100);
   const [miningPower, setMiningPower] = useState(1);
   const [smeltingPower, setSmeltingPower] = useState(1);
@@ -191,12 +191,25 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   }
 
   function unlockResource(res: GameResource) {
+    if (money < res.unlockedFor) return;
+    setMoney(money - res.unlockedFor);
     setResources((prevState) => {
       return prevState.map((e) => {
-        if (e.value === res.value) return { ...e, unlocked: true };
+        if (e.value === res.value && e.type === res.type)
+          return { ...e, unlocked: true };
         return e;
       });
     });
+    const ores = resources.filter((r) => r.type === "ore") as GameResourceOre[];
+    if (ores.filter((o) => o.active).length < 3) {
+      setResources((prevState) => {
+        return prevState.map((e) => {
+          if (e.value === res.value && e.type === res.type)
+            return { ...e, active: true };
+          return e;
+        });
+      });
+    }
   }
 
   //   function unlockUpgrade(tool: GameUpgrade) {
@@ -223,6 +236,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
         smeltingPower,
         sellAll,
         sellHalf,
+        unlockResource,
       }}
     >
       {children}

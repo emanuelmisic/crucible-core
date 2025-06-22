@@ -11,7 +11,7 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
 		<div className="resources-panel__item">
 		  {ores.map((ore) => (
 			<p key={ore.name}>
-			  <Image resource={ore} type="icon" />
+			  <Image resource={ore} />
 			  {ore.amount}
 			</p>
 		  ))}
@@ -19,7 +19,7 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
 		<div className="resources-panel__item">
 		  {alloys.map((alloy) => (
 			<p key={alloy.name}>
-			  <Image resource={alloy} type="icon" />
+			  <Image resource={alloy}/>
 			  {alloy.amount}
 			</p>
 		  ))}

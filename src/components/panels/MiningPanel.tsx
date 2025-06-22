@@ -18,8 +18,9 @@ function MiningPanel({ miningProgress, ores, mineOre }: MiningPanelProps) {
   }
 
   useEffect(() => {
+    if (selectedOres.length === 3) return;
     generateInitialSelectedOres(ores);
-  }, []);
+  }, [ores]);
 
   return (
     <>

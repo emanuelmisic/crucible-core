@@ -33,7 +33,7 @@ function FocusOresDialog({
             key={ore.name}
             onClick={() => chooseOre()}
           >
-            <Image key={ore.name} resource={ore} />
+            <Image key={ore.name} resource={ore} size={70} />
           </div>
         ))}
       </div>
