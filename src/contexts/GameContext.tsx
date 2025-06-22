@@ -24,18 +24,10 @@ interface GameContextType {
   smeltAlloy: (alloy: GameResourceAlloy) => void;
   miningPower: number;
   smeltingPower: number;
-  //   unlockTool: (tool: GameUpgrade) => void;
+  sellAll: (resource: GameResource) => void;
+  sellHalf: (resource: GameResource) => void;
+  //   unlockUpgrade: (tool: GameUpgrade) => void;
   //   unlockResource: (res: GameResource) => void;
-  //   addResource: (
-  //     name: string,
-  //     materialType: "ore" | "alloy",
-  //     amount: number
-  //   ) => void;
-  //   setResource: (
-  //     name: string,
-  //     materialType: "ore" | "alloy",
-  //     amount: number
-  //   ) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -151,6 +143,21 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     addResource(alloy.value, alloy.type, 1);
   }
 
+  // MERCHANT LOGIC
+
+  function sellAll(resource: GameResource) {
+    const moneyToAdd = resource.amount * resource.sellingPrice;
+    setResource(resource.value, resource.type, 0);
+    setMoney(money + moneyToAdd);
+  }
+
+  function sellHalf(resource: GameResource) {
+    const halfAmount = Math.floor(resource.amount / 2);
+    const moneyToAdd = halfAmount * resource.sellingPrice;
+    setResource(resource.value, resource.type, resource.amount - halfAmount);
+    setMoney(money + moneyToAdd);
+  }
+
   // OTHER
 
   function addResource(
@@ -208,12 +215,14 @@ function GameContextComposer({ children }: { children: ReactNode }) {
         setMoney,
         resources,
         upgrades,
-		miningProgress,
-		smeltingProgress,
+        miningProgress,
+        smeltingProgress,
         mineOre,
         smeltAlloy,
-		miningPower,
-		smeltingPower,
+        miningPower,
+        smeltingPower,
+        sellAll,
+        sellHalf,
       }}
     >
       {children}

@@ -23,7 +23,7 @@ function App() {
         />
         <h1>Crucible Core: Humble Beginnings</h1>
         <div className="app-header__money-panel">
-          <p>💲0</p>
+          <p>💲{game.money}</p>
         </div>
       </div>
       <div className="app-body">
@@ -56,6 +56,13 @@ function App() {
           ores={
             game.resources.filter((r) => r.type === "ore") as GameResourceOre[]
           }
+          alloys={
+            game.resources.filter(
+              (r) => r.type === "alloy"
+            ) as GameResourceAlloy[]
+          }
+		  sellAll={game.sellAll}
+		  sellHalf={game.sellHalf}
         />
       </div>
     </>

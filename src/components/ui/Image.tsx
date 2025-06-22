@@ -14,12 +14,11 @@ import platinumAlloy from "@/assets/images/alloys/platinum.png";
 
 interface ImageProps {
   resource: GameResource;
-  type?: string;
+  size?: number;
   className?: string;
 }
 
-function Image({ resource, type, className }: ImageProps) {
-  const size = type === "icon" ? 25 : 100;
+function Image({ resource, size = 25, className }: ImageProps) {
 
   function getResourceImage(res: GameResource) {
     if (res.type === "ore") return _getOreImage(res.value);
