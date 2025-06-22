@@ -12,6 +12,7 @@ interface GameContext {
   sellAll: (resource: GameResource) => void;
   sellHalf: (resource: GameResource) => void;
   unlockResource: (res: GameResource) => void;
+  setResourceActiveState: (res: GameResource, value: boolean) => void;
 }
 
 interface GameResource {
@@ -44,4 +45,9 @@ interface GameUpgrade {
   type: "mine" | "fuel" | "storage";
   unlocked: boolean;
   value: string;
+}
+
+interface DialogProps {
+  showDialog: boolean;
+  closeDialog: () => void;
 }

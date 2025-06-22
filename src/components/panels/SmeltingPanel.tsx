@@ -3,6 +3,7 @@ import { useGame } from "@/contexts/GameContext";
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import Image from "@/components/ui/Image";
+import SelectAlloyDialog from "../dialogs/SelectAlloyDialog";
 
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
@@ -14,12 +15,18 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
   const [selectedAlloy, setSelectedAlloy] = useState<GameResourceAlloy>(
     alloys[0]
   );
+  const [showDialog, setShowDialog] = useState(false);
 
   return (
     <>
+      <SelectAlloyDialog
+        showDialog={showDialog}
+        closeDialog={() => setShowDialog(false)}
+        alloys={alloys}
+      />
       <div className="panel smelting-panel">
         <div className="panel__header">
-          <button>Choose alloy</button>
+          <button onClick={() => setShowDialog(true)}>Choose alloy</button>
         </div>
         <div className="smelting-panel__alloy-container">
           <div className="alloy-recipe">

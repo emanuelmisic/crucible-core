@@ -13,7 +13,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     border: 2px solid #000000;
-    background-color: white;
+    background-color: #d18117;
     width: 26rem;
     z-index: 999;
 
@@ -34,7 +34,8 @@
     }
   }
 
-  .dialog__ore {
+  .dialog__ore,
+  .dialog__alloy {
 	display: flex;
 	justify-content: center;
 	align-items: center;

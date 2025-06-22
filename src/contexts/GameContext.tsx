@@ -188,6 +188,17 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     }
   }
 
+  function setResourceActiveState(res: GameResource, value: boolean) {
+    setResources((prevState) => {
+      return prevState.map((e) => {
+        if (e.type === res.type && e.value === res.value) {
+          return { ...e, active: value };
+        }
+        return e;
+      });
+    });
+  }
+
   //   function unlockUpgrade(tool: GameUpgrade) {
   //     setTools((prevState) => {
   //       return prevState.map((e) => {
@@ -211,6 +222,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     sellAll,
     sellHalf,
     unlockResource,
+    setResourceActiveState,
   };
 
   return (
