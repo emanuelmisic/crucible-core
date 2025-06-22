@@ -4,58 +4,14 @@ import ProgressBar from "@/components/ui/ProgressBar";
 import FocusOresDialog from "@/components/dialogs/FocusOresDialog";
 
 interface MiningPanelProps {
-  miningPower: number;
+  miningProgress: { [key: string]: number };
   ores: GameResourceOre[];
+  mineOre: (ore: GameResourceOre) => void;
 }
 
-function MiningPanel({ miningPower, ores }: MiningPanelProps) {
-  const [progress, setProgress] = useState<{ [key: string]: number }>({
-    iron: 0,
-    bronze: 0,
-    silver: 0,
-    gold: 0,
-    platinum: 0,
-    diamond: 0,
-    titanium: 0,
-  });
+function MiningPanel({ miningProgress, ores, mineOre }: MiningPanelProps) {
   const [selectedOres, setSelectedOres] = useState<GameResourceOre[]>([]);
   const [showDialog, setShowDialog] = useState(false);
-
-  function mineOre(ore: GameResourceOre) {
-    // check for storage
-    let newMiningProgress = 0;
-    if (progress[ore.value] < ore.miningHardness) {
-      _addOreMiningProgress(ore.value);
-      newMiningProgress = progress[ore.value] + miningPower;
-    }
-    _handleOreMiningStep(ore, newMiningProgress);
-  }
-
-  function _handleOreMiningStep(
-    ore: GameResourceOre,
-    newMiningProgress: number
-  ) {
-    if (newMiningProgress < ore.miningHardness) return;
-    // if (miningPower > ore.miningHardness) {
-    //   const amountToMine = Math.floor(miningPower / ore.miningHardness);
-    //   addResource(ore.value, "ore", amountToMine);
-    // } else {
-    //   addResource(ore.value, "ore", 1);
-    // }
-    _resetOreMiningProgress(ore.value);
-  }
-
-  function _addOreMiningProgress(ore: string) {
-    setProgress((prevState) => {
-      return { ...prevState, [ore]: progress[ore] + miningPower };
-    });
-  }
-
-  function _resetOreMiningProgress(ore: string) {
-    setProgress((prevState) => {
-      return { ...prevState, [ore]: 0 };
-    });
-  }
 
   function generateInitialSelectedOres(ores: GameResourceOre[]) {
     setSelectedOres(ores.filter((ore) => ore.active));
@@ -81,7 +37,7 @@ function MiningPanel({ miningPower, ores }: MiningPanelProps) {
             <div key={ore.name} className="ore">
               <ResourceTile resource={ore} onClick={() => mineOre(ore)} />
               <ProgressBar
-                currentProgress={progress[ore.value]}
+                currentProgress={miningProgress[ore.value]}
                 maxProgress={ore.miningHardness}
               />
             </div>

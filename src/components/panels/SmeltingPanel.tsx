@@ -6,12 +6,20 @@ import Image from "../ui/Image";
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
   alloys: GameResourceAlloy[];
+  smeltingProgress: { [key: string]: number };
+  smeltAlloy: (alloy: GameResourceAlloy) => void;
 }
 
-function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
+function SmeltingPanel({
+  ores,
+  alloys,
+  smeltingProgress,
+  smeltAlloy,
+}: SmeltingPanelProps) {
   const [selectedAlloy, setSelectedAlloy] = useState<GameResourceAlloy>(
     alloys[0]
   );
+
   return (
     <>
       <div className="smelting-panel">
@@ -24,7 +32,8 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
             {Object.entries(selectedAlloy.smeltingRecipe).map(
               ([key, value]) => (
                 <span key={key}>
-                  <Image type="icon"
+                  <Image
+                    type="icon"
                     resource={ores.filter((ore) => ore.value === key)[0]}
                   />{" "}
                   {value}
@@ -33,8 +42,15 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
             )}
           </div>
           <div key={selectedAlloy.name} className="alloy">
-            <ResourceTile resource={selectedAlloy} />
-            <ProgressBar type="smelting" currentProgress={0} maxProgress={5} />
+            <ResourceTile
+              resource={selectedAlloy}
+              onClick={() => smeltAlloy(selectedAlloy)}
+            />
+            <ProgressBar
+              type="smelting"
+              currentProgress={smeltingProgress[selectedAlloy.value]}
+              maxProgress={selectedAlloy.smeltingDifficulty}
+            />
           </div>
         </div>
       </div>
