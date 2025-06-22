@@ -1,26 +1,21 @@
 import { useState } from "react";
+import { useGame } from "@/contexts/GameContext";
 import Image from "@/components/ui/Image";
 
 interface MerchantPanelProps {
   ores: GameResourceOre[];
   alloys: GameResourceAlloy[];
-  sellAll: (ore: GameResource) => void;
-  sellHalf: (ore: GameResource) => void;
-  unlockResource: (ore: GameResource) => void;
 }
 
-function MerchantPanel({
-  ores,
-  alloys,
-  sellAll,
-  sellHalf,
-  unlockResource,
-}: MerchantPanelProps) {
+function MerchantPanel({ ores, alloys }: MerchantPanelProps) {
+  const game = useGame();
   const [selectedTab, setSelectedTab] = useState<"ores" | "alloys">("ores");
+
   function selectResources(res: "ores" | "alloys") {
     // TODO: set active tab class logic
     setSelectedTab(res);
   }
+
   return (
     <div className="panel merchant-panel">
       <div className="panel__header merchant-panel__header">
@@ -35,8 +30,8 @@ function MerchantPanel({
               <div key={ore.name} className="item">
                 <Image size={75} resource={ore} />
                 <span className="item__price">${ore.sellingPrice}</span>
-                <button onClick={() => sellHalf(ore)}>SELL HALF</button>
-                <button onClick={() => sellAll(ore)}>SELL ALL</button>
+                <button onClick={() => game.sellHalf(ore)}>SELL HALF</button>
+                <button onClick={() => game.sellAll(ore)}>SELL ALL</button>
               </div>
             ))}
         {selectedTab === "ores" &&
@@ -46,7 +41,9 @@ function MerchantPanel({
               <div key={ore.name} className="item">
                 <div className="item__empty">?</div>
                 <span className="item__price">${ore.unlockedFor}</span>
-                <button onClick={() => unlockResource(ore)}>DISCOVER</button>
+                <button onClick={() => game.unlockResource(ore)}>
+                  DISCOVER
+                </button>
               </div>
             ))[0]}
         {selectedTab === "alloys" &&
@@ -56,8 +53,8 @@ function MerchantPanel({
               <div key={alloy.name} className="item">
                 <Image size={75} resource={alloy} />
                 <span className="item__price">${alloy.sellingPrice}</span>
-                <button onClick={() => sellHalf(alloy)}>SELL HALF</button>
-                <button onClick={() => sellAll(alloy)}>SELL ALL</button>
+                <button onClick={() => game.sellHalf(alloy)}>SELL HALF</button>
+                <button onClick={() => game.sellAll(alloy)}>SELL ALL</button>
               </div>
             ))}
         {selectedTab === "alloys" &&
@@ -67,7 +64,9 @@ function MerchantPanel({
               <div key={alloy.name} className="item">
                 <div className="item__empty">?</div>
                 <span className="item__price">${alloy.unlockedFor}</span>
-                <button onClick={() => unlockResource(alloy)}>DISCOVER</button>
+                <button onClick={() => game.unlockResource(alloy)}>
+                  DISCOVER
+                </button>
               </div>
             ))[0]}
       </div>

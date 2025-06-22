@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  type ReactNode,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import {
   INITIAL_MINING_PROGRESS,
   INITIAL_RESOURCES,
@@ -13,24 +6,7 @@ import {
 } from "@/constants/resources";
 import { INITIAL_UPGRADES } from "@/constants/upgrades";
 
-interface GameContextType {
-  money: number;
-  setMoney: Dispatch<SetStateAction<number>>;
-  resources: GameResource[];
-  upgrades: GameUpgrade[];
-  miningProgress: { [key: string]: number };
-  smeltingProgress: { [key: string]: number };
-  mineOre: (ore: GameResourceOre) => void;
-  smeltAlloy: (alloy: GameResourceAlloy) => void;
-  miningPower: number;
-  smeltingPower: number;
-  sellAll: (resource: GameResource) => void;
-  sellHalf: (resource: GameResource) => void;
-  unlockResource: (res: GameResource) => void;
-  //   unlockUpgrade: (tool: GameUpgrade) => void;
-}
-
-const GameContext = createContext<GameContextType | undefined>(undefined);
+const GameContext = createContext<GameContext | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
   const [money, setMoney] = useState(5000);
@@ -221,26 +197,24 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   //     });
   //   }
 
+  const contextValue: GameContext = {
+    money,
+    setMoney,
+    resources,
+    upgrades,
+    miningProgress,
+    smeltingProgress,
+    mineOre,
+    smeltAlloy,
+    miningPower,
+    smeltingPower,
+    sellAll,
+    sellHalf,
+    unlockResource,
+  };
+
   return (
-    <GameContext.Provider
-      value={{
-        money,
-        setMoney,
-        resources,
-        upgrades,
-        miningProgress,
-        smeltingProgress,
-        mineOre,
-        smeltAlloy,
-        miningPower,
-        smeltingPower,
-        sellAll,
-        sellHalf,
-        unlockResource,
-      }}
-    >
-      {children}
-    </GameContext.Provider>
+    <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
   );
 }
 

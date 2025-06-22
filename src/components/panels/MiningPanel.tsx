@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
+import { useGame } from "@/contexts/GameContext";
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import FocusOresDialog from "@/components/dialogs/FocusOresDialog";
 
 interface MiningPanelProps {
-  miningProgress: { [key: string]: number };
   ores: GameResourceOre[];
-  mineOre: (ore: GameResourceOre) => void;
 }
 
-function MiningPanel({ miningProgress, ores, mineOre }: MiningPanelProps) {
+function MiningPanel({ ores }: MiningPanelProps) {
+  const game = useGame();
   const [selectedOres, setSelectedOres] = useState<GameResourceOre[]>([]);
   const [showDialog, setShowDialog] = useState(false);
 
@@ -36,9 +36,9 @@ function MiningPanel({ miningProgress, ores, mineOre }: MiningPanelProps) {
         <div className="mining-panel__ore-container">
           {selectedOres.map((ore) => (
             <div key={ore.name} className="ore">
-              <ResourceTile resource={ore} onClick={() => mineOre(ore)} />
+              <ResourceTile resource={ore} onClick={() => game.mineOre(ore)} />
               <ProgressBar
-                currentProgress={miningProgress[ore.value]}
+                currentProgress={game.miningProgress[ore.value]}
                 maxProgress={ore.miningHardness}
               />
             </div>

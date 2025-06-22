@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useGame } from "@/contexts/GameContext";
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import Image from "@/components/ui/Image";
@@ -6,16 +7,10 @@ import Image from "@/components/ui/Image";
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
   alloys: GameResourceAlloy[];
-  smeltingProgress: { [key: string]: number };
-  smeltAlloy: (alloy: GameResourceAlloy) => void;
 }
 
-function SmeltingPanel({
-  ores,
-  alloys,
-  smeltingProgress,
-  smeltAlloy,
-}: SmeltingPanelProps) {
+function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
+  const game = useGame();
   const [selectedAlloy, setSelectedAlloy] = useState<GameResourceAlloy>(
     alloys[0]
   );
@@ -42,11 +37,11 @@ function SmeltingPanel({
           <div key={selectedAlloy.name} className="alloy">
             <ResourceTile
               resource={selectedAlloy}
-              onClick={() => smeltAlloy(selectedAlloy)}
+              onClick={() => game.smeltAlloy(selectedAlloy)}
             />
             <ProgressBar
               type="smelting"
-              currentProgress={smeltingProgress[selectedAlloy.value]}
+              currentProgress={game.smeltingProgress[selectedAlloy.value]}
               maxProgress={selectedAlloy.smeltingDifficulty}
             />
           </div>

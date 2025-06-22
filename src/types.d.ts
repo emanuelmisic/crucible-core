@@ -1,3 +1,19 @@
+interface GameContext {
+  money: number;
+  setMoney: Dispatch<SetStateAction<number>>;
+  resources: GameResource[];
+  upgrades: GameUpgrade[];
+  miningProgress: { [key: string]: number };
+  smeltingProgress: { [key: string]: number };
+  mineOre: (ore: GameResourceOre) => void;
+  smeltAlloy: (alloy: GameResourceAlloy) => void;
+  miningPower: number;
+  smeltingPower: number;
+  sellAll: (resource: GameResource) => void;
+  sellHalf: (resource: GameResource) => void;
+  unlockResource: (res: GameResource) => void;
+}
+
 interface GameResource {
   active: boolean;
   amount: number;
