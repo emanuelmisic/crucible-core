@@ -1,4 +1,3 @@
-import { act, useState } from "react";
 import Dialog from "@/components/ui/Dialog";
 import Image from "@/components/ui/Image";
 
