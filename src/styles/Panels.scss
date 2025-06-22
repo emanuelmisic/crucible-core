@@ -1,3 +1,27 @@
+.panel {
+  .panel__header {
+    display: flex;
+
+    button {
+      margin-left: auto;
+      padding: 0.5rem;
+	  cursor: pointer;
+    }
+  }
+
+  .merchant-panel__header {
+    button {
+      margin-left: 0;
+    }
+  }
+
+  .ore__empty,
+  .item__empty {
+    font-size: 5rem;
+    color: #bbbbbbe8;
+  }
+}
+
 .resources-panel {
   min-width: 15rem;
 
@@ -27,14 +51,6 @@
   flex-direction: column;
   background-color: #a96e00;
   width: fit-content;
-
-  .mining-panel__header {
-    display: flex;
-
-    button {
-      margin-left: auto;
-    }
-  }
 
   .mining-panel__ore-container {
     display: flex;
@@ -67,10 +83,6 @@
       border: 7px outset #583900;
       border-radius: 50%;
     }
-
-    .ore__empty {
-      font-size: 5rem;
-    }
   }
 }
 
@@ -79,14 +91,6 @@
   flex-direction: column;
   background-color: #be5217;
   width: fit-content;
-
-  .smelting-panel__header {
-    display: flex;
-
-    button {
-      margin-left: auto;
-    }
-  }
 
   .smelting-panel__alloy-container {
     display: flex;
@@ -141,10 +145,6 @@
   background-color: #e3d910;
   width: fit-content;
 
-  .merchant-panel__header {
-    display: flex;
-  }
-
   .merchant-panel__item-container {
     display: flex;
     flex-wrap: wrap;
@@ -187,10 +187,6 @@
         border: 2px outset #32c700;
         border-radius: 5px;
         padding: 2px;
-      }
-
-      .item__empty {
-        font-size: 5rem;
       }
     }
   }

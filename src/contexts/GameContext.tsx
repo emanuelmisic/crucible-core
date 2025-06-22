@@ -33,7 +33,7 @@ interface GameContextType {
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
-  const [money, setMoney] = useState(500);
+  const [money, setMoney] = useState(5000);
   const [storage, setStorage] = useState(100);
   const [miningPower, setMiningPower] = useState(1);
   const [smeltingPower, setSmeltingPower] = useState(1);

@@ -22,8 +22,8 @@ function MerchantPanel({
     setSelectedTab(res);
   }
   return (
-    <div className="merchant-panel">
-      <div className="merchant-panel__header">
+    <div className="panel merchant-panel">
+      <div className="panel__header merchant-panel__header">
         <button onClick={() => selectResources("ores")}>Ores</button>
         <button onClick={() => selectResources("alloys")}>Alloys</button>
       </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
-import Image from "../ui/Image";
+import Image from "@/components/ui/Image";
 
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
@@ -22,8 +22,8 @@ function SmeltingPanel({
 
   return (
     <>
-      <div className="smelting-panel">
-        <div className="smelting-panel__header">
+      <div className="panel smelting-panel">
+        <div className="panel__header">
           <button>Choose alloy</button>
         </div>
         <div className="smelting-panel__alloy-container">

@@ -29,8 +29,8 @@ function MiningPanel({ miningProgress, ores, mineOre }: MiningPanelProps) {
         closeDialog={() => setShowDialog(false)}
         ores={ores}
       />
-      <div className="mining-panel">
-        <div className="mining-panel__header">
+      <div className="panel mining-panel">
+        <div className="panel__header">
           <button onClick={() => setShowDialog(true)}>Focus ores</button>
         </div>
         <div className="mining-panel__ore-container">
