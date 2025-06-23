@@ -2,16 +2,11 @@ import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import Image from "@/components/ui/Image";
 
-interface MerchantPanelProps {
-  ores: GameResourceOre[];
-  alloys: GameResourceAlloy[];
-}
-
-function MerchantPanel({ ores, alloys }: MerchantPanelProps) {
+function MerchantPanel() {
   const game = useGame();
-  const [selectedTab, setSelectedTab] = useState<"ores" | "alloys">("ores");
+  const [selectedTab, setSelectedTab] = useState<"ore" | "alloy">("ore");
 
-  function selectResources(res: "ores" | "alloys") {
+  function selectResources(res: "ore" | "alloy") {
     // TODO: set active tab class logic
     setSelectedTab(res);
   }
@@ -19,56 +14,33 @@ function MerchantPanel({ ores, alloys }: MerchantPanelProps) {
   return (
     <div className="panel merchant-panel">
       <div className="panel__header merchant-panel__header">
-        <button onClick={() => selectResources("ores")}>Ores</button>
-        <button onClick={() => selectResources("alloys")}>Alloys</button>
+        <button onClick={() => selectResources("ore")}>Ores</button>
+        <button onClick={() => selectResources("alloy")}>Alloys</button>
       </div>
       <div className="merchant-panel__item-container">
-        {selectedTab === "ores" &&
-          ores
-            .filter((ore) => ore.unlocked)
-            .map((ore) => (
-              <div key={ore.name} className="item">
-                <Image size={75} resource={ore} />
-                <span className="item__price">${ore.sellingPrice}</span>
-                <button onClick={() => game.sellHalf(ore)}>SELL HALF</button>
-                <button onClick={() => game.sellAll(ore)}>SELL ALL</button>
-              </div>
-            ))}
-        {selectedTab === "ores" &&
-          ores
-            .filter((ore) => !ore.unlocked)
-            .map((ore) => (
-              <div key={ore.name} className="item">
+        {game.resources
+          .filter((res) => res.type === selectedTab && res.unlocked)
+          .map((res) => (
+            <div key={res.name} className="item">
+              <Image size={75} resource={res} />
+              <span className="item__price">${res.sellingPrice}</span>
+              <button onClick={() => game.sellHalf(res)}>SELL HALF</button>
+              <button onClick={() => game.sellAll(res)}>SELL ALL</button>
+            </div>
+          ))}
+        {
+          game.resources
+            .filter((res) => res.type === selectedTab && !res.unlocked)
+            .map((res) => (
+              <div key={res.name} className="item">
                 <div className="item__empty">?</div>
-                <span className="item__price">${ore.unlockedFor}</span>
-                <button onClick={() => game.unlockResource(ore)}>
+                <span className="item__price">${res.unlockedFor}</span>
+                <button onClick={() => game.unlockResource(res)}>
                   DISCOVER
                 </button>
               </div>
-            ))[0]}
-        {selectedTab === "alloys" &&
-          alloys
-            .filter((alloy) => alloy.unlocked)
-            .map((alloy) => (
-              <div key={alloy.name} className="item">
-                <Image size={75} resource={alloy} />
-                <span className="item__price">${alloy.sellingPrice}</span>
-                <button onClick={() => game.sellHalf(alloy)}>SELL HALF</button>
-                <button onClick={() => game.sellAll(alloy)}>SELL ALL</button>
-              </div>
-            ))}
-        {selectedTab === "alloys" &&
-          alloys
-            .filter((alloy) => !alloy.unlocked)
-            .map((alloy) => (
-              <div key={alloy.name} className="item">
-                <div className="item__empty">?</div>
-                <span className="item__price">${alloy.unlockedFor}</span>
-                <button onClick={() => game.unlockResource(alloy)}>
-                  DISCOVER
-                </button>
-              </div>
-            ))[0]}
+            ))[0]
+        }
       </div>
     </div>
   );

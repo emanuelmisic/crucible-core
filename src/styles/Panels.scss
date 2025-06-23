@@ -5,11 +5,12 @@
     button {
       margin-left: auto;
       padding: 0.5rem;
-	  cursor: pointer;
+      cursor: pointer;
     }
   }
 
-  .merchant-panel__header {
+  .merchant-panel__header,
+  .vendor-panel__header {
     button {
       margin-left: 0;
     }
@@ -20,6 +21,11 @@
     font-size: 5rem;
     color: #bbbbbbe8;
   }
+}
+
+.app-body .panel {
+  display: flex;
+  flex-direction: column;
 }
 
 .resources-panel {
@@ -47,8 +53,6 @@
 }
 
 .mining-panel {
-  display: flex;
-  flex-direction: column;
   background-color: #a96e00;
   width: fit-content;
 
@@ -87,8 +91,6 @@
 }
 
 .smelting-panel {
-  display: flex;
-  flex-direction: column;
   background-color: #be5217;
   width: fit-content;
 
@@ -140,8 +142,6 @@
 }
 
 .merchant-panel {
-  display: flex;
-  flex-direction: column;
   background-color: #e3d910;
   width: fit-content;
 
@@ -155,7 +155,6 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #343000;
       background: radial-gradient(
         circle farthest-corner at center center,
         #343000 0%,
@@ -185,6 +184,56 @@
         color: #ffffff;
         cursor: pointer;
         border: 2px outset #32c700;
+        border-radius: 5px;
+        padding: 2px;
+      }
+    }
+  }
+}
+
+.vendor-panel {
+  background-color: #146aeb;
+
+  .vendor-panel__item-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(
+        circle farthest-corner at center center,
+        #002153 0%,
+        #0051cb 100%
+      );
+      background: -webkit-radial-gradient(
+        circle farthest-corner at center center,
+        #002153 0%,
+        #0051cb 100%
+      );
+      background: -moz-radial-gradient(
+        circle farthest-corner at center center,
+        #002153 0%,
+        #0051cb 100%
+      );
+      width: 10rem;
+      height: 10rem;
+      border: 7px outset #002153;
+      border-radius: 2rem;
+
+      .item__price {
+        color: #ffffff;
+      }
+
+      button {
+        background-color: #c58d00;
+        color: #ffffff;
+        cursor: pointer;
+        border: 2px outset #ffb700;
         border-radius: 5px;
         padding: 2px;
       }

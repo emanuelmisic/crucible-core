@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react";
+import { useGame } from "@/contexts/GameContext";
 import "@/styles.scss";
 
 import ResourcesPanel from "@/components/panels/ResourcesPanel";
 import MiningPanel from "@/components/panels/MiningPanel";
 import SmeltingPanel from "@/components/panels/SmeltingPanel";
-import { useGame } from "@/contexts/GameContext";
 import MerchantPanel from "@/components/panels/MerchantPanel";
-import { useEffect, useState } from "react";
+import VendorPanel from "@/components/panels/VendorPanel";
 
 function App() {
   const game = useGame();
@@ -35,7 +36,8 @@ function App() {
           <MiningPanel ores={ores} />
           {alloys.length > 0 && <SmeltingPanel ores={ores} alloys={alloys} />}
         </div>
-        <MerchantPanel ores={ores} alloys={alloys} />
+        <MerchantPanel />
+        <VendorPanel />
       </div>
     </>
   );
