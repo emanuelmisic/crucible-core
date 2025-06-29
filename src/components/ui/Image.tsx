@@ -12,17 +12,20 @@ import silverAlloy from "@/assets/images/alloys/silver.png";
 import goldAlloy from "@/assets/images/alloys/gold.png";
 import platinumAlloy from "@/assets/images/alloys/platinum.png";
 
+import ironPickaxe from "@/assets/images/upgrades/iron_pickaxe.png";
+import goldPickaxe from "@/assets/images/upgrades/gold_pickaxe.png";
+
 interface ImageProps {
-  resource: GameResource;
+  resource: GameResource | GameUpgrade;
   size?: number;
   className?: string;
 }
 
 function Image({ resource, size = 25, className }: ImageProps) {
-
-  function getResourceImage(res: GameResource) {
+  function getResourceImage(res: GameResource | GameUpgrade) {
     if (res.type === "ore") return _getOreImage(res.value);
-    else return _getAlloyImage(res.value);
+    else if (res.type === "alloy") return _getAlloyImage(res.value);
+    else return _getUpgradeImage(res.value);
   }
 
   function _getOreImage(value: string) {
@@ -45,6 +48,7 @@ function Image({ resource, size = 25, className }: ImageProps) {
         return "";
     }
   }
+
   function _getAlloyImage(value: string) {
     switch (value) {
       case "iron":
@@ -62,11 +66,30 @@ function Image({ resource, size = 25, className }: ImageProps) {
     }
   }
 
+  function _getUpgradeImage(value: string) {
+    switch (value) {
+      case "iron_pickaxe":
+        return ironPickaxe;
+      case "gold_pickaxe":
+        return goldPickaxe;
+      case "basic_fuel":
+        return "";
+      case "advanced_fuel":
+        return "";
+      case "small_container":
+        return;
+      case "medium_crate":
+        return "";
+      default:
+        return "";
+    }
+  }
+
   return (
     <img
       className={className}
       src={getResourceImage(resource)}
-      alt="image"
+      alt={resource.value}
       width={size}
       height={size}
     />

@@ -199,14 +199,29 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     });
   }
 
-  //   function unlockUpgrade(tool: GameUpgrade) {
-  //     setTools((prevState) => {
-  //       return prevState.map((e) => {
-  //         if (e.value === tool.value) return { ...e, unlocked: true };
-  //         return e;
-  //       });
-  //     });
-  //   }
+  function unlockUpgrade(tool: GameUpgrade) {
+    if (money < tool.cost) return;
+    setMoney(money - tool.cost);
+
+    setUpgrades((prevState) => {
+      return prevState.map((e) => {
+        if (e.value === tool.value) return { ...e, unlocked: true };
+        return e;
+      });
+    });
+
+    switch (tool.type) {
+      case "mine":
+        setMiningPower(tool.power);
+        break;
+      case "fuel":
+        setSmeltingPower(tool.power);
+        break;
+      case "storage":
+        setStorage(tool.power);
+        break;
+    }
+  }
 
   const contextValue: GameContext = {
     money,
@@ -219,9 +234,11 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     smeltAlloy,
     miningPower,
     smeltingPower,
+    storage,
     sellAll,
     sellHalf,
     unlockResource,
+    unlockUpgrade,
     setResourceActiveState,
   };
 

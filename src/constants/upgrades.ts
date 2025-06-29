@@ -5,7 +5,7 @@ const INITIAL_MINING_TOOLS: GameUpgrade[] = [
     power: 1,
     type: "mine",
     unlocked: true,
-    value: "ironPickaxe",
+    value: "iron_pickaxe",
   },
   {
     cost: 15,
@@ -13,7 +13,7 @@ const INITIAL_MINING_TOOLS: GameUpgrade[] = [
     power: 2,
     type: "mine",
     unlocked: false,
-    value: "goldPickaxe",
+    value: "gold_pickaxe",
   },
 ];
 
@@ -24,7 +24,7 @@ const INITIAL_FUEL: GameUpgrade[] = [
     power: 1,
     type: "fuel",
     unlocked: true,
-    value: "basicFuel",
+    value: "basic_fuel",
   },
   {
     cost: 1000,
@@ -32,7 +32,7 @@ const INITIAL_FUEL: GameUpgrade[] = [
     power: 2,
     type: "fuel",
     unlocked: false,
-    value: "advancedFuel",
+    value: "advanced_fuel",
   },
 ];
 
@@ -43,7 +43,7 @@ const INITIAL_STORAGE_ITEMS: GameUpgrade[] = [
     power: 100,
     type: "storage",
     unlocked: true,
-    value: "smallContainer",
+    value: "small_container",
   },
   {
     cost: 1000,
@@ -51,7 +51,7 @@ const INITIAL_STORAGE_ITEMS: GameUpgrade[] = [
     power: 1000,
     type: "storage",
     unlocked: false,
-    value: "mediumCrate",
+    value: "medium_crate",
   },
 ];
 

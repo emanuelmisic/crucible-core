@@ -9,9 +9,11 @@ interface GameContext {
   smeltAlloy: (alloy: GameResourceAlloy) => void;
   miningPower: number;
   smeltingPower: number;
+  storage: number;
   sellAll: (resource: GameResource) => void;
   sellHalf: (resource: GameResource) => void;
   unlockResource: (res: GameResource) => void;
+  unlockUpgrade: (upgrade: GameUpgrade) => void;
   setResourceActiveState: (res: GameResource, value: boolean) => void;
 }
 
