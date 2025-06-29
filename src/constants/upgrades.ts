@@ -15,6 +15,14 @@ const INITIAL_MINING_TOOLS: GameUpgrade[] = [
     unlocked: false,
     value: "gold_pickaxe",
   },
+  {
+    cost: 350,
+    name: "Diamond Pickaxe",
+    power: 5,
+    type: "mine",
+    unlocked: false,
+    value: "diamond_pickaxe",
+  },
 ];
 
 const INITIAL_FUEL: GameUpgrade[] = [

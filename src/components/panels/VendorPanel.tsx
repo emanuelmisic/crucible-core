@@ -62,16 +62,22 @@ function VendorPanel() {
               <button>BOUGHT</button>
             </div>
           ))}
-        {game.upgrades
-          .filter((u) => u.type === selectedTab && !u.unlocked)
-          .map((upgrade) => (
-            <div className="item">
-              <span>{upgrade.name}</span>
-              <Image resource={upgrade} size={75} />
-              <span className="item__price">${upgrade.cost}</span>
-              <button onClick={() => game.unlockUpgrade(upgrade)}>BUY</button>
-            </div>
-          ))}
+        {
+          game.upgrades
+            .filter((u) => u.type === selectedTab && !u.unlocked)
+            .map((upgrade) => (
+              <div className="item">
+                <span>{upgrade.name}</span>
+                <Image resource={upgrade} size={75} />
+                <span className="item__price">${upgrade.cost}</span>
+                <button onClick={() => game.unlockUpgrade(upgrade)}>
+                  BUY ({game.miningPower} =&gt; {upgrade.power})
+                </button>
+              </div>
+            ))[0]
+        }
+        {game.upgrades.filter((u) => u.type === selectedTab && !u.unlocked)
+          .length > 0 && <div className="item item__empty">?</div>}
       </div>
     </div>
   );

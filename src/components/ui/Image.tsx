@@ -5,6 +5,10 @@ import goldOre from "@/assets/images/ores/gold.png";
 import platinumOre from "@/assets/images/ores/platinum.png";
 import diamondOre from "@/assets/images/ores/diamond.png";
 import titaniumOre from "@/assets/images/ores/titanium.png";
+import crystalOre from "@/assets/images/ores/crystal.png";
+import etheriumOre from "@/assets/images/ores/etherium.png";
+import oxidiumOre from "@/assets/images/ores/oxidium.png";
+import baseteriumOre from "@/assets/images/ores/baseterium.png";
 
 import ironAlloy from "@/assets/images/alloys/iron.png";
 import bronzeAlloy from "@/assets/images/alloys/bronze.png";
@@ -14,6 +18,7 @@ import platinumAlloy from "@/assets/images/alloys/platinum.png";
 
 import ironPickaxe from "@/assets/images/upgrades/iron_pickaxe.png";
 import goldPickaxe from "@/assets/images/upgrades/gold_pickaxe.png";
+import diamondPickaxe from "@/assets/images/upgrades/diamond_pickaxe.png";
 
 interface ImageProps {
   resource: GameResource | GameUpgrade;
@@ -44,6 +49,14 @@ function Image({ resource, size = 25, className }: ImageProps) {
         return diamondOre;
       case "titanium":
         return titaniumOre;
+      case "crystal":
+        return crystalOre;
+      case "etherium":
+        return etheriumOre;
+      case "oxidium":
+        return oxidiumOre;
+      case "baseterium":
+        return baseteriumOre;
       default:
         return "";
     }
@@ -72,6 +85,8 @@ function Image({ resource, size = 25, className }: ImageProps) {
         return ironPickaxe;
       case "gold_pickaxe":
         return goldPickaxe;
+      case "diamond_pickaxe":
+        return diamondPickaxe;
       case "basic_fuel":
         return "";
       case "advanced_fuel":
