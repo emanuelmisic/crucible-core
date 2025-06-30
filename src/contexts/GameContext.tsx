@@ -176,15 +176,20 @@ function GameContextComposer({ children }: { children: ReactNode }) {
         return e;
       });
     });
-    const ores = resources.filter((r) => r.type === "ore") as GameResourceOre[];
-    if (ores.filter((o) => o.active).length < 3) {
-      setResources((prevState) => {
-        return prevState.map((e) => {
-          if (e.value === res.value && e.type === res.type)
-            return { ...e, active: true };
-          return e;
-        });
-      });
+    if (res.type === "ore") {
+      const ores = resources.filter(
+        (r) => r.type === "ore"
+      ) as GameResourceOre[];
+      if (ores.filter((o) => o.active).length < 3) {
+        setResourceActiveState(res, true);
+      }
+    } else {
+      const alloys = resources.filter(
+        (r) => r.type === "alloy"
+      ) as GameResourceAlloy[];
+      if (alloys.filter((a) => a.active).length === 0) {
+        setResourceActiveState(res, true);
+      }
     }
   }
 
