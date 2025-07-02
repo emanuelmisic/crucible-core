@@ -39,14 +39,29 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-    border: 2px solid black;
+    border: 7px outset #815117;
     border-radius: 50%;
     width: 7rem;
     height: 7rem;
 	cursor: pointer;
+	background: radial-gradient(
+        circle farthest-corner at center center,
+        #462700 0%,
+        #d07200 100%
+      );
+      background: -webkit-radial-gradient(
+        circle farthest-corner at center center,
+        #462700 0%,
+        #d07200 100%
+      );
+      background: -moz-radial-gradient(
+        circle farthest-corner at center center,
+        #462700 0%,
+        #d07200 100%
+      );
 
 	&--selected {
-		border-color: #00882d;
+		border-color: #249249;
 	}
   }
 }

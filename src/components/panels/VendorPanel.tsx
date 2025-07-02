@@ -9,7 +9,7 @@ interface Powers {
 }
 type VendorTab = "mine" | "fuel" | "storage";
 
-function VendorPanel() {
+function VendorPanel({isVisible}: { isVisible: boolean }) {
   const game = useGame();
   const [powers, setPowers] = useState<Powers>({
     mining: game.miningPower,
@@ -45,7 +45,7 @@ function VendorPanel() {
   }, [game.miningPower, game.smeltingPower, game.storage]);
 
   return (
-    <div className="panel vendor-panel">
+    <div className="panel vendor-panel" style={{ display: isVisible ? "block" : "none" }}>
       <div className="panel__header vendor-panel__header">
         <button onClick={() => selectUpgrades("mine")}>Mining tools</button>
         <button onClick={() => selectUpgrades("fuel")}>Fuel</button>

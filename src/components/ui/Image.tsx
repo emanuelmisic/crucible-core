@@ -19,6 +19,7 @@ import platinumAlloy from "@/assets/images/alloys/platinum.png";
 import ironPickaxe from "@/assets/images/upgrades/iron_pickaxe.png";
 import goldPickaxe from "@/assets/images/upgrades/gold_pickaxe.png";
 import diamondPickaxe from "@/assets/images/upgrades/diamond_pickaxe.png";
+import megaDrill from "@/assets/images/upgrades/mega_drill.png";
 
 interface ImageProps {
   resource: GameResource | GameUpgrade;
@@ -87,6 +88,8 @@ function Image({ resource, size = 25, className }: ImageProps) {
         return goldPickaxe;
       case "diamond_pickaxe":
         return diamondPickaxe;
+      case "mega_drill":
+        return megaDrill;
       case "basic_fuel":
         return "";
       case "advanced_fuel":

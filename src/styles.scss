@@ -1,7 +1,7 @@
 @use "@/styles/App.scss";
 @use "@/styles/Panels.scss";
 @use "@/styles/Dialogs.scss";
-@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap");
 
 * {
   margin: 0;
@@ -9,4 +9,8 @@
   box-sizing: border-box;
   font-size: 16px;
   font-family: "Bubblegum Sans", sans-serif;
+}
+
+body {
+  overflow-x: hidden;
 }

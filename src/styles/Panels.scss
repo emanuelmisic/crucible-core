@@ -143,8 +143,11 @@
 }
 
 .merchant-panel {
+  position: absolute;
+  right: 0;
+  width: 45rem;
+  animation: slideInRight 0.5s;
   background-color: #e3d910;
-  width: fit-content;
 
   .merchant-panel__item-container {
     display: flex;
@@ -193,6 +196,10 @@
 }
 
 .vendor-panel {
+  position: absolute;
+  right: 0;
+  width: 45rem;
+  animation: slideInRight 0.5s;
   background-color: #146aeb;
 
   .power {
@@ -241,5 +248,14 @@
         padding: 2px;
       }
     }
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

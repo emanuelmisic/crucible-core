@@ -23,6 +23,14 @@ const INITIAL_MINING_TOOLS: GameUpgrade[] = [
     unlocked: false,
     value: "diamond_pickaxe",
   },
+  {
+    cost: 500000,
+    name: "Mega Drill",
+    power: 1000,
+    type: "mine",
+    unlocked: false,
+    value: "mega_drill",
+  },
 ];
 
 const INITIAL_FUEL: GameUpgrade[] = [

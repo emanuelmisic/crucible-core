@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import Image from "@/components/ui/Image";
 
-function MerchantPanel() {
+function MerchantPanel({ isVisible }: { isVisible: boolean }) {
   const game = useGame();
   const [selectedTab, setSelectedTab] = useState<"ore" | "alloy">("ore");
 
@@ -12,7 +12,10 @@ function MerchantPanel() {
   }
 
   return (
-    <div className="panel merchant-panel">
+    <div
+      className="panel merchant-panel"
+      style={{ display: isVisible ? "block" : "none" }}
+    >
       <div className="panel__header merchant-panel__header">
         <button onClick={() => selectResources("ore")}>Ores</button>
         <button onClick={() => selectResources("alloy")}>Alloys</button>

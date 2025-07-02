@@ -12,6 +12,18 @@ function App() {
   const game = useGame();
   const [ores, setOres] = useState<GameResourceOre[]>([]);
   const [alloys, setAlloys] = useState<GameResourceAlloy[]>([]);
+  const [vendorVisible, setVendorVisible] = useState(false);
+  const [merchantVisible, setMerchantVisible] = useState(false);
+
+  function toggleVisibility(panelName: string) {
+    if (panelName === "vendor") {
+      setMerchantVisible(false);
+      setVendorVisible(!vendorVisible);
+    } else if (panelName === "merchant") {
+      setVendorVisible(false);
+      setMerchantVisible(!merchantVisible);
+    }
+  }
 
   useEffect(() => {
     setOres(
@@ -36,9 +48,13 @@ function App() {
           <MiningPanel ores={ores} />
           {alloys.length > 0 && <SmeltingPanel ores={ores} alloys={alloys} />}
         </div>
-        <MerchantPanel />
-        <VendorPanel />
+        <MerchantPanel isVisible={merchantVisible} />
+        <VendorPanel isVisible={vendorVisible} />
       </div>
+      <nav>
+        <button onClick={() => toggleVisibility("merchant")}>merchant</button>
+        <button onClick={() => toggleVisibility("vendor")}>vendor</button>
+      </nav>
     </>
   );
 }
