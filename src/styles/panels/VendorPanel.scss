@@ -1,0 +1,55 @@
+.vendor-panel {
+  position: absolute;
+  right: 0;
+  width: 45rem;
+  animation: slideInRight 0.5s;
+  background-color: #146aeb;
+
+  .power {
+    margin-left: auto;
+    margin-right: 1rem;
+  }
+
+  .vendor-panel__item-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      background: radial-gradient(
+        circle farthest-corner at center center,
+        #002153 0%,
+        #0051cb 100%
+      );
+      background: -webkit-radial-gradient(
+        circle farthest-corner at center center,
+        #002153 0%,
+        #0051cb 100%
+      );
+      background: -moz-radial-gradient(
+        circle farthest-corner at center center,
+        #002153 0%,
+        #0051cb 100%
+      );
+      width: 10rem;
+      height: 10rem;
+      border: 7px outset #002153;
+      border-radius: 2rem;
+
+      button {
+        background-color: #c58d00;
+        color: #ffffff;
+        cursor: pointer;
+        border: 2px outset #ffb700;
+        border-radius: 5px;
+        padding: 2px;
+      }
+    }
+  }
+}

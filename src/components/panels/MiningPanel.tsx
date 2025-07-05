@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
+
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import FocusOresDialog from "@/components/dialogs/FocusOresDialog";

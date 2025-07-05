@@ -1,0 +1,37 @@
+.mining-panel {
+  background-color: #a96e00;
+  width: fit-content;
+
+  .mining-panel__ore-container {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    .ore,
+    .ore__empty {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #342200;
+      background: radial-gradient(
+        circle farthest-corner at center center,
+        #342200 0%,
+        #a26a00 100%
+      );
+      background: -webkit-radial-gradient(
+        circle farthest-corner at center center,
+        #342200 0%,
+        #a26a00 100%
+      );
+      background: -moz-radial-gradient(
+        circle farthest-corner at center center,
+        #342200 0%,
+        #a26a00 100%
+      );
+      width: 10rem;
+      height: 10rem;
+      border: 7px outset #583900;
+      border-radius: 50%;
+    }
+  }
+}

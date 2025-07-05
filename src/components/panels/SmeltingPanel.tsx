@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useGame } from "@/contexts/GameContext";
-import ResourceTile from "@/components/ResourceTile";
-import ProgressBar from "@/components/ui/ProgressBar";
-import Image from "@/components/ui/Image";
+
 import SelectAlloyDialog from "@/components/dialogs/SelectAlloyDialog";
-import { formatNumber } from "@/helpers/helperFunctions";
+import SmeltingItemTile from "@/components/SmeltingItemTile";
 
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
@@ -35,32 +33,7 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
           <button onClick={() => setShowDialog(true)}>Choose alloy</button>
         </div>
         <div className="smelting-panel__alloy-container">
-          <div className="alloy-recipe">
-            {Object.entries(selectedAlloy.smeltingRecipe).map(
-              ([key, value]) => (
-                <span key={key}>
-                  <Image
-                    resource={ores.filter((ore) => ore.value === key)[0]}
-                  />{" "}
-                  {formatNumber(
-                    ores.filter((ore) => ore.value === key)[0].amount
-                  )}
-                  /{formatNumber(value)}
-                </span>
-              )
-            )}
-          </div>
-          <div key={selectedAlloy.name} className="alloy">
-            <ResourceTile
-              resource={selectedAlloy}
-              onClick={() => game.smeltAlloy(selectedAlloy)}
-            />
-            <ProgressBar
-              type="smelting"
-              currentProgress={game.smeltingProgress[selectedAlloy.value]}
-              maxProgress={selectedAlloy.smeltingDifficulty}
-            />
-          </div>
+          <SmeltingItemTile ores={ores} selectedAlloy={selectedAlloy} />
         </div>
       </div>
     </>
