@@ -1,0 +1,11 @@
+.tab-btn {
+  background: none;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  padding: 0.5rem;
+
+  &--selected {
+    border-bottom: 4px outset #ffffff;
+    border-right: 4px outset #ffffff;
+  }
+}

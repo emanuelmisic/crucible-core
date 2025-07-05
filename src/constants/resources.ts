@@ -19,6 +19,7 @@ const INITIAL_SMELTING_PROGRESS: { [key: string]: number } = {
 const INITIAL_ORES: GameResourceOre[] = [
   {
     active: true,
+	isDisplayed: true,
     amount: 0,
     miningHardness: 5,
     name: "Iron ore",
@@ -30,6 +31,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     miningHardness: 10,
     name: "Bronze ore",
@@ -41,6 +43,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     miningHardness: 20,
     name: "Silver ore",
@@ -52,6 +55,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     miningHardness: 60,
     name: "Gold ore",
@@ -63,6 +67,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 100,
     name: "Platinum ore",
@@ -74,6 +79,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 200,
     name: "Diamond ore",
@@ -85,6 +91,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 500,
     name: "Titanium ore",
@@ -96,6 +103,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 500,
     name: "Raw crystal",
@@ -107,6 +115,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 500,
     name: "Raw etherium",
@@ -118,6 +127,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 500,
     name: "Raw oxidium",
@@ -129,6 +139,7 @@ const INITIAL_ORES: GameResourceOre[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     miningHardness: 500,
     name: "Raw baseterium",
@@ -143,6 +154,7 @@ const INITIAL_ORES: GameResourceOre[] = [
 const INITIAL_ALLOYS: GameResourceAlloy[] = [
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     name: "Iron ingot",
     smeltingDifficulty: 5,
@@ -157,6 +169,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
   },
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     name: "Bronze ingot",
     smeltingDifficulty: 10,
@@ -171,6 +184,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
   },
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     name: "Silver bar",
     smeltingDifficulty: 20,
@@ -185,6 +199,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
   },
   {
     active: false,
+	isDisplayed: true,
     amount: 0,
     name: "Gold bar",
     smeltingDifficulty: 10,
@@ -199,6 +214,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
   },
   {
     active: false,
+	isDisplayed: false,
     amount: 0,
     name: "Platinum bar",
     smeltingDifficulty: 10,

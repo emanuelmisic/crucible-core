@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import Image from "@/components/ui/Image";
+import TabBtn from "../ui/TabBtn";
 
 function MerchantPanel({ isVisible }: { isVisible: boolean }) {
   const game = useGame();
   const [selectedTab, setSelectedTab] = useState<"ore" | "alloy">("ore");
-
-  function selectResources(res: "ore" | "alloy") {
-    // TODO: set active tab class logic
-    setSelectedTab(res);
-  }
 
   return (
     <div
@@ -17,8 +13,20 @@ function MerchantPanel({ isVisible }: { isVisible: boolean }) {
       style={{ display: isVisible ? "block" : "none" }}
     >
       <div className="panel__header merchant-panel__header">
-        <button onClick={() => selectResources("ore")}>Ores</button>
-        <button onClick={() => selectResources("alloy")}>Alloys</button>
+        <TabBtn
+          textDark
+          isSelected={selectedTab === "ore"}
+          onClick={() => setSelectedTab("ore")}
+        >
+          Ores
+        </TabBtn>
+        <TabBtn
+          textDark
+          isSelected={selectedTab === "alloy"}
+          onClick={() => setSelectedTab("alloy")}
+        >
+          Alloys
+        </TabBtn>
       </div>
       <div className="merchant-panel__item-container">
         {game.resources

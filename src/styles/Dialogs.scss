@@ -12,8 +12,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid #000000;
+    border: 1px solid #a4620b;
+    border-radius: 8px;
     background-color: #d18117;
+    box-shadow: 2px 2px #00000080;
     width: 26rem;
     z-index: 999;
 
@@ -23,45 +25,60 @@
       .title,
       .close-btn {
         margin-left: auto;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: #950000;
+        cursor: pointer;
+        padding: 0 0.5rem 0 0;
+
+        &:hover {
+          transform: scale(1.4);
+          transition: transform 0.2s;
+        }
       }
     }
 
     .dialog__content {
       display: flex;
       flex-wrap: wrap;
-	  gap: 1rem;
-	  padding: 1rem;
+      gap: 1rem;
+      padding: 1rem;
     }
   }
 
   .dialog__ore,
   .dialog__alloy {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 7px outset #815117;
     border-radius: 50%;
     width: 7rem;
     height: 7rem;
-	cursor: pointer;
-	background: radial-gradient(
-        circle farthest-corner at center center,
-        #462700 0%,
-        #d07200 100%
-      );
-      background: -webkit-radial-gradient(
-        circle farthest-corner at center center,
-        #462700 0%,
-        #d07200 100%
-      );
-      background: -moz-radial-gradient(
-        circle farthest-corner at center center,
-        #462700 0%,
-        #d07200 100%
-      );
+    cursor: pointer;
+    background: radial-gradient(
+      circle farthest-corner at center center,
+      #462700 0%,
+      #d07200 100%
+    );
+    background: -webkit-radial-gradient(
+      circle farthest-corner at center center,
+      #462700 0%,
+      #d07200 100%
+    );
+    background: -moz-radial-gradient(
+      circle farthest-corner at center center,
+      #462700 0%,
+      #d07200 100%
+    );
 
-	&--selected {
-		border-color: #249249;
-	}
+    &--selected {
+      border-color: #249249;
+    }
   }
 }

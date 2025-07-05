@@ -19,6 +19,7 @@ interface GameContext {
 
 interface GameResource {
   active: boolean;
+  isDisplayed: boolean;
   amount: number;
   name: string;
   miningHardness?: number;

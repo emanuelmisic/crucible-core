@@ -59,7 +59,7 @@ function Image({ resource, size = 25, className }: ImageProps) {
       case "baseterium":
         return baseteriumOre;
       default:
-        return "";
+        return undefined;
     }
   }
 
@@ -76,7 +76,7 @@ function Image({ resource, size = 25, className }: ImageProps) {
       case "platinum":
         return platinumAlloy;
       default:
-        return "";
+        return undefined;
     }
   }
 
@@ -91,15 +91,15 @@ function Image({ resource, size = 25, className }: ImageProps) {
       case "mega_drill":
         return megaDrill;
       case "basic_fuel":
-        return "";
+        return undefined;
       case "advanced_fuel":
-        return "";
+        return undefined;
       case "small_container":
-        return;
+        return undefined;
       case "medium_crate":
-        return "";
+        return undefined;
       default:
-        return "";
+        return undefined;
     }
   }
 

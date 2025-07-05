@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGame } from "@/contexts/GameContext";
+import { formatNumber } from "@/helpers/helperFunctions";
 import "@/styles.scss";
 
 import ResourcesPanel from "@/components/panels/ResourcesPanel";
@@ -40,7 +41,7 @@ function App() {
         <ResourcesPanel ores={ores} alloys={alloys} />
         <h1>Crucible Core: Humble Beginnings</h1>
         <div className="app-header__money-panel">
-          <p>💲{game.money}</p>
+          <p>💲{formatNumber(game.money)}</p>
         </div>
       </div>
       <div className="app-body">

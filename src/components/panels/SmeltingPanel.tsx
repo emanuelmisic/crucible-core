@@ -4,6 +4,7 @@ import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import Image from "@/components/ui/Image";
 import SelectAlloyDialog from "@/components/dialogs/SelectAlloyDialog";
+import { formatNumber } from "@/helpers/helperFunctions";
 
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
@@ -41,7 +42,10 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
                   <Image
                     resource={ores.filter((ore) => ore.value === key)[0]}
                   />{" "}
-                  {ores.filter((ore) => ore.value === key)[0].amount}/{value}
+                  {formatNumber(
+                    ores.filter((ore) => ore.value === key)[0].amount
+                  )}
+                  /{formatNumber(value)}
                 </span>
               )
             )}

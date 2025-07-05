@@ -1,6 +1,8 @@
-import { useGame } from "@/contexts/GameContext";
 import { useEffect, useState } from "react";
+import { useGame } from "@/contexts/GameContext";
+import { formatNumber } from "@/helpers/helperFunctions";
 import Image from "@/components/ui/Image";
+import TabBtn from "@/components/ui/TabBtn";
 
 interface Powers {
   mining: number;
@@ -9,7 +11,7 @@ interface Powers {
 }
 type VendorTab = "mine" | "fuel" | "storage";
 
-function VendorPanel({isVisible}: { isVisible: boolean }) {
+function VendorPanel({ isVisible }: { isVisible: boolean }) {
   const game = useGame();
   const [powers, setPowers] = useState<Powers>({
     mining: game.miningPower,
@@ -18,19 +20,14 @@ function VendorPanel({isVisible}: { isVisible: boolean }) {
   });
   const [selectedTab, setSelectedTab] = useState<VendorTab>("mine");
 
-  function selectUpgrades(type: VendorTab) {
-    // active class logic
-    setSelectedTab(type);
-  }
-
   function displayPower() {
     switch (selectedTab) {
       case "mine":
-        return `Mining power: ${powers.mining}`;
+        return `Mining power: ${formatNumber(powers.mining)}`;
       case "fuel":
-        return `Smelting power: ${powers.smelting}`;
+        return `Smelting power: ${formatNumber(powers.smelting)}`;
       case "storage":
-        return `Storage: ${powers.storage}`;
+        return `Storage: ${formatNumber(powers.storage)}`;
       default:
         return "";
     }
@@ -45,11 +42,29 @@ function VendorPanel({isVisible}: { isVisible: boolean }) {
   }, [game.miningPower, game.smeltingPower, game.storage]);
 
   return (
-    <div className="panel vendor-panel" style={{ display: isVisible ? "block" : "none" }}>
+    <div
+      className="panel vendor-panel"
+      style={{ display: isVisible ? "block" : "none" }}
+    >
       <div className="panel__header vendor-panel__header">
-        <button onClick={() => selectUpgrades("mine")}>Mining tools</button>
-        <button onClick={() => selectUpgrades("fuel")}>Fuel</button>
-        <button onClick={() => selectUpgrades("storage")}>Storage</button>
+        <TabBtn
+          isSelected={selectedTab === "mine"}
+          onClick={() => setSelectedTab("mine")}
+        >
+          Mining tools
+        </TabBtn>
+        <TabBtn
+          isSelected={selectedTab === "fuel"}
+          onClick={() => setSelectedTab("fuel")}
+        >
+          Fuel
+        </TabBtn>
+        <TabBtn
+          isSelected={selectedTab === "storage"}
+          onClick={() => setSelectedTab("storage")}
+        >
+          Storage
+        </TabBtn>
         <div className="power">{displayPower()}</div>
       </div>
       <div className="vendor-panel__item-container">
@@ -69,9 +84,12 @@ function VendorPanel({isVisible}: { isVisible: boolean }) {
               <div className="item">
                 <span>{upgrade.name}</span>
                 <Image resource={upgrade} size={75} />
-                <span className="item__price">${upgrade.cost}</span>
+                <span className="item__price">
+                  ${formatNumber(upgrade.cost)}
+                </span>
                 <button onClick={() => game.unlockUpgrade(upgrade)}>
-                  BUY ({game.miningPower} =&gt; {upgrade.power})
+                  BUY ({formatNumber(game.miningPower)} =&gt;{" "}
+                  {formatNumber(upgrade.power)})
                 </button>
               </div>
             ))[0]

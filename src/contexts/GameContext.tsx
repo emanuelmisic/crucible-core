@@ -10,8 +10,8 @@ const GameContext = createContext<GameContext | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
   const [money, setMoney] = useState(5000);
-  const [storage, setStorage] = useState(100);
-  const [miningPower, setMiningPower] = useState(1);
+  const [storage, setStorage] = useState(100000000);
+  const [miningPower, setMiningPower] = useState(1000000);
   const [smeltingPower, setSmeltingPower] = useState(1);
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [upgrades, setUpgrades] = useState<GameUpgrade[]>(INITIAL_UPGRADES);
