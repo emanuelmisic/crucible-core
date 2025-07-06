@@ -12,11 +12,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 1px solid #a4620b;
+    border: 1px solid #717171;
     border-radius: 8px;
-    background-color: #d18117;
+    background-color: #b1b1b1;
     box-shadow: 2px 2px #00000080;
-    width: 26rem;
     z-index: 999;
 
     .dialog__header {
@@ -52,29 +51,30 @@
   }
 
   .dialog__ore,
-  .dialog__alloy {
+  .dialog__alloy,
+  .dialog__resource {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 7px outset #815117;
+    border: 7px solid #8e8e8e;
     border-radius: 50%;
     width: 7rem;
     height: 7rem;
     cursor: pointer;
     background: radial-gradient(
       circle farthest-corner at center center,
-      #462700 0%,
-      #d07200 100%
+      #383838 0%,
+      #c3c3c3 100%
     );
     background: -webkit-radial-gradient(
       circle farthest-corner at center center,
-      #462700 0%,
-      #d07200 100%
+      #383838 0%,
+      #c3c3c3 100%
     );
     background: -moz-radial-gradient(
       circle farthest-corner at center center,
-      #462700 0%,
-      #d07200 100%
+      #383838 0%,
+      #c3c3c3 100%
     );
 
     &--selected {

@@ -15,6 +15,7 @@ interface GameContext {
   unlockResource: (res: GameResource) => void;
   unlockUpgrade: (upgrade: GameUpgrade) => void;
   setResourceActiveState: (res: GameResource, value: boolean) => void;
+  setResourceIsDisplayedState: (res: GameResource, value: boolean) => void;
 }
 
 interface GameResource {

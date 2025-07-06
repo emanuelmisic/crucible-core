@@ -204,6 +204,17 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     });
   }
 
+  function setResourceIsDisplayedState(res: GameResource, value: boolean) {
+    setResources((prevState) => {
+      return prevState.map((e) => {
+        if (e.type === res.type && e.value === res.value) {
+          return { ...e, isDisplayed: value };
+        }
+        return e;
+      });
+    });
+  }
+
   function unlockUpgrade(tool: GameUpgrade) {
     if (money < tool.cost) return;
     setMoney(money - tool.cost);
@@ -245,6 +256,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     unlockResource,
     unlockUpgrade,
     setResourceActiveState,
+    setResourceIsDisplayedState,
   };
 
   return (
