@@ -32,7 +32,7 @@ $ash-sizes: 0.5px, 1.0px, 1.5px, 2px;
 $ember-sizes: 0.25px, 0.5px, 1px, 1.5px;
 
 @mixin ashes-and-embers($count) {
-  $layers: ();
+  $backgrounds: ();
 
   @for $i from 1 through $count {
     $x: #{math.random(100) + "%"};
@@ -54,8 +54,8 @@ $ember-sizes: 0.25px, 0.5px, 1px, 1.5px;
     $blur: $size + 1px;
 
     $particle: radial-gradient(circle at $x $y, $color $size, transparent $blur);
-    $layers: list.append($layers, $particle, comma);
+    $backgrounds: list.append($backgrounds, $particle, comma);
   }
 
-  background-image: $layers;
+  background-image: $backgrounds;
 }
