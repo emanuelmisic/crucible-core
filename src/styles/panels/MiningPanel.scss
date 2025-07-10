@@ -1,6 +1,11 @@
+@use '@/styles/mixins.scss' as m;
+
 .mining-panel {
-  background-color: #a96e00;
+  background-color: #603e2d;
   width: fit-content;
+  @include m.generate-pebbles(250);
+  background-size: 100% 100%;
+  background-repeat: repeat;
 
   .mining-panel__ore-container {
     display: flex;

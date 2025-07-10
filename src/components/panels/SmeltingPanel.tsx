@@ -35,6 +35,7 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
         <div className="smelting-panel__alloy-container">
           <SmeltingItemTile ores={ores} selectedAlloy={selectedAlloy} />
         </div>
+		<span className="fire"></span>
       </div>
     </>
   );
