@@ -15,13 +15,8 @@
     &--smelting {
       display: flex;
       height: 10px;
-      background: linear-gradient(
-        90deg,
-        #ffe100 0%,
-        #ff8400 70%,
-        #ff1500 100%,
-      );
-	  transition: width 0.1s ease;
+      background: linear-gradient(90deg, #ffe100 0%, #ff8400 70%, #ff1500 100%);
+      transition: width 0.1s ease;
     }
   }
 }

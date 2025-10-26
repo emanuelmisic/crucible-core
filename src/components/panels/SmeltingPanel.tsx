@@ -3,6 +3,7 @@ import { useGame } from "@/contexts/GameContext";
 
 import SelectAlloyDialog from "@/components/dialogs/SelectAlloyDialog";
 import SmeltingItemTile from "@/components/SmeltingItemTile";
+import TabBtn from "@/components/ui/TabBtn";
 
 interface SmeltingPanelProps {
   ores: GameResourceOre[];
@@ -29,13 +30,15 @@ function SmeltingPanel({ ores, alloys }: SmeltingPanelProps) {
         setSelectedAlloy={setSelectedAlloy}
       />
       <div className="panel smelting-panel">
-        <div className="panel__header">
-          <button onClick={() => setShowDialog(true)}>Choose alloy</button>
+        <div className="panel__header smelting-panel__header">
+          <TabBtn isSelected={true} onClick={() => setShowDialog(true)}>
+            Choose alloy
+          </TabBtn>
         </div>
         <div className="smelting-panel__alloy-container">
           <SmeltingItemTile ores={ores} selectedAlloy={selectedAlloy} />
         </div>
-		<span className="fire"></span>
+        <span className="fire"></span>
       </div>
     </>
   );

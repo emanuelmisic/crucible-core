@@ -6,8 +6,11 @@ function SelectAlloyDialog({
   showDialog,
   closeDialog,
   alloys,
-  setSelectedAlloy
-}: DialogProps & { alloys: GameResourceAlloy[], setSelectedAlloy: (alloy: GameResourceAlloy) => void }) {
+  setSelectedAlloy,
+}: DialogProps & {
+  alloys: GameResourceAlloy[];
+  setSelectedAlloy: (alloy: GameResourceAlloy) => void;
+}) {
   const game = useGame();
 
   function getDialogAlloyClass(alloy: GameResourceAlloy) {
@@ -21,7 +24,7 @@ function SelectAlloyDialog({
       game.setResourceActiveState(a, false);
     }
     game.setResourceActiveState(alloy, true);
-	setSelectedAlloy(alloy);
+    setSelectedAlloy(alloy);
   }
 
   return (

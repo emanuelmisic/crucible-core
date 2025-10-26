@@ -72,7 +72,7 @@ const INITIAL_STORAGE_ITEMS: GameUpgrade[] = [
 ];
 
 function generateUpgrades(): GameUpgrade[] {
-  let result: GameUpgrade[] = [];
+  const result: GameUpgrade[] = [];
   INITIAL_MINING_TOOLS.forEach((ore) => {
     result.push(ore);
   });

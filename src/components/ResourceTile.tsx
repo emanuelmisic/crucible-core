@@ -6,9 +6,11 @@ interface ResourceTileProps {
 }
 
 function ResourceTile({ resource, onClick }: ResourceTileProps) {
-  return <div onClick={onClick}>
-	<Image className="mining-tile" resource={resource} size={100} />
-  </div>;
+  return (
+    <div onClick={onClick}>
+      <Image className="mining-tile" resource={resource} size={100} />
+    </div>
+  );
 }
 
 export default ResourceTile;

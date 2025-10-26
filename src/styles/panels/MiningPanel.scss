@@ -8,34 +8,46 @@
 
   .mining-panel__ore-container {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.75rem;
     padding: 0.75rem;
+
     .ore,
     .ore__empty {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
-      background: #342200;
+      gap: 0.25rem;
+      padding: 0.5rem;
       background: radial-gradient(
         circle farthest-corner at center center,
-        #342200 0%,
-        #a26a00 100%
+        #2a1a0a 0%,
+        #5a3a1a 100%
       );
       background: -webkit-radial-gradient(
         circle farthest-corner at center center,
-        #342200 0%,
-        #a26a00 100%
+        #2a1a0a 0%,
+        #5a3a1a 100%
       );
       background: -moz-radial-gradient(
         circle farthest-corner at center center,
-        #342200 0%,
-        #a26a00 100%
+        #2a1a0a 0%,
+        #5a3a1a 100%
       );
-      width: 8.5rem;
-      height: 8.5rem;
-      border: 6px outset #583900;
-      border-radius: 50%;
+      width: 11rem;
+      height: 11rem;
+      border: 6px outset #1a0f05;
+      border-radius: 1.75rem;
+    }
+
+    .ore__empty {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-weight: bold;
     }
   }
 }

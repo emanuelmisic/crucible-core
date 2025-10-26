@@ -4,6 +4,7 @@ import { useGame } from "@/contexts/GameContext";
 import ResourceTile from "@/components/ResourceTile";
 import ProgressBar from "@/components/ui/ProgressBar";
 import FocusOresDialog from "@/components/dialogs/FocusOresDialog";
+import TabBtn from "@/components/ui/TabBtn";
 
 function MiningPanel({ ores }: { ores: GameResourceOre[] }) {
   const game = useGame();
@@ -17,8 +18,10 @@ function MiningPanel({ ores }: { ores: GameResourceOre[] }) {
         ores={ores}
       />
       <div className="panel mining-panel">
-        <div className="panel__header">
-          <button onClick={() => setShowDialog(true)}>Focus ores</button>
+        <div className="panel__header mining-panel__header">
+          <TabBtn isSelected={true} onClick={() => setShowDialog(true)}>
+            Focus ores
+          </TabBtn>
         </div>
         <div className="mining-panel__ore-container">
           {ores

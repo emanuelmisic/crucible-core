@@ -16,9 +16,7 @@ export default tseslint.config(
         },
         alias: {
           extensions: [".tsx", ".ts", ".scss", ".d.ts"],
-          map: [
-            ["@", "./src"],
-          ],
+          map: [["@", "./src"]],
         },
       },
     },

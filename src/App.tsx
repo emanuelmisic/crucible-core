@@ -53,15 +53,17 @@ function App() {
           {merchantVisible && <MerchantPanel isVisible={merchantVisible} />}
           {vendorVisible && <VendorPanel isVisible={vendorVisible} />}
           {!merchantVisible && !vendorVisible && (
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              color: "#888",
-              fontSize: "1.2rem"
-            }}>
-              Select a shop from the navigation below
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "100%",
+                color: "#888",
+                fontSize: "1.2rem",
+              }}
+            >
+              Select a menu from the navigation below
             </div>
           )}
         </div>
