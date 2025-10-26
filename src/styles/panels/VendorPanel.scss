@@ -1,7 +1,7 @@
 .vendor-panel {
   width: 100%;
   max-width: 50rem;
-  background-color: #146aeb;
+  background: linear-gradient(135deg, #3a1a0a, #2a1005);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -9,6 +9,8 @@
   .power {
     margin-left: auto;
     margin-right: 1rem;
+    color: #d4af37;
+    font-weight: bold;
   }
 
   .vendor-panel__item-container {
@@ -20,36 +22,79 @@
     .item {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem;
       color: #ffffff;
       background: radial-gradient(
         circle farthest-corner at center center,
-        #002153 0%,
-        #0051cb 100%
+        #2a1a0a 0%,
+        #4a2f1a 100%
       );
       background: -webkit-radial-gradient(
         circle farthest-corner at center center,
-        #002153 0%,
-        #0051cb 100%
+        #2a1a0a 0%,
+        #4a2f1a 100%
       );
       background: -moz-radial-gradient(
         circle farthest-corner at center center,
-        #002153 0%,
-        #0051cb 100%
+        #2a1a0a 0%,
+        #4a2f1a 100%
       );
-      width: 8.5rem;
-      height: 8.5rem;
-      border: 6px outset #002153;
+      width: 11rem;
+      height: 11rem;
+      border: 6px outset #1a0f05;
       border-radius: 1.75rem;
 
+      span {
+        font-size: 0.75rem;
+        text-align: center;
+      }
+
+      .item__price {
+        color: #d4af37;
+        font-weight: bold;
+        font-size: 0.85rem;
+      }
+
       button {
-        background-color: #c58d00;
+        background: linear-gradient(135deg, #6a4a2a, #5a3a1a);
         color: #ffffff;
         cursor: pointer;
-        border: 2px outset #ffb700;
-        border-radius: 5px;
-        padding: 2px;
+        border: 2px outset #8a6a3a;
+        border-radius: 6px;
+        padding: 0.35rem 0.5rem;
+        font-size: 0.65rem;
+        font-weight: bold;
+        width: 90%;
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+        &:hover {
+          background: linear-gradient(135deg, #8a6a3a, #7a5a2a);
+          transform: translateY(-1px);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        &:active {
+          transform: translateY(0);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+      }
+
+      &__bought {
+        button {
+          background: linear-gradient(135deg, #4a4a4a, #3a3a3a);
+          border-color: #6a6a6a;
+          cursor: default;
+
+          &:hover {
+            background: linear-gradient(135deg, #4a4a4a, #3a3a3a);
+            transform: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+          }
+        }
       }
     }
   }

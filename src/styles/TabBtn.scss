@@ -1,11 +1,26 @@
 .tab-btn {
-  background: none;
-  border: 1px solid #ffffff;
+  background: linear-gradient(135deg, rgba(80, 80, 80, 0.8), rgba(40, 40, 40, 0.9));
+  border: 3px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(100, 100, 100, 0.9), rgba(60, 60, 60, 1));
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  }
 
   &--selected {
-    border-bottom: 4px outset #ffffff;
-    border-right: 4px outset #ffffff;
+    background: linear-gradient(135deg, rgba(120, 120, 120, 1), rgba(80, 80, 80, 1));
+    border: 3px solid rgba(255, 255, 255, 0.7);
+    border-bottom-style: outset;
+    border-bottom-color: rgba(255, 255, 255, 0.8);
+    border-right-style: outset;
+    border-right-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.25);
   }
 }
