@@ -45,16 +45,30 @@ function App() {
         </div>
       </div>
       <div className="app-body">
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div className="game-area">
           <MiningPanel ores={ores} />
           {alloys.length > 0 && <SmeltingPanel ores={ores} alloys={alloys} />}
         </div>
-        <MerchantPanel isVisible={merchantVisible} />
-        <VendorPanel isVisible={vendorVisible} />
+        <div className="shop-area">
+          {merchantVisible && <MerchantPanel isVisible={merchantVisible} />}
+          {vendorVisible && <VendorPanel isVisible={vendorVisible} />}
+          {!merchantVisible && !vendorVisible && (
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              color: "#888",
+              fontSize: "1.2rem"
+            }}>
+              Select a shop from the navigation below
+            </div>
+          )}
+        </div>
       </div>
       <nav>
-        <button onClick={() => toggleVisibility("merchant")}>merchant</button>
-        <button onClick={() => toggleVisibility("vendor")}>vendor</button>
+        <button onClick={() => toggleVisibility("merchant")}>Merchant</button>
+        <button onClick={() => toggleVisibility("vendor")}>Vendor</button>
       </nav>
     </>
   );

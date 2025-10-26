@@ -1,16 +1,15 @@
-@use '@/styles/mixins.scss' as m;
-
 .mining-panel {
-  background-color: #603e2d;
-  width: fit-content;
-  @include m.generate-pebbles(250);
-  background-size: 100% 100%;
-  background-repeat: repeat;
+  background: linear-gradient(135deg, #4a3428, #3a2418);
+  width: 100%;
+  max-width: 50rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 
   .mining-panel__ore-container {
     display: flex;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 0.75rem;
+    padding: 0.75rem;
     .ore,
     .ore__empty {
       display: flex;
@@ -33,9 +32,9 @@
         #342200 0%,
         #a26a00 100%
       );
-      width: 10rem;
-      height: 10rem;
-      border: 7px outset #583900;
+      width: 8.5rem;
+      height: 8.5rem;
+      border: 6px outset #583900;
       border-radius: 50%;
     }
   }
