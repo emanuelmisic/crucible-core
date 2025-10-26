@@ -21,6 +21,9 @@ import goldPickaxe from "@/assets/images/upgrades/gold_pickaxe.png";
 import diamondPickaxe from "@/assets/images/upgrades/diamond_pickaxe.png";
 import megaDrill from "@/assets/images/upgrades/mega_drill.png";
 
+import basicFuel from "@/assets/images/upgrades/coal_bag.png";
+import advancedFuel from "@/assets/images/upgrades/coal_container.png";
+
 interface ImageProps {
   resource: GameResource | GameUpgrade;
   size?: number;
@@ -91,9 +94,9 @@ function Image({ resource, size = 25, className }: ImageProps) {
       case "mega_drill":
         return megaDrill;
       case "basic_fuel":
-        return undefined;
+        return basicFuel;
       case "advanced_fuel":
-        return undefined;
+        return advancedFuel;
       case "small_container":
         return undefined;
       case "medium_crate":
