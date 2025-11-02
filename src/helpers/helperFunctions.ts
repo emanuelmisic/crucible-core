@@ -4,10 +4,10 @@ function formatNumber(number: number): string {
     calculatedValue = (number / 1000).toString().slice(0, 5);
     return `${_removeExcessZero(calculatedValue)}k`;
   } else if (number >= 1000000 && number < 1000000000) {
-    calculatedValue = (number / 1000000).toString().slice(0, 5);
+    calculatedValue = (number / 1000000).toString().slice(0, 4);
     return `${_removeExcessZero(calculatedValue)}M`;
   } else if (number >= 1000000000 && number < 1000000000000) {
-    calculatedValue = (number / 1000000000).toString().slice(0, 5);
+    calculatedValue = (number / 1000000000).toString().slice(0, 4);
     return `${_removeExcessZero(calculatedValue)}B`;
   }
   return number.toString();
