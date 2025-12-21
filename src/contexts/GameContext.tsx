@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import {
-  INITIAL_MINING_PROGRESS,
   INITIAL_RESOURCES,
   INITIAL_SMELTING_PROGRESS,
 } from "@/constants/resources";
@@ -10,7 +9,7 @@ import { STRUCTURES } from "@/constants/structures";
 const GameContextInstance = createContext<GameContext | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
-  const [money, setMoney] = useState(150);
+  const [money, setMoney] = useState(1500);
   const [storage, setStorage] = useState(100000000);
   const [miningPower, setMiningPower] = useState(1000000);
   const [smeltingPower, setSmeltingPower] = useState(1);
@@ -18,50 +17,9 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const [upgrades, setUpgrades] = useState<GameUpgrade[]>(INITIAL_UPGRADES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
 
-  const [miningProgress, setMiningProgress] = useState<{
-    [key: string]: number;
-  }>(INITIAL_MINING_PROGRESS);
   const [smeltingProgress, setSmeltingProgress] = useState<{
     [key: string]: number;
   }>(INITIAL_SMELTING_PROGRESS);
-
-  //   MINING LOGIC
-
-  function mineOre(ore: GameResourceOre) {
-    if (ore.amount >= storage) return;
-    let newMiningProgress = 0;
-    if (miningProgress[ore.value] < ore.miningHardness) {
-      _addOreMiningProgress(ore.value);
-      newMiningProgress = miningProgress[ore.value] + miningPower;
-    }
-    _handleOreMiningStep(ore, newMiningProgress);
-  }
-
-  function _handleOreMiningStep(
-    ore: GameResourceOre,
-    newMiningProgress: number
-  ) {
-    if (newMiningProgress < ore.miningHardness) return;
-    if (miningPower > ore.miningHardness) {
-      const amountToMine = Math.floor(miningPower / ore.miningHardness);
-      addResource(ore.value, "ore", amountToMine);
-    } else {
-      addResource(ore.value, "ore", 1);
-    }
-    _resetOreMiningProgress(ore.value);
-  }
-
-  function _addOreMiningProgress(ore: string) {
-    setMiningProgress((prevState) => {
-      return { ...prevState, [ore]: miningProgress[ore] + miningPower };
-    });
-  }
-
-  function _resetOreMiningProgress(ore: string) {
-    setMiningProgress((prevState) => {
-      return { ...prevState, [ore]: 0 };
-    });
-  }
 
   // SMELTING LOGIC
 
@@ -196,7 +154,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   // Collect accumulated resources from a structure
   const collectResources = (structureId: string) => {
     const structure = structures.find(s => s.id === structureId);
-    if (!structure || structure.accumulated === 0) return;
+    if (!structure || structure.accumulated < 1) return;
 
     // Add accumulated resources to inventory
     const amount = Math.floor(structure.accumulated);
@@ -331,9 +289,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     resources,
     upgrades,
     structures,
-    miningProgress,
     smeltingProgress,
-    mineOre,
     smeltAlloy,
     miningPower,
     smeltingPower,

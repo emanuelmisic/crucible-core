@@ -37,8 +37,8 @@ const INITIAL_ORES: GameResourceOre[] = [
     name: "Bronze ore",
     sellingPrice: 2,
     type: "ore",
-    unlocked: false,
-    unlockedFor: 200,
+    unlocked: true,
+    unlockedFor: 0,
     value: "bronze",
   },
   {
@@ -49,8 +49,8 @@ const INITIAL_ORES: GameResourceOre[] = [
     name: "Silver ore",
     sellingPrice: 5,
     type: "ore",
-    unlocked: false,
-    unlockedFor: 1000,
+    unlocked: true,
+    unlockedFor: 0,
     value: "silver",
   },
   {

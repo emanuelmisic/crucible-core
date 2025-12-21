@@ -4,9 +4,7 @@ interface GameContext {
   resources: GameResource[];
   upgrades: GameUpgrade[];
   structures: GameStructure[];
-  miningProgress: { [key: string]: number };
   smeltingProgress: { [key: string]: number };
-  mineOre: (ore: GameResourceOre) => void;
   smeltAlloy: (alloy: GameResourceAlloy) => void;
   miningPower: number;
   smeltingPower: number;

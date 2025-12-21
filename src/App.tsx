@@ -4,7 +4,6 @@ import { formatNumber } from "@/helpers/helperFunctions";
 import "@/styles.scss";
 
 import ResourcesPanel from "@/components/panels/ResourcesPanel";
-import MiningPanel from "@/components/panels/MiningPanel";
 import SmeltingPanel from "@/components/panels/SmeltingPanel";
 import MerchantPanel from "@/components/panels/MerchantPanel";
 import VendorPanel from "@/components/panels/VendorPanel";
@@ -16,21 +15,14 @@ function App() {
   const [alloys, setAlloys] = useState<GameResourceAlloy[]>([]);
   const [vendorVisible, setVendorVisible] = useState(false);
   const [merchantVisible, setMerchantVisible] = useState(false);
-  const [structuresVisible, setStructuresVisible] = useState(false);
 
   function toggleVisibility(panelName: string) {
     if (panelName === "vendor") {
       setMerchantVisible(false);
-      setStructuresVisible(false);
       setVendorVisible(!vendorVisible);
     } else if (panelName === "merchant") {
       setVendorVisible(false);
-      setStructuresVisible(false);
       setMerchantVisible(!merchantVisible);
-    } else if (panelName === "structures") {
-      setVendorVisible(false);
-      setMerchantVisible(false);
-      setStructuresVisible(!structuresVisible);
     }
   }
 
@@ -54,14 +46,13 @@ function App() {
       </div>
       <div className="app-body">
         <div className="game-area">
-          <MiningPanel ores={ores} />
+          <StructuresPanel />
           {alloys.length > 0 && <SmeltingPanel ores={ores} alloys={alloys} />}
         </div>
         <div className="shop-area">
           {merchantVisible && <MerchantPanel isVisible={merchantVisible} />}
           {vendorVisible && <VendorPanel isVisible={vendorVisible} />}
-          {structuresVisible && <StructuresPanel />}
-          {!merchantVisible && !vendorVisible && !structuresVisible && (
+          {!merchantVisible && !vendorVisible && (
             <div
               style={{
                 display: "flex",
@@ -80,7 +71,6 @@ function App() {
       <nav>
         <button onClick={() => toggleVisibility("merchant")}>Merchant</button>
         <button onClick={() => toggleVisibility("vendor")}>Vendor</button>
-        <button onClick={() => toggleVisibility("structures")}>Structures</button>
       </nav>
     </>
   );
