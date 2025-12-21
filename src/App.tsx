@@ -12,18 +12,8 @@ function App() {
   const game = useGame();
   const [ores, setOres] = useState<GameResourceOre[]>([]);
   const [alloys, setAlloys] = useState<GameResourceAlloy[]>([]);
-  const [vendorVisible, setVendorVisible] = useState(false);
-  const [merchantVisible, setMerchantVisible] = useState(false);
-
-  function toggleVisibility(panelName: string) {
-    if (panelName === "vendor") {
-      setMerchantVisible(false);
-      setVendorVisible(!vendorVisible);
-    } else if (panelName === "merchant") {
-      setVendorVisible(false);
-      setMerchantVisible(!merchantVisible);
-    }
-  }
+  const [vendorOpen, setVendorOpen] = useState(false);
+  const [merchantOpen, setMerchantOpen] = useState(false);
 
   useEffect(() => {
     setOres(
@@ -47,28 +37,12 @@ function App() {
         <div className="game-area">
           <StructuresPanel />
         </div>
-        <div className="shop-area">
-          {merchantVisible && <MerchantPanel isVisible={merchantVisible} />}
-          {vendorVisible && <VendorPanel isVisible={vendorVisible} />}
-          {!merchantVisible && !vendorVisible && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                color: "#888",
-                fontSize: "1.2rem",
-              }}
-            >
-              Select a menu from the navigation below
-            </div>
-          )}
-        </div>
       </div>
+      <MerchantPanel isOpen={merchantOpen} onClose={() => setMerchantOpen(false)} />
+      <VendorPanel isOpen={vendorOpen} onClose={() => setVendorOpen(false)} />
       <nav>
-        <button onClick={() => toggleVisibility("merchant")}>Merchant</button>
-        <button onClick={() => toggleVisibility("vendor")}>Vendor</button>
+        <button onClick={() => setMerchantOpen(true)}>Merchant</button>
+        <button onClick={() => setVendorOpen(true)}>Vendor</button>
       </nav>
     </>
   );

@@ -2,7 +2,6 @@ interface GameContext {
   money: number;
   setMoney: Dispatch<SetStateAction<number>>;
   resources: GameResource[];
-  upgrades: GameUpgrade[];
   structures: GameStructure[];
   miningPower: number;
   smeltingPower: number;
@@ -10,7 +9,6 @@ interface GameContext {
   sellAll: (resource: GameResource) => void;
   sellHalf: (resource: GameResource) => void;
   unlockResource: (res: GameResource) => void;
-  unlockUpgrade: (upgrade: GameUpgrade) => void;
   setResourceActiveState: (res: GameResource, value: boolean) => void;
   setResourceIsDisplayedState: (res: GameResource, value: boolean) => void;
   purchaseStructure: (structureId: string) => void;
@@ -50,20 +48,11 @@ interface GameStructure {
   cost: number; // Purchase cost
   level: number; // 0 = not owned, 1+ = placed and active
   accumulated: number; // Output resources waiting to be collected
-  structureType: "mining" | "smelting"; // Structure category
+  structureType: "mining" | "smelting" | "storage"; // Structure category
   recipe?: { [resource: string]: number }; // Input resources (for smelting)
   fuelConsumptionRate?: number; // Fuel units consumed per second
   fuelCapacity?: number; // Max fuel this structure can hold
   currentFuel?: number; // Current fuel level
-}
-
-interface GameUpgrade {
-  cost: number;
-  name: string;
-  power: number;
-  type: "mine" | "fuel" | "storage";
-  unlocked: boolean;
-  value: string;
 }
 
 interface DialogProps {

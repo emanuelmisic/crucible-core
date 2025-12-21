@@ -1,9 +1,11 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import {
-  INITIAL_RESOURCES,
-  INITIAL_SMELTING_PROGRESS,
-} from "@/constants/resources";
-import { INITIAL_UPGRADES } from "@/constants/upgrades";
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
+import { INITIAL_RESOURCES } from "@/constants/resources";
 import { STRUCTURES, FUEL_COST_PER_UNIT } from "@/constants/structures";
 
 const GameContextInstance = createContext<GameContext | undefined>(undefined);
@@ -14,7 +16,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const [miningPower, setMiningPower] = useState(1000000);
   const [smeltingPower, setSmeltingPower] = useState(1);
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
-  const [upgrades, setUpgrades] = useState<GameUpgrade[]>(INITIAL_UPGRADES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
 
   // MERCHANT LOGIC
@@ -116,41 +117,41 @@ function GameContextComposer({ children }: { children: ReactNode }) {
 
   // Purchase a structure (deduct money, set level to 1)
   const purchaseStructure = (structureId: string) => {
-    const structure = structures.find(s => s.id === structureId);
+    const structure = structures.find((s) => s.id === structureId);
     if (!structure) return;
 
     if (structure.level > 0) {
-      console.warn('Structure already owned');
+      console.warn("Structure already owned");
       return;
     }
 
     if (money < structure.cost) {
-      console.warn('Not enough money');
+      console.warn("Not enough money");
       return;
     }
 
     // Deduct money
-    setMoney(prev => prev - structure.cost);
+    setMoney((prev) => prev - structure.cost);
 
     // Set structure to level 1 (active)
-    setStructures(prev =>
-      prev.map(s =>
-        s.id === structureId ? { ...s, level: 1 } : s
-      )
+    setStructures((prev) =>
+      prev.map((s) => (s.id === structureId ? { ...s, level: 1 } : s))
     );
   };
 
   // Collect accumulated resources from a structure
   const collectResources = (structureId: string) => {
-    const structure = structures.find(s => s.id === structureId);
+    const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.accumulated < 1) return;
 
     // Add accumulated resources to inventory
     const amount = Math.floor(structure.accumulated);
-    setResources(prev => {
-      const existingResource = prev.find(r => r.value === structure.resourceType);
+    setResources((prev) => {
+      const existingResource = prev.find(
+        (r) => r.value === structure.resourceType
+      );
       if (existingResource) {
-        return prev.map(r =>
+        return prev.map((r) =>
           r.value === structure.resourceType
             ? { ...r, amount: r.amount + amount }
             : r
@@ -160,10 +161,8 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     });
 
     // Reset accumulated to 0
-    setStructures(prev =>
-      prev.map(s =>
-        s.id === structureId ? { ...s, accumulated: 0 } : s
-      )
+    setStructures((prev) =>
+      prev.map((s) => (s.id === structureId ? { ...s, accumulated: 0 } : s))
     );
   };
 
@@ -199,27 +198,14 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setMoney((prev) => prev - totalCost);
     setStructures((prev) =>
       prev.map((s) =>
-        s.id === structureId ? { ...s, currentFuel: currentFuel + fuelToAdd } : s
+        s.id === structureId
+          ? { ...s, currentFuel: currentFuel + fuelToAdd }
+          : s
       )
     );
   };
 
   // OTHER
-
-  function addResource(
-    name: string,
-    materialType: "ore" | "alloy",
-    amount: number
-  ) {
-    setResources((prevState) => {
-      return prevState.map((e) => {
-        if (e.type === materialType && e.value === name) {
-          return { ...e, amount: e.amount + amount };
-        }
-        return e;
-      });
-    });
-  }
 
   function setResource(
     name: string,
@@ -285,35 +271,10 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     });
   }
 
-  function unlockUpgrade(tool: GameUpgrade) {
-    if (money < tool.cost) return;
-    setMoney(money - tool.cost);
-
-    setUpgrades((prevState) => {
-      return prevState.map((e) => {
-        if (e.value === tool.value) return { ...e, unlocked: true };
-        return e;
-      });
-    });
-
-    switch (tool.type) {
-      case "mine":
-        setMiningPower(tool.power);
-        break;
-      case "fuel":
-        setSmeltingPower(tool.power);
-        break;
-      case "storage":
-        setStorage(tool.power);
-        break;
-    }
-  }
-
   const contextValue: GameContext = {
     money,
     setMoney,
     resources,
-    upgrades,
     structures,
     miningPower,
     smeltingPower,
@@ -321,7 +282,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     sellAll,
     sellHalf,
     unlockResource,
-    unlockUpgrade,
     setResourceActiveState,
     setResourceIsDisplayedState,
     purchaseStructure,
@@ -330,7 +290,9 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   };
 
   return (
-    <GameContextInstance.Provider value={contextValue}>{children}</GameContextInstance.Provider>
+    <GameContextInstance.Provider value={contextValue}>
+      {children}
+    </GameContextInstance.Provider>
   );
 }
 

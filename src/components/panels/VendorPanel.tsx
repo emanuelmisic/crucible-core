@@ -3,51 +3,46 @@ import { useGame } from "@/contexts/GameContext";
 import { formatNumber } from "@/helpers/helperFunctions";
 import Image from "@/components/ui/Image";
 import TabBtn from "@/components/ui/TabBtn";
+import Dialog from "@/components/ui/Dialog";
 
-type VendorTab = "structures" | "mine" | "fuel" | "storage";
+type VendorTab = "mining" | "smelting" | "storage";
 
-function VendorPanel({ isVisible }: { isVisible: boolean }) {
+interface VendorPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
   const game = useGame();
-  const [selectedTab, setSelectedTab] = useState<VendorTab>("structures");
+  const [selectedTab, setSelectedTab] = useState<VendorTab>("mining");
 
   return (
-    <div
-      className="panel vendor-panel"
-      style={{ display: isVisible ? "block" : "none" }}
-    >
-      <div className="panel__header vendor-panel__header">
-        <TabBtn
-          isSelected={selectedTab === "structures"}
-          onClick={() => setSelectedTab("structures")}
-        >
-          Structures
-        </TabBtn>
-        <TabBtn
-          isSelected={selectedTab === "mine"}
-          onClick={() => setSelectedTab("mine")}
-        >
-          Mining tools
-        </TabBtn>
-        <TabBtn
-          isSelected={selectedTab === "fuel"}
-          onClick={() => setSelectedTab("fuel")}
-        >
-          Fuel
-        </TabBtn>
-        <TabBtn
-          isSelected={selectedTab === "storage"}
-          onClick={() => setSelectedTab("storage")}
-        >
-          Storage
-        </TabBtn>
-      </div>
+    <Dialog title="Vendor" isOpen={isOpen} closeDialog={onClose} width="40rem">
+      <div className="vendor-panel">
+        <div className="panel__header vendor-panel__header">
+          <TabBtn
+            isSelected={selectedTab === "mining"}
+            onClick={() => setSelectedTab("mining")}
+          >
+            Mining
+          </TabBtn>
+          <TabBtn
+            isSelected={selectedTab === "smelting"}
+            onClick={() => setSelectedTab("smelting")}
+          >
+            Smelting
+          </TabBtn>
+          <TabBtn
+            isSelected={selectedTab === "storage"}
+            onClick={() => setSelectedTab("storage")}
+          >
+            Storage
+          </TabBtn>
+        </div>
 
-      <div className="vendor-panel__item-container">
-        {/* Structures Tab */}
-        {selectedTab === "structures" && (
-          <>
-            <div className="vendor-section">
-              <h3 className="vendor-section__title">Mining Drills</h3>
+        <div className="vendor-panel__item-container">
+          {selectedTab === "mining" && (
+            <>
               {game.structures
                 .filter((s) => s.structureType === "mining")
                 .map((structure) => (
@@ -58,10 +53,11 @@ function VendorPanel({ isVisible }: { isVisible: boolean }) {
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
-            </div>
+            </>
+          )}
 
-            <div className="vendor-section">
-              <h3 className="vendor-section__title">Smelters</h3>
+          {selectedTab === "smelting" && (
+            <>
               {game.structures
                 .filter((s) => s.structureType === "smelting")
                 .map((structure) => (
@@ -72,84 +68,29 @@ function VendorPanel({ isVisible }: { isVisible: boolean }) {
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
-            </div>
-          </>
-        )}
+            </>
+          )}
 
-        {/* Fuel Tab - Keep existing upgrades only */}
-        {selectedTab === "fuel" && (
-          <div className="vendor-section">
-            <h3 className="vendor-section__title">Fuel Efficiency Upgrades</h3>
-            <p className="vendor-section__description">
-              Refuel your smelters directly from the Structures panel. These
-              upgrades may reduce fuel consumption or improve smelting
-              efficiency.
-            </p>
-
-            {game.upgrades
-              .filter((u) => u.type === "fuel" && u.unlocked)
-              .map((upgrade) => (
-                <div className="item item__bought" key={upgrade.value}>
-                  <span>{upgrade.name}</span>
-                  <Image resource={upgrade} size={75} />
-                  <button>BOUGHT</button>
-                </div>
-              ))}
-            {
-              game.upgrades
-                .filter((u) => u.type === "fuel" && !u.unlocked)
-                .map((upgrade) => (
-                  <div className="item" key={upgrade.value}>
-                    <span>{upgrade.name}</span>
-                    <Image resource={upgrade} size={75} />
-                    <span className="item__price">
-                      ${formatNumber(upgrade.cost)}
-                    </span>
-                    <button onClick={() => game.unlockUpgrade(upgrade)}>
-                      BUY
-                    </button>
-                  </div>
-                ))[0]
-            }
-          </div>
-        )}
-
-        {/* Mining and Storage tabs - unchanged */}
-        {(selectedTab === "mine" || selectedTab === "storage") && (
-          <>
-            {game.upgrades
-              .filter((u) => u.type === selectedTab && u.unlocked)
-              .map((upgrade) => (
-                <div className="item item__bought" key={upgrade.value}>
-                  <span>{upgrade.name}</span>
-                  <Image resource={upgrade} size={75} />
-                  <button>BOUGHT</button>
-                </div>
-              ))}
-            {
-              game.upgrades
-                .filter((u) => u.type === selectedTab && !u.unlocked)
-                .map((upgrade) => (
-                  <div className="item" key={upgrade.value}>
-                    <span>{upgrade.name}</span>
-                    <Image resource={upgrade} size={75} />
-                    <span className="item__price">
-                      ${formatNumber(upgrade.cost)}
-                    </span>
-                    <button onClick={() => game.unlockUpgrade(upgrade)}>
-                      BUY
-                    </button>
-                  </div>
-                ))[0]
-            }
-          </>
-        )}
+          {selectedTab === "storage" && (
+            <>
+              {game.structures
+                .filter((s) => s.structureType === "storage")
+                .map((structure) => (
+                  <StructureItem
+                    key={structure.id}
+                    structure={structure}
+                    money={game.money}
+                    onPurchase={game.purchaseStructure}
+                  />
+                ))}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </Dialog>
   );
 }
 
-// Structure item component
 interface StructureItemProps {
   structure: GameStructure;
   money: number;

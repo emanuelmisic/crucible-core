@@ -5,17 +5,6 @@
   overflow-y: auto;
   max-height: calc(100vh - 200px);
 
-  .panel__header {
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-
-    h2 {
-      font-size: 1.5rem;
-      color: #fff;
-    }
-  }
-
   .structures-empty {
     text-align: center;
     padding: 2rem;
@@ -115,24 +104,6 @@
       font-weight: 600;
     }
   }
-
-  &__accumulated {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    font-size: 0.9rem;
-
-    .accumulated__label {
-      color: #aaa;
-    }
-
-    .accumulated__value {
-      color: #4caf50;
-      font-weight: 600;
-    }
-  }
 }
 
 .status--active {
@@ -177,7 +148,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

@@ -1,6 +1,5 @@
 import React from "react";
 import { useGame } from "@/contexts/GameContext";
-import { formatNumber } from "@/helpers/helperFunctions";
 
 import { FUEL_COST_PER_UNIT } from "@/constants/structures";
 
@@ -18,10 +17,6 @@ function StructuresPanel() {
 
   return (
     <div className="panel structures-panel">
-      <div className="panel__header">
-        <h2>Active Structures</h2>
-      </div>
-
       {ownedStructures.length === 0 && (
         <div className="structures-empty">
           <p>No active structures. Visit the Vendor to purchase structures.</p>
@@ -65,7 +60,6 @@ function StructuresPanel() {
   );
 }
 
-// Mining structure card (simple - no fuel)
 interface MiningStructureCardProps {
   structure: GameStructure;
   onCollect: (id: string) => void;
@@ -89,13 +83,6 @@ const MiningStructureCard: React.FC<MiningStructureCardProps> = ({
           <span className="stat__label">Output:</span>
           <span className="stat__value">
             {structure.generationRate}/s {structure.resourceType}
-          </span>
-        </div>
-
-        <div className="structure-card__accumulated">
-          <span className="accumulated__label">Accumulated:</span>
-          <span className="accumulated__value">
-            {structure.accumulated.toFixed(2)} {structure.resourceType}
           </span>
         </div>
 
