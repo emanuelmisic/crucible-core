@@ -8,6 +8,7 @@ import MiningPanel from "@/components/panels/MiningPanel";
 import SmeltingPanel from "@/components/panels/SmeltingPanel";
 import MerchantPanel from "@/components/panels/MerchantPanel";
 import VendorPanel from "@/components/panels/VendorPanel";
+import StructuresPanel from "@/components/panels/StructuresPanel";
 
 function App() {
   const game = useGame();
@@ -15,14 +16,21 @@ function App() {
   const [alloys, setAlloys] = useState<GameResourceAlloy[]>([]);
   const [vendorVisible, setVendorVisible] = useState(false);
   const [merchantVisible, setMerchantVisible] = useState(false);
+  const [structuresVisible, setStructuresVisible] = useState(false);
 
   function toggleVisibility(panelName: string) {
     if (panelName === "vendor") {
       setMerchantVisible(false);
+      setStructuresVisible(false);
       setVendorVisible(!vendorVisible);
     } else if (panelName === "merchant") {
       setVendorVisible(false);
+      setStructuresVisible(false);
       setMerchantVisible(!merchantVisible);
+    } else if (panelName === "structures") {
+      setVendorVisible(false);
+      setMerchantVisible(false);
+      setStructuresVisible(!structuresVisible);
     }
   }
 
@@ -52,7 +60,8 @@ function App() {
         <div className="shop-area">
           {merchantVisible && <MerchantPanel isVisible={merchantVisible} />}
           {vendorVisible && <VendorPanel isVisible={vendorVisible} />}
-          {!merchantVisible && !vendorVisible && (
+          {structuresVisible && <StructuresPanel />}
+          {!merchantVisible && !vendorVisible && !structuresVisible && (
             <div
               style={{
                 display: "flex",
@@ -71,6 +80,7 @@ function App() {
       <nav>
         <button onClick={() => toggleVisibility("merchant")}>Merchant</button>
         <button onClick={() => toggleVisibility("vendor")}>Vendor</button>
+        <button onClick={() => toggleVisibility("structures")}>Structures</button>
       </nav>
     </>
   );

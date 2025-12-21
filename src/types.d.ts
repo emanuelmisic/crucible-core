@@ -3,6 +3,7 @@ interface GameContext {
   setMoney: Dispatch<SetStateAction<number>>;
   resources: GameResource[];
   upgrades: GameUpgrade[];
+  structures: GameStructure[];
   miningProgress: { [key: string]: number };
   smeltingProgress: { [key: string]: number };
   mineOre: (ore: GameResourceOre) => void;
@@ -16,6 +17,8 @@ interface GameContext {
   unlockUpgrade: (upgrade: GameUpgrade) => void;
   setResourceActiveState: (res: GameResource, value: boolean) => void;
   setResourceIsDisplayedState: (res: GameResource, value: boolean) => void;
+  purchaseStructure: (structureId: string) => void;
+  collectResources: (structureId: string) => void;
 }
 
 interface GameResource {
@@ -40,6 +43,16 @@ interface GameResourceOre extends GameResource {
 interface GameResourceAlloy extends GameResource {
   smeltingDifficulty: number;
   smeltingRecipe: { [resource: string]: number };
+}
+
+interface GameStructure {
+  id: string;
+  name: string;
+  resourceType: string;
+  generationRate: number; // Resources per second (e.g., 1)
+  cost: number;
+  level: number; // 0 = not owned, 1+ = placed and active
+  accumulated: number; // Resources waiting to be collected
 }
 
 interface GameUpgrade {

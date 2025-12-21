@@ -1,20 +1,22 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
 import {
   INITIAL_MINING_PROGRESS,
   INITIAL_RESOURCES,
   INITIAL_SMELTING_PROGRESS,
 } from "@/constants/resources";
 import { INITIAL_UPGRADES } from "@/constants/upgrades";
+import { STRUCTURES } from "@/constants/structures";
 
-const GameContext = createContext<GameContext | undefined>(undefined);
+const GameContextInstance = createContext<GameContext | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
-  const [money, setMoney] = useState(5000);
+  const [money, setMoney] = useState(150);
   const [storage, setStorage] = useState(100000000);
   const [miningPower, setMiningPower] = useState(1000000);
   const [smeltingPower, setSmeltingPower] = useState(1);
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [upgrades, setUpgrades] = useState<GameUpgrade[]>(INITIAL_UPGRADES);
+  const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
 
   const [miningProgress, setMiningProgress] = useState<{
     [key: string]: number;
@@ -134,6 +136,90 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setMoney(money + moneyToAdd);
   }
 
+  // STRUCTURES LOGIC
+
+  // Game loop - ticks every 100ms
+  useEffect(() => {
+    const interval = setInterval(() => {
+      generateResources();
+    }, 100); // Tick every 100ms
+
+    return () => clearInterval(interval);
+  }, []); // Run once on mount
+
+  // Generate resources function
+  const generateResources = () => {
+    const tickRate = 0.1; // 100ms = 0.1 seconds
+
+    setStructures(prev =>
+      prev.map(structure => {
+        if (structure.level === 0) return structure; // Not placed yet
+
+        // Calculate generation for this tick
+        const generated = structure.generationRate * tickRate;
+
+        // Add to structure's accumulated resources
+        return {
+          ...structure,
+          accumulated: (structure.accumulated || 0) + generated
+        };
+      })
+    );
+  };
+
+  // Purchase a structure (deduct money, set level to 1)
+  const purchaseStructure = (structureId: string) => {
+    const structure = structures.find(s => s.id === structureId);
+    if (!structure) return;
+
+    if (structure.level > 0) {
+      console.warn('Structure already owned');
+      return;
+    }
+
+    if (money < structure.cost) {
+      console.warn('Not enough money');
+      return;
+    }
+
+    // Deduct money
+    setMoney(prev => prev - structure.cost);
+
+    // Set structure to level 1 (active)
+    setStructures(prev =>
+      prev.map(s =>
+        s.id === structureId ? { ...s, level: 1 } : s
+      )
+    );
+  };
+
+  // Collect accumulated resources from a structure
+  const collectResources = (structureId: string) => {
+    const structure = structures.find(s => s.id === structureId);
+    if (!structure || structure.accumulated === 0) return;
+
+    // Add accumulated resources to inventory
+    const amount = Math.floor(structure.accumulated);
+    setResources(prev => {
+      const existingResource = prev.find(r => r.value === structure.resourceType);
+      if (existingResource) {
+        return prev.map(r =>
+          r.value === structure.resourceType
+            ? { ...r, amount: r.amount + amount }
+            : r
+        );
+      }
+      return prev;
+    });
+
+    // Reset accumulated to 0
+    setStructures(prev =>
+      prev.map(s =>
+        s.id === structureId ? { ...s, accumulated: 0 } : s
+      )
+    );
+  };
+
   // OTHER
 
   function addResource(
@@ -244,6 +330,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setMoney,
     resources,
     upgrades,
+    structures,
     miningProgress,
     smeltingProgress,
     mineOre,
@@ -257,10 +344,12 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     unlockUpgrade,
     setResourceActiveState,
     setResourceIsDisplayedState,
+    purchaseStructure,
+    collectResources,
   };
 
   return (
-    <GameContext.Provider value={contextValue}>{children}</GameContext.Provider>
+    <GameContextInstance.Provider value={contextValue}>{children}</GameContextInstance.Provider>
   );
 }
 
@@ -269,7 +358,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
 }
 
 export function useGame() {
-  const context = useContext(GameContext);
+  const context = useContext(GameContextInstance);
   if (!context) throw new Error("useGame must be used within GameProvider");
   return context;
 }
