@@ -4,7 +4,7 @@ import {
   INITIAL_SMELTING_PROGRESS,
 } from "@/constants/resources";
 import { INITIAL_UPGRADES } from "@/constants/upgrades";
-import { STRUCTURES } from "@/constants/structures";
+import { STRUCTURES, FUEL_COST_PER_UNIT } from "@/constants/structures";
 
 const GameContextInstance = createContext<GameContext | undefined>(undefined);
 
@@ -16,68 +16,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [upgrades, setUpgrades] = useState<GameUpgrade[]>(INITIAL_UPGRADES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
-
-  const [smeltingProgress, setSmeltingProgress] = useState<{
-    [key: string]: number;
-  }>(INITIAL_SMELTING_PROGRESS);
-
-  // SMELTING LOGIC
-
-  function smeltAlloy(alloy: GameResourceAlloy) {
-    if (!_isSmeltable(alloy.smeltingRecipe)) return;
-    let newSmeltingProgress = 0;
-    if (smeltingProgress[alloy.value] < alloy.smeltingDifficulty) {
-      _addAlloySmeltingProgress(alloy.value);
-      newSmeltingProgress = smeltingProgress[alloy.value] + smeltingPower;
-    }
-    _handleSmeltingStep(alloy, newSmeltingProgress);
-  }
-
-  function _handleSmeltingStep(
-    alloy: GameResourceAlloy,
-    newSmeltingProgress: number
-  ) {
-    if (newSmeltingProgress < alloy.smeltingDifficulty) return;
-    _turnOresToAlloy(alloy);
-    _resetAlloySmeltingProgress(alloy.value);
-  }
-
-  function _addAlloySmeltingProgress(alloy: string) {
-    setSmeltingProgress((prevState) => {
-      return { ...prevState, [alloy]: prevState[alloy] + smeltingPower };
-    });
-  }
-
-  function _resetAlloySmeltingProgress(alloy: string) {
-    setSmeltingProgress((prevState) => {
-      return { ...prevState, [alloy]: 0 };
-    });
-  }
-
-  function _isSmeltable(recipe: { [key: string]: number }): boolean {
-    const ores = resources.filter((r) => r.type === "ore") as GameResourceOre[];
-    for (const k in ores) {
-      if (!recipe[ores[k].value]) continue;
-      if (ores[k].amount < recipe[ores[k].value]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function _turnOresToAlloy(alloy: GameResourceAlloy) {
-    const ores = resources.filter((r) => r.type === "ore") as GameResourceOre[];
-    const recipe = alloy.smeltingRecipe;
-    for (const k in ores) {
-      if (!recipe[ores[k].value]) continue;
-      setResource(
-        ores[k].value,
-        ores[k].type,
-        ores[k].amount - recipe[ores[k].value]
-      );
-    }
-    addResource(alloy.value, alloy.type, 1);
-  }
 
   // MERCHANT LOGIC
 
@@ -109,18 +47,69 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const generateResources = () => {
     const tickRate = 0.1; // 100ms = 0.1 seconds
 
-    setStructures(prev =>
-      prev.map(structure => {
-        if (structure.level === 0) return structure; // Not placed yet
+    setStructures((prev) =>
+      prev.map((structure) => {
+        if (structure.level === 0) return structure; // Not owned
 
-        // Calculate generation for this tick
-        const generated = structure.generationRate * tickRate;
+        // Handle MINING structures (simple generation, no fuel)
+        if (structure.structureType === "mining") {
+          const generated = structure.generationRate * tickRate;
+          return {
+            ...structure,
+            accumulated: structure.accumulated + generated,
+          };
+        }
 
-        // Add to structure's accumulated resources
-        return {
-          ...structure,
-          accumulated: (structure.accumulated || 0) + generated
-        };
+        // Handle SMELTING structures (fuel + recipe consumption)
+        if (structure.structureType === "smelting" && structure.recipe) {
+          // Check 1: Does structure have fuel?
+          if (!structure.currentFuel || structure.currentFuel <= 0) {
+            return structure; // No fuel - stop generating
+          }
+
+          // Check 2: Do we have enough input resources?
+          const hasEnoughResources = Object.entries(structure.recipe).every(
+            ([resource, amount]) => {
+              const res = resources.find(
+                (r) => r.value === resource && r.type === "ore"
+              );
+              return res && res.amount >= amount;
+            }
+          );
+
+          if (!hasEnoughResources) {
+            return structure; // Not enough resources - stop generating
+          }
+
+          // All checks passed - generate resources and consume fuel
+          const generated = structure.generationRate * tickRate;
+          const fuelConsumed = (structure.fuelConsumptionRate || 0) * tickRate;
+
+          // Calculate new accumulated
+          const newAccumulated = structure.accumulated + generated;
+
+          // Check if we crossed a whole number (completed a unit)
+          if (Math.floor(newAccumulated) > Math.floor(structure.accumulated)) {
+            // Consume input resources (recipe)
+            setResources((prevRes) =>
+              prevRes.map((res) => {
+                const consumeAmount = structure.recipe?.[res.value] || 0;
+                return consumeAmount > 0 && res.type === "ore"
+                  ? { ...res, amount: res.amount - consumeAmount }
+                  : res;
+              })
+            );
+          }
+
+          // Update structure with new values
+          return {
+            ...structure,
+            accumulated: newAccumulated,
+            currentFuel: Math.max(0, structure.currentFuel - fuelConsumed),
+          };
+        }
+
+        return structure; // Fallback (shouldn't reach here)
       })
     );
   };
@@ -174,6 +163,43 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setStructures(prev =>
       prev.map(s =>
         s.id === structureId ? { ...s, accumulated: 0 } : s
+      )
+    );
+  };
+
+  // Refuel a structure directly with money
+  const refuelStructure = (structureId: string, amount: number) => {
+    const structure = structures.find((s) => s.id === structureId);
+    if (!structure || structure.structureType !== "smelting") {
+      console.warn("Structure not found or is not a smelting structure");
+      return;
+    }
+
+    // Calculate how much fuel we can actually add (respect capacity)
+    const currentFuel = structure.currentFuel || 0;
+    const capacity = structure.fuelCapacity || 0;
+    const spaceAvailable = capacity - currentFuel;
+    const fuelToAdd = Math.min(amount, spaceAvailable);
+
+    if (fuelToAdd <= 0) {
+      console.warn("Structure fuel tank is full");
+      return;
+    }
+
+    // Calculate cost
+    const totalCost = fuelToAdd * FUEL_COST_PER_UNIT;
+
+    // Check if player has enough money
+    if (money < totalCost) {
+      console.warn("Not enough money to refuel");
+      return;
+    }
+
+    // Deduct money and add fuel to structure (single atomic operation)
+    setMoney((prev) => prev - totalCost);
+    setStructures((prev) =>
+      prev.map((s) =>
+        s.id === structureId ? { ...s, currentFuel: currentFuel + fuelToAdd } : s
       )
     );
   };
@@ -289,8 +315,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     resources,
     upgrades,
     structures,
-    smeltingProgress,
-    smeltAlloy,
     miningPower,
     smeltingPower,
     storage,
@@ -302,6 +326,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setResourceIsDisplayedState,
     purchaseStructure,
     collectResources,
+    refuelStructure,
   };
 
   return (

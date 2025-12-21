@@ -2,29 +2,41 @@ import React from "react";
 import { useGame } from "@/contexts/GameContext";
 import { formatNumber } from "@/helpers/helperFunctions";
 
-function StructuresPanel() {
-  const { structures, money, purchaseStructure, collectResources } = useGame();
+import { FUEL_COST_PER_UNIT } from "@/constants/structures";
 
-  // Group structures by ownership for better UX
+function StructuresPanel() {
+  const { structures, money, collectResources, refuelStructure } = useGame();
+
+  // ONLY show owned structures
   const ownedStructures = structures.filter((s) => s.level > 0);
-  const availableStructures = structures.filter((s) => s.level === 0);
+  const ownedMining = ownedStructures.filter(
+    (s) => s.structureType === "mining"
+  );
+  const ownedSmelting = ownedStructures.filter(
+    (s) => s.structureType === "smelting"
+  );
 
   return (
     <div className="panel structures-panel">
       <div className="panel__header">
-        <h2>Mining Structures</h2>
+        <h2>Active Structures</h2>
       </div>
 
-      {/* Show owned structures first */}
-      {ownedStructures.length > 0 && (
+      {ownedStructures.length === 0 && (
+        <div className="structures-empty">
+          <p>No active structures. Visit the Vendor to purchase structures.</p>
+        </div>
+      )}
+
+      {/* Mining Drills Section */}
+      {ownedMining.length > 0 && (
         <div className="structures-section">
-          <h3 className="structures-section__title">Active Drills</h3>
+          <h3 className="structures-section__title">Mining Drills</h3>
           <div className="structures-grid">
-            {ownedStructures.map((structure) => (
-              <StructureCard
+            {ownedMining.map((structure) => (
+              <MiningStructureCard
                 key={structure.id}
                 structure={structure}
-                isOwned={true}
                 onCollect={collectResources}
               />
             ))}
@@ -32,18 +44,18 @@ function StructuresPanel() {
         </div>
       )}
 
-      {/* Show available structures to purchase */}
-      {availableStructures.length > 0 && (
+      {/* Smelters Section */}
+      {ownedSmelting.length > 0 && (
         <div className="structures-section">
-          <h3 className="structures-section__title">Available for Purchase</h3>
+          <h3 className="structures-section__title">Smelters</h3>
           <div className="structures-grid">
-            {availableStructures.map((structure) => (
-              <StructureCard
+            {ownedSmelting.map((structure) => (
+              <SmeltingStructureCard
                 key={structure.id}
                 structure={structure}
-                isOwned={false}
                 money={money}
-                onPurchase={purchaseStructure}
+                onCollect={collectResources}
+                onRefuel={refuelStructure}
               />
             ))}
           </div>
@@ -53,69 +65,197 @@ function StructuresPanel() {
   );
 }
 
-// Helper component for cleaner code
-interface StructureCardProps {
+// Mining structure card (simple - no fuel)
+interface MiningStructureCardProps {
   structure: GameStructure;
-  isOwned: boolean;
-  money?: number;
-  onPurchase?: (id: string) => void;
-  onCollect?: (id: string) => void;
+  onCollect: (id: string) => void;
 }
 
-const StructureCard: React.FC<StructureCardProps> = ({
+const MiningStructureCard: React.FC<MiningStructureCardProps> = ({
   structure,
-  isOwned,
-  money,
-  onPurchase,
   onCollect,
 }) => {
-  const canAfford = money !== undefined && money >= structure.cost;
   const canCollect = structure.accumulated >= 1;
 
   return (
-    <div className={`structure-card ${isOwned ? "structure-card--owned" : ""}`}>
+    <div className="structure-card structure-card--mining">
       <div className="structure-card__header">
         <h4 className="structure-card__name">{structure.name}</h4>
-        <p className="structure-card__info">
-          Generates {structure.generationRate}/s {structure.resourceType}
-        </p>
+        <span className="structure-card__level">Level {structure.level}</span>
       </div>
 
-      {isOwned ? (
-        <div className="structure-card__content">
-          <p className="structure-card__status">
-            Status:{" "}
-            <span className="status--active">
-              Active (Level {structure.level})
+      <div className="structure-card__content">
+        <div className="structure-card__stat">
+          <span className="stat__label">Output:</span>
+          <span className="stat__value">
+            {structure.generationRate}/s {structure.resourceType}
+          </span>
+        </div>
+
+        <div className="structure-card__accumulated">
+          <span className="accumulated__label">Accumulated:</span>
+          <span className="accumulated__value">
+            {structure.accumulated.toFixed(2)} {structure.resourceType}
+          </span>
+        </div>
+
+        <button
+          className="btn btn--collect"
+          onClick={() => onCollect(structure.id)}
+          disabled={!canCollect}
+        >
+          {canCollect
+            ? `Collect ${Math.floor(structure.accumulated)}`
+            : "Not ready"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Smelting structure card (with fuel management)
+interface SmeltingStructureCardProps {
+  structure: GameStructure;
+  money: number;
+  onCollect: (id: string) => void;
+  onRefuel: (id: string, amount: number) => void;
+}
+
+const SmeltingStructureCard: React.FC<SmeltingStructureCardProps> = ({
+  structure,
+  money,
+  onCollect,
+  onRefuel,
+}) => {
+  const canCollect = structure.accumulated >= 1;
+  const currentFuel = structure.currentFuel || 0;
+  const fuelCapacity = structure.fuelCapacity || 100;
+  const fuelPercentage = (currentFuel / fuelCapacity) * 100;
+  const isLowFuel = fuelPercentage < 25;
+  const isOutOfFuel = currentFuel <= 0;
+
+  // Refuel package amounts
+  const refuelOptions = [
+    { amount: 10, label: "10" },
+    { amount: 50, label: "50" },
+    { amount: 100, label: "100" },
+    { amount: fuelCapacity - currentFuel, label: "Max" },
+  ];
+
+  const handleRefuel = (amount: number) => {
+    if (amount <= 0) return;
+    onRefuel(structure.id, amount);
+  };
+
+  return (
+    <div
+      className={`structure-card structure-card--smelting ${
+        isOutOfFuel ? "structure-card--stopped" : ""
+      }`}
+    >
+      <div className="structure-card__header">
+        <h4 className="structure-card__name">{structure.name}</h4>
+        <span
+          className={`structure-card__status ${
+            isOutOfFuel ? "status--stopped" : "status--active"
+          }`}
+        >
+          {isOutOfFuel ? "STOPPED" : "ACTIVE"}
+        </span>
+      </div>
+
+      <div className="structure-card__content">
+        {/* Stats */}
+        <div className="structure-card__stats">
+          <div className="structure-card__stat">
+            <span className="stat__label">Output:</span>
+            <span className="stat__value">
+              {structure.generationRate}/s {structure.resourceType} ingots
             </span>
-          </p>
-          <p className="structure-card__accumulated">
-            Accumulated: <strong>{structure.accumulated.toFixed(2)}</strong>{" "}
-            {structure.resourceType}
-          </p>
-          <button
-            className="btn btn--collect"
-            onClick={() => onCollect?.(structure.id)}
-            disabled={!canCollect}
-          >
-            {canCollect
-              ? `Collect ${Math.floor(structure.accumulated)} ${
-                  structure.resourceType
-                }`
-              : "Not enough to collect"}
-          </button>
+          </div>
+          {structure.recipe && (
+            <div className="structure-card__stat">
+              <span className="stat__label">Consumes:</span>
+              <span className="stat__value">
+                {Object.entries(structure.recipe)
+                  .map(([res, amt]) => `${amt} ${res}`)
+                  .join(", ")}
+              </span>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="structure-card__content">
-          <button
-            className="btn btn--purchase"
-            onClick={() => onPurchase?.(structure.id)}
-            disabled={!canAfford}
-          >
-            Purchase for ${formatNumber(structure.cost)}
-          </button>
+
+        {/* Fuel Bar */}
+        <div className="fuel-section">
+          <div className="fuel-header">
+            <span className="fuel-label">Fuel</span>
+            <span
+              className={`fuel-value ${isLowFuel ? "fuel-value--low" : ""}`}
+            >
+              {currentFuel.toFixed(1)} / {fuelCapacity}
+            </span>
+          </div>
+          <div className="fuel-bar">
+            <div
+              className={`fuel-bar__fill ${
+                isLowFuel ? "fuel-bar__fill--low" : ""
+              }`}
+              style={{ width: `${fuelPercentage}%` }}
+            />
+          </div>
         </div>
-      )}
+
+        {/* Refuel Controls */}
+        <div className="refuel-section">
+          <p className="refuel-label">Refuel Options:</p>
+          <div className="refuel-buttons">
+            {refuelOptions.map((option) => {
+              const cost = option.amount * FUEL_COST_PER_UNIT;
+              const canAfford = money >= cost;
+              const hasSpace = option.amount > 0;
+
+              return (
+                <button
+                  key={option.label}
+                  className="btn btn--refuel"
+                  onClick={() => handleRefuel(option.amount)}
+                  disabled={!canAfford || !hasSpace}
+                  title={
+                    !canAfford
+                      ? "Not enough money"
+                      : !hasSpace
+                      ? "Tank is full"
+                      : `Add ${option.amount} fuel for $${cost.toFixed(2)}`
+                  }
+                >
+                  {option.label}{" "}
+                  <span className="refuel-cost">(${cost.toFixed(2)})</span>
+                </button>
+              );
+            })}
+          </div>
+          <span className="money-available">Money: ${money.toFixed(2)}</span>
+        </div>
+
+        {/* Accumulated Output */}
+        <div className="structure-card__accumulated">
+          <span className="accumulated__label">Accumulated:</span>
+          <span className="accumulated__value">
+            {structure.accumulated.toFixed(2)} ingots
+          </span>
+        </div>
+
+        {/* Collect Button */}
+        <button
+          className="btn btn--collect"
+          onClick={() => onCollect(structure.id)}
+          disabled={!canCollect}
+        >
+          {canCollect
+            ? `Collect ${Math.floor(structure.accumulated)}`
+            : "Not ready"}
+        </button>
+      </div>
     </div>
   );
 };

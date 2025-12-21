@@ -4,8 +4,6 @@ interface GameContext {
   resources: GameResource[];
   upgrades: GameUpgrade[];
   structures: GameStructure[];
-  smeltingProgress: { [key: string]: number };
-  smeltAlloy: (alloy: GameResourceAlloy) => void;
   miningPower: number;
   smeltingPower: number;
   storage: number;
@@ -17,6 +15,7 @@ interface GameContext {
   setResourceIsDisplayedState: (res: GameResource, value: boolean) => void;
   purchaseStructure: (structureId: string) => void;
   collectResources: (structureId: string) => void;
+  refuelStructure: (structureId: string, amount: number) => void;
 }
 
 interface GameResource {
@@ -46,11 +45,16 @@ interface GameResourceAlloy extends GameResource {
 interface GameStructure {
   id: string;
   name: string;
-  resourceType: string;
-  generationRate: number; // Resources per second (e.g., 1)
-  cost: number;
+  resourceType: string; // Output resource (e.g., "iron" for iron ingots)
+  generationRate: number; // Resources per second
+  cost: number; // Purchase cost
   level: number; // 0 = not owned, 1+ = placed and active
-  accumulated: number; // Resources waiting to be collected
+  accumulated: number; // Output resources waiting to be collected
+  structureType: "mining" | "smelting"; // Structure category
+  recipe?: { [resource: string]: number }; // Input resources (for smelting)
+  fuelConsumptionRate?: number; // Fuel units consumed per second
+  fuelCapacity?: number; // Max fuel this structure can hold
+  currentFuel?: number; // Current fuel level
 }
 
 interface GameUpgrade {

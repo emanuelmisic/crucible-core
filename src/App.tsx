@@ -4,7 +4,6 @@ import { formatNumber } from "@/helpers/helperFunctions";
 import "@/styles.scss";
 
 import ResourcesPanel from "@/components/panels/ResourcesPanel";
-import SmeltingPanel from "@/components/panels/SmeltingPanel";
 import MerchantPanel from "@/components/panels/MerchantPanel";
 import VendorPanel from "@/components/panels/VendorPanel";
 import StructuresPanel from "@/components/panels/StructuresPanel";
@@ -47,7 +46,6 @@ function App() {
       <div className="app-body">
         <div className="game-area">
           <StructuresPanel />
-          {alloys.length > 0 && <SmeltingPanel ores={ores} alloys={alloys} />}
         </div>
         <div className="shop-area">
           {merchantVisible && <MerchantPanel isVisible={merchantVisible} />}
