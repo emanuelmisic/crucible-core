@@ -4,7 +4,7 @@ import { useGame } from "@/contexts/GameContext";
 import { FUEL_COST_PER_UNIT } from "@/constants/structures";
 
 function StructuresPanel() {
-  const { structures, money, collectResources, refuelStructure } = useGame();
+  const { structures, money, resources, collectResources, refuelStructure, inputOre } = useGame();
 
   // ONLY show owned structures
   const ownedStructures = structures.filter((s) => s.level > 0);
@@ -49,8 +49,10 @@ function StructuresPanel() {
                 key={structure.id}
                 structure={structure}
                 money={money}
+                resources={resources}
                 onCollect={collectResources}
                 onRefuel={refuelStructure}
+                onInputOre={inputOre}
               />
             ))}
           </div>
@@ -100,26 +102,46 @@ const MiningStructureCard: React.FC<MiningStructureCardProps> = ({
   );
 };
 
-// Smelting structure card (with fuel management)
+// Smelting structure card (with fuel and ore management)
 interface SmeltingStructureCardProps {
   structure: GameStructure;
   money: number;
+  resources: GameResource[];
   onCollect: (id: string) => void;
   onRefuel: (id: string, amount: number) => void;
+  onInputOre: (id: string, amount: number) => void;
 }
 
 const SmeltingStructureCard: React.FC<SmeltingStructureCardProps> = ({
   structure,
   money,
+  resources,
   onCollect,
   onRefuel,
+  onInputOre,
 }) => {
   const canCollect = structure.accumulated >= 1;
+
+  // Fuel state
   const currentFuel = structure.currentFuel || 0;
   const fuelCapacity = structure.fuelCapacity || 100;
   const fuelPercentage = (currentFuel / fuelCapacity) * 100;
   const isLowFuel = fuelPercentage < 25;
   const isOutOfFuel = currentFuel <= 0;
+
+  // Ore state
+  const currentOre = structure.currentOre || 0;
+  const oreCapacity = structure.oreCapacity || 500;
+  const orePercentage = (currentOre / oreCapacity) * 100;
+  const isLowOre = orePercentage < 25;
+  const oreNeeded = Object.values(structure.recipe || {})[0] || 0;
+  const isOutOfOre = currentOre < oreNeeded;
+
+  // Get ore type and available amount from inventory
+  const oreType = Object.keys(structure.recipe || {})[0] || "";
+  const availableOre = resources.find(
+    (r) => r.value === oreType && r.type === "ore"
+  )?.amount || 0;
 
   // Refuel package amounts
   const refuelOptions = [
@@ -129,25 +151,38 @@ const SmeltingStructureCard: React.FC<SmeltingStructureCardProps> = ({
     { amount: fuelCapacity - currentFuel, label: "Max" },
   ];
 
+  // Ore input package amounts
+  const oreInputOptions = [
+    { amount: 10, label: "10" },
+    { amount: 50, label: "50" },
+    { amount: 100, label: "100" },
+    { amount: Math.min(oreCapacity - currentOre, availableOre), label: "Max" },
+  ];
+
   const handleRefuel = (amount: number) => {
     if (amount <= 0) return;
     onRefuel(structure.id, amount);
   };
 
+  const handleInputOre = (amount: number) => {
+    if (amount <= 0) return;
+    onInputOre(structure.id, amount);
+  };
+
   return (
     <div
       className={`structure-card structure-card--smelting ${
-        isOutOfFuel ? "structure-card--stopped" : ""
+        isOutOfFuel || isOutOfOre ? "structure-card--stopped" : ""
       }`}
     >
       <div className="structure-card__header">
         <h4 className="structure-card__name">{structure.name}</h4>
         <span
           className={`structure-card__status ${
-            isOutOfFuel ? "status--stopped" : "status--active"
+            isOutOfFuel || isOutOfOre ? "status--stopped" : "status--active"
           }`}
         >
-          {isOutOfFuel ? "STOPPED" : "ACTIVE"}
+          {isOutOfFuel || isOutOfOre ? "STOPPED" : "ACTIVE"}
         </span>
       </div>
 
@@ -221,15 +256,55 @@ const SmeltingStructureCard: React.FC<SmeltingStructureCardProps> = ({
               );
             })}
           </div>
-          <span className="money-available">Money: ${money.toFixed(2)}</span>
         </div>
 
-        {/* Accumulated Output */}
-        <div className="structure-card__accumulated">
-          <span className="accumulated__label">Accumulated:</span>
-          <span className="accumulated__value">
-            {structure.accumulated.toFixed(2)} ingots
-          </span>
+        {/* Ore Bar */}
+        <div className="fuel-section">
+          <div className="fuel-header">
+            <span className="fuel-label">Ore ({oreType})</span>
+            <span
+              className={`fuel-value ${isLowOre ? "fuel-value--low" : ""}`}
+            >
+              {currentOre.toFixed(1)} / {oreCapacity}
+            </span>
+          </div>
+          <div className="fuel-bar">
+            <div
+              className={`fuel-bar__fill ${
+                isLowOre ? "fuel-bar__fill--low" : ""
+              }`}
+              style={{ width: `${orePercentage}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Ore Input Controls */}
+        <div className="refuel-section">
+          <p className="refuel-label">Input Ore (Available: {availableOre}):</p>
+          <div className="refuel-buttons">
+            {oreInputOptions.map((option) => {
+              const hasOre = availableOre >= option.amount;
+              const hasSpace = option.amount > 0;
+
+              return (
+                <button
+                  key={option.label}
+                  className="btn btn--refuel"
+                  onClick={() => handleInputOre(option.amount)}
+                  disabled={!hasOre || !hasSpace}
+                  title={
+                    !hasOre
+                      ? "Not enough ore in inventory"
+                      : !hasSpace
+                      ? "Storage is full"
+                      : `Add ${option.amount} ${oreType} ore`
+                  }
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Collect Button */}

@@ -5,7 +5,6 @@ interface GameContext {
   structures: GameStructure[];
   miningPower: number;
   smeltingPower: number;
-  storage: number;
   sellAll: (resource: GameResource) => void;
   sellHalf: (resource: GameResource) => void;
   unlockResource: (res: GameResource) => void;
@@ -14,6 +13,7 @@ interface GameContext {
   purchaseStructure: (structureId: string) => void;
   collectResources: (structureId: string) => void;
   refuelStructure: (structureId: string, amount: number) => void;
+  inputOre: (structureId: string, amount: number) => void;
 }
 
 interface GameResource {
@@ -53,6 +53,8 @@ interface GameStructure {
   fuelConsumptionRate?: number; // Fuel units consumed per second
   fuelCapacity?: number; // Max fuel this structure can hold
   currentFuel?: number; // Current fuel level
+  oreCapacity?: number; // Max ore this structure can hold
+  currentOre?: number; // Current ore stored
 }
 
 interface DialogProps {

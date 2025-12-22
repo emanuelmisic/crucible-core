@@ -56,5 +56,7 @@ export const STRUCTURES: GameStructure[] = [
     fuelConsumptionRate: 0.1, // 0.1 coal per second = 1 coal per 10 seconds
     fuelCapacity: 100, // Can hold 100 coal (1000 seconds / ~16 minutes)
     currentFuel: 0, // Starts empty
+    oreCapacity: 500, // Can hold 500 ore units
+    currentOre: 0, // Starts empty
   },
 ];
