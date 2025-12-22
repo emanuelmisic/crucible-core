@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import Image from "@/components/ui/Image";
-import TabBtn from "../ui/TabBtn";
+import TabBtn from "@/components/ui/TabBtn";
 import Dialog from "@/components/ui/Dialog";
 
 interface MerchantPanelProps {

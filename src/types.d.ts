@@ -3,8 +3,6 @@ interface GameContext {
   setMoney: Dispatch<SetStateAction<number>>;
   resources: GameResource[];
   structures: GameStructure[];
-  miningPower: number;
-  smeltingPower: number;
   sellAll: (resource: GameResource) => void;
   sellHalf: (resource: GameResource) => void;
   unlockResource: (res: GameResource) => void;
@@ -43,18 +41,18 @@ interface GameResourceAlloy extends GameResource {
 interface GameStructure {
   id: string;
   name: string;
-  resourceType: string; // Output resource (e.g., "iron" for iron ingots)
-  generationRate: number; // Resources per second
-  cost: number; // Purchase cost
-  level: number; // 0 = not owned, 1+ = placed and active
-  accumulated: number; // Output resources waiting to be collected
-  structureType: "mining" | "smelting" | "storage"; // Structure category
-  recipe?: { [resource: string]: number }; // Input resources (for smelting)
-  fuelConsumptionRate?: number; // Fuel units consumed per second
-  fuelCapacity?: number; // Max fuel this structure can hold
-  currentFuel?: number; // Current fuel level
-  oreCapacity?: number; // Max ore this structure can hold
-  currentOre?: number; // Current ore stored
+  resourceType: string;
+  generationRate: number;
+  cost: number;
+  level: number;
+  accumulated: number;
+  structureType: "mining" | "smelting" | "storage";
+  recipe?: { [resource: string]: number };
+  fuelConsumptionRate?: number;
+  fuelCapacity?: number;
+  currentFuel?: number;
+  oreCapacity?: number;
+  currentOre?: number;
 }
 
 interface DialogProps {

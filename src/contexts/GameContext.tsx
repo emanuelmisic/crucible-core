@@ -12,8 +12,6 @@ const GameContextInstance = createContext<GameContext | undefined>(undefined);
 
 function GameContextComposer({ children }: { children: ReactNode }) {
   const [money, setMoney] = useState(1000);
-  const [miningPower, setMiningPower] = useState(1000000);
-  const [smeltingPower, setSmeltingPower] = useState(1);
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
 
@@ -38,20 +36,18 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   useEffect(() => {
     const interval = setInterval(() => {
       generateResources();
-    }, 100); // Tick every 100ms
+    }, 100);
 
     return () => clearInterval(interval);
-  }, []); // Run once on mount
+  }, []);
 
-  // Generate resources function
   const generateResources = () => {
-    const tickRate = 0.1; // 100ms = 0.1 seconds
+    const tickRate = 0.1;
 
     setStructures((prev) =>
       prev.map((structure) => {
-        if (structure.level === 0) return structure; // Not owned
+        if (structure.level === 0) return structure;
 
-        // Handle MINING structures (simple generation, no fuel)
         if (structure.structureType === "mining") {
           const generated = structure.generationRate * tickRate;
           return {
@@ -60,36 +56,27 @@ function GameContextComposer({ children }: { children: ReactNode }) {
           };
         }
 
-        // Handle SMELTING structures (fuel + ore consumption)
         if (structure.structureType === "smelting" && structure.recipe) {
-          // Check 1: Does structure have fuel?
           if (!structure.currentFuel || structure.currentFuel <= 0) {
-            return structure; // No fuel - stop generating
+            return structure;
           }
 
-          // Check 2: Does structure have ore in storage?
           const currentOre = structure.currentOre || 0;
           const oreNeeded = Object.values(structure.recipe)[0] || 0;
-
           if (currentOre < oreNeeded) {
-            return structure; // Not enough ore in storage - stop generating
+            return structure;
           }
 
-          // All checks passed - generate resources and consume fuel + ore
           const generated = structure.generationRate * tickRate;
           const fuelConsumed = (structure.fuelConsumptionRate || 0) * tickRate;
 
-          // Calculate new accumulated
           const newAccumulated = structure.accumulated + generated;
 
-          // Check if we crossed a whole number (completed a unit)
           let newOreAmount = currentOre;
           if (Math.floor(newAccumulated) > Math.floor(structure.accumulated)) {
-            // Consume ore from structure storage
             newOreAmount = Math.max(0, currentOre - oreNeeded);
           }
 
-          // Update structure with new values
           return {
             ...structure,
             accumulated: newAccumulated,
@@ -98,12 +85,11 @@ function GameContextComposer({ children }: { children: ReactNode }) {
           };
         }
 
-        return structure; // Fallback (shouldn't reach here)
+        return structure;
       })
     );
   };
 
-  // Purchase a structure (deduct money, set level to 1)
   const purchaseStructure = (structureId: string) => {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure) return;
@@ -118,21 +104,17 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Deduct money
     setMoney((prev) => prev - structure.cost);
 
-    // Set structure to level 1 (active)
     setStructures((prev) =>
       prev.map((s) => (s.id === structureId ? { ...s, level: 1 } : s))
     );
   };
 
-  // Collect accumulated resources from a structure
   const collectResources = (structureId: string) => {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.accumulated < 1) return;
 
-    // Add accumulated resources to inventory
     const amount = Math.floor(structure.accumulated);
     setResources((prev) => {
       const existingResource = prev.find(
@@ -148,13 +130,11 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return prev;
     });
 
-    // Reset accumulated to 0
     setStructures((prev) =>
       prev.map((s) => (s.id === structureId ? { ...s, accumulated: 0 } : s))
     );
   };
 
-  // Refuel a structure directly with money
   const refuelStructure = (structureId: string, amount: number) => {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.structureType !== "smelting") {
@@ -162,7 +142,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Calculate how much fuel we can actually add (respect capacity)
     const currentFuel = structure.currentFuel || 0;
     const capacity = structure.fuelCapacity || 0;
     const spaceAvailable = capacity - currentFuel;
@@ -173,16 +152,13 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Calculate cost
     const totalCost = fuelToAdd * FUEL_COST_PER_UNIT;
 
-    // Check if player has enough money
     if (money < totalCost) {
       console.warn("Not enough money to refuel");
       return;
     }
 
-    // Deduct money and add fuel to structure (single atomic operation)
     setMoney((prev) => prev - totalCost);
     setStructures((prev) =>
       prev.map((s) =>
@@ -193,7 +169,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     );
   };
 
-  // Input ore into a structure from inventory
   const inputOre = (structureId: string, amount: number) => {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.structureType !== "smelting") {
@@ -201,20 +176,17 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Determine which ore type this smelter needs
     if (!structure.recipe) {
       console.warn("Structure has no recipe");
       return;
     }
 
-    // Get the ore type from the recipe (first key)
     const oreType = Object.keys(structure.recipe)[0];
     if (!oreType) {
       console.warn("No ore type found in recipe");
       return;
     }
 
-    // Find the ore resource in inventory
     const oreResource = resources.find(
       (r) => r.value === oreType && r.type === "ore"
     );
@@ -224,7 +196,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Calculate how much ore we can actually add (respect capacity and inventory)
     const currentOre = structure.currentOre || 0;
     const capacity = structure.oreCapacity || 0;
     const spaceAvailable = capacity - currentOre;
@@ -235,7 +206,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Deduct ore from inventory and add to structure
     setResources((prev) =>
       prev.map((r) =>
         r.value === oreType && r.type === "ore"
@@ -322,8 +292,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setMoney,
     resources,
     structures,
-    miningPower,
-    smeltingPower,
     sellAll,
     sellHalf,
     unlockResource,
