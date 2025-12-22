@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import TabBtn from "@/components/ui/TabBtn";
 import Dialog from "@/components/ui/Dialog";
-import ResourceImage from "../ui/image/ResourceImage";
+import ResourceImage from "@/components/ui/image/ResourceImage";
 
 interface MerchantPanelProps {
   isOpen: boolean;

@@ -1,5 +1,4 @@
 @use "@/styles/panels/ResourcesPanel.scss";
-@use "@/styles/panels/MiningPanel.scss";
 @use "@/styles/panels/MerchantPanel.scss";
 @use "@/styles/panels/VendorPanel.scss";
 @use "@/styles/panels/StructuresPanel.scss";
@@ -24,7 +23,6 @@
     }
   }
 
-  .ore__empty,
   .item__empty {
     font-size: 4rem;
     color: #bbbbbbe8 !important;
@@ -34,13 +32,4 @@
 .app-body .panel {
   display: flex;
   flex-direction: column;
-}
-
-@keyframes slideInRight {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(0);
-  }
 }

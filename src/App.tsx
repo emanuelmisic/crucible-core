@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import { formatNumber } from "@/helpers/helperFunctions";
+import { DIALOG_ANIMATION_TIME } from "@/constants";
 import "@/styles.scss";
 
 import ResourcesPanel from "@/components/panels/ResourcesPanel";
 import MerchantPanel from "@/components/panels/MerchantPanel";
 import VendorPanel from "@/components/panels/VendorPanel";
 import StructuresPanel from "@/components/panels/StructuresPanel";
-import { DIALOG_ANIMATION_TIME } from "./constants";
 
 function App() {
   const game = useGame();

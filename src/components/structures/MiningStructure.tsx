@@ -1,3 +1,6 @@
+import { getStructureResourceType } from "@/helpers/helperFunctions";
+import ResourceImage from "@/components/ui/image/ResourceImage";
+
 interface MiningStructureProps {
   structure: GameStructure;
   onCollect: (id: string) => void;
@@ -14,21 +17,25 @@ function MiningStructure({ structure, onCollect }: MiningStructureProps) {
       </div>
 
       <div className="structure-card__content">
-        <div className="structure-card__stat">
-          <span className="stat__label">Output:</span>
-          <span className="stat__value">
-            {structure.generationRate}/s {structure.resourceType}
-          </span>
-        </div>
-
+        {/* TODO: Place an image here */}
         <button
           className="btn btn--collect"
           onClick={() => onCollect(structure.id)}
           disabled={!canCollect}
         >
-          {canCollect
-            ? `Collect ${Math.floor(structure.accumulated)}`
-            : "Not ready"}
+          {canCollect ? (
+            <span>
+              + {Math.floor(structure.accumulated)}{" "}
+              <ResourceImage
+                type={
+                  getStructureResourceType(structure.structureType) ?? "ore"
+                }
+                value={structure.resource}
+              />
+            </span>
+          ) : (
+            "Not ready"
+          )}
         </button>
       </div>
     </div>

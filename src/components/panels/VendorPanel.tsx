@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
-import { formatNumber } from "@/helpers/helperFunctions";
+import {
+  formatNumber,
+  getStructureResourceType,
+} from "@/helpers/helperFunctions";
 import TabBtn from "@/components/ui/TabBtn";
 import Dialog from "@/components/ui/Dialog";
-import ResourceImage from "../ui/image/ResourceImage";
+import ResourceImage from "@/components/ui/image/ResourceImage";
 
 type VendorTab = "mining" | "smelting" | "storage";
 
@@ -104,14 +107,6 @@ const StructureItem: React.FC<StructureItemProps> = ({
 }) => {
   const isOwned = structure.level > 0;
   const canAfford = money >= structure.cost;
-  function getStructureResourceType() {
-    switch (structure.structureType) {
-      case "mining":
-        return "ore";
-      case "smelting":
-        return "alloy";
-    }
-  }
 
   return (
     <div className={`item ${isOwned ? "item__bought" : ""}`}>
@@ -120,7 +115,7 @@ const StructureItem: React.FC<StructureItemProps> = ({
         <div>
           +
           <ResourceImage
-            type={getStructureResourceType() ?? "ore"}
+            type={getStructureResourceType(structure.structureType) ?? "ore"}
             value={structure.resource ?? ""}
           />
         </div>
