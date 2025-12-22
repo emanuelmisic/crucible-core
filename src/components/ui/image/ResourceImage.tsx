@@ -16,16 +16,17 @@ import silverAlloy from "@/assets/images/alloys/silver.png";
 import goldAlloy from "@/assets/images/alloys/gold.png";
 import platinumAlloy from "@/assets/images/alloys/platinum.png";
 
-interface ImageProps {
-  resource: GameResource;
+interface ResourceImageProps {
+  type: "ore" | "alloy";
+  value: string;
   size?: number;
   className?: string;
 }
 
-function Image({ resource, size = 25, className }: ImageProps) {
-  function getResourceImage(res: GameResource) {
-    if (res.type === "ore") return _getOreImage(res.value);
-    else if (res.type === "alloy") return _getAlloyImage(res.value);
+function ResourceImage({ type, value, size = 25, className }: ResourceImageProps) {
+  function getResourceImage() {
+    if (type === "ore") return _getOreImage(value);
+    else if (type === "alloy") return _getAlloyImage(value);
   }
 
   function _getOreImage(value: string) {
@@ -77,12 +78,12 @@ function Image({ resource, size = 25, className }: ImageProps) {
   return (
     <img
       className={className}
-      src={getResourceImage(resource)}
-      alt={resource.value}
+      src={getResourceImage()}
+      alt={value}
       width={size}
       height={size}
     />
   );
 }
 
-export default Image;
+export default ResourceImage;

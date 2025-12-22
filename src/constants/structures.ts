@@ -5,7 +5,7 @@ export const STRUCTURES: GameStructure[] = [
   {
     id: "basic_iron_drill",
     name: "Basic Iron Drill",
-    resourceType: "iron",
+    resource: "iron",
     generationRate: 1.5,
     cost: 100,
     level: 0,
@@ -15,7 +15,7 @@ export const STRUCTURES: GameStructure[] = [
   {
     id: "basic_bronze_drill",
     name: "Basic Bronze Drill",
-    resourceType: "bronze",
+    resource: "bronze",
     generationRate: 1.0,
     cost: 300,
     level: 0,
@@ -25,7 +25,7 @@ export const STRUCTURES: GameStructure[] = [
   {
     id: "basic_silver_drill",
     name: "Basic Silver Drill",
-    resourceType: "silver",
+    resource: "silver",
     generationRate: 0.6,
     cost: 800,
     level: 0,
@@ -37,7 +37,7 @@ export const STRUCTURES: GameStructure[] = [
   {
     id: "basic_iron_smelter",
     name: "Basic Iron Smelter",
-    resourceType: "iron",
+    resource: "iron",
     generationRate: 0.5,
     cost: 800,
     level: 0,
@@ -55,7 +55,6 @@ export const STRUCTURES: GameStructure[] = [
   {
     id: "basic_warehouse",
     name: "Basic Warehouse",
-    resourceType: "",
     generationRate: 0,
     cost: 400,
     level: 0,

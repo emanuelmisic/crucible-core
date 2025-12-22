@@ -1,13 +1,3 @@
-const INITIAL_MINING_PROGRESS: { [key: string]: number } = {
-  iron: 0,
-  bronze: 0,
-  silver: 0,
-  gold: 0,
-  platinum: 0,
-  diamond: 0,
-  titanium: 0,
-};
-
 const INITIAL_ORES: GameResourceOre[] = [
   {
     active: true,
@@ -250,4 +240,4 @@ function generateResources(): GameResource[] {
 
 const INITIAL_RESOURCES: GameResource[] = generateResources();
 
-export { INITIAL_RESOURCES, INITIAL_MINING_PROGRESS };
+export { INITIAL_RESOURCES };

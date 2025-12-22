@@ -1,4 +1,4 @@
-import Image from "@/components/ui/Image";
+import ResourceImage from "@/components/ui/image/ResourceImage";
 
 interface ResourceTileProps {
   resource: GameResource;
@@ -8,7 +8,12 @@ interface ResourceTileProps {
 function ResourceTile({ resource, onClick }: ResourceTileProps) {
   return (
     <div onClick={onClick}>
-      <Image className="mining-tile" resource={resource} size={100} />
+      <ResourceImage
+        type={resource.type}
+        value={resource.value}
+        className="mining-tile"
+        size={100}
+      />
     </div>
   );
 }

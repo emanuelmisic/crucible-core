@@ -1,6 +1,6 @@
 import { useGame } from "@/contexts/GameContext";
 import Dialog from "@/components/ui/Dialog";
-import Image from "@/components/ui/Image";
+import ResourceImage from "@/components/ui/image/ResourceImage";
 
 function SelectResourcesDialog({
   showDialog,
@@ -40,7 +40,12 @@ function SelectResourcesDialog({
               key={resource.name}
               onClick={() => toggleVisibleResource(resource)}
             >
-              <Image key={resource.name} resource={resource} size={75} />
+              <ResourceImage
+                key={resource.name}
+                type={resource.type}
+                value={resource.value}
+                size={75}
+              />
             </div>
           ))}
       </div>

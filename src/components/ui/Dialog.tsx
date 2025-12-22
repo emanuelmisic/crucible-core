@@ -1,3 +1,4 @@
+import { DIALOG_ANIMATION_TIME } from "@/constants";
 import { useEffect, useState } from "react";
 
 interface DialogProps {
@@ -30,12 +31,10 @@ function Dialog({
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
-      // Small delay to trigger CSS transition
       setTimeout(() => setIsAnimating(true), 10);
     } else {
       setIsAnimating(false);
-      // Wait for fade-out animation to complete before hiding
-      const timer = setTimeout(() => setIsVisible(false), 200);
+      const timer = setTimeout(() => setIsVisible(false), DIALOG_ANIMATION_TIME);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);

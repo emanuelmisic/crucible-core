@@ -7,6 +7,7 @@ import ResourcesPanel from "@/components/panels/ResourcesPanel";
 import MerchantPanel from "@/components/panels/MerchantPanel";
 import VendorPanel from "@/components/panels/VendorPanel";
 import StructuresPanel from "@/components/panels/StructuresPanel";
+import { DIALOG_ANIMATION_TIME } from "./constants";
 
 function App() {
   const game = useGame();
@@ -14,6 +15,24 @@ function App() {
   const [alloys, setAlloys] = useState<GameResourceAlloy[]>([]);
   const [vendorOpen, setVendorOpen] = useState(false);
   const [merchantOpen, setMerchantOpen] = useState(false);
+
+  const openMerchant = () => {
+    if (vendorOpen) {
+      setVendorOpen(false);
+      setTimeout(() => setMerchantOpen(true), DIALOG_ANIMATION_TIME);
+    } else {
+      setMerchantOpen(true);
+    }
+  };
+
+  const openVendor = () => {
+    if (merchantOpen) {
+      setMerchantOpen(false);
+      setTimeout(() => setVendorOpen(true), DIALOG_ANIMATION_TIME);
+    } else {
+      setVendorOpen(true);
+    }
+  };
 
   useEffect(() => {
     setOres(
@@ -38,11 +57,14 @@ function App() {
           <StructuresPanel />
         </div>
       </div>
-      <MerchantPanel isOpen={merchantOpen} onClose={() => setMerchantOpen(false)} />
+      <MerchantPanel
+        isOpen={merchantOpen}
+        onClose={() => setMerchantOpen(false)}
+      />
       <VendorPanel isOpen={vendorOpen} onClose={() => setVendorOpen(false)} />
       <nav>
-        <button onClick={() => setMerchantOpen(true)}>Merchant</button>
-        <button onClick={() => setVendorOpen(true)}>Vendor</button>
+        <button onClick={openMerchant}>Merchant</button>
+        <button onClick={openVendor}>Vendor</button>
       </nav>
     </>
   );

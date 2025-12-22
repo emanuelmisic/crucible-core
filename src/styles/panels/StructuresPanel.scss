@@ -273,3 +273,53 @@
     box-shadow: none;
   }
 }
+
+/* Storage Structure Styles */
+.structure-card--storage {
+  border-color: #7e57c2;
+
+  &:hover {
+    border-color: #9575cd;
+  }
+}
+
+.storage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__title {
+    font-size: 0.95rem;
+    color: #aaa;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+}
+
+.storage-resource {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &__name {
+    font-size: 0.9rem;
+    color: #fff;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  &__value {
+    font-size: 0.95rem;
+    color: #7e57c2;
+    font-weight: 600;
+  }
+
+  &__current {
+    font-size: 0.85rem;
+    color: #888;
+  }
+}

@@ -15,15 +15,23 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
 
+  // Game loop - ticks every 100ms
+  useEffect(() => {
+    const interval = setInterval(() => {
+      generateResources();
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // STORAGE LOGIC
 
-  // Calculate storage capacity for a specific resource based on owned structures
-  const calculateStorageCapacity = (resourceType: string): number => {
-    // Get base capacity from initial resource definition
-    const initialResource = INITIAL_RESOURCES.find((r) => r.value === resourceType);
+  function calculateStorageCapacity(resourceType: string): number {
+    const initialResource = INITIAL_RESOURCES.find(
+      (r) => r.value === resourceType
+    );
     const baseCapacity = initialResource?.storageCapacity || 0;
 
-    // Add capacity from owned storage structures
     const bonusCapacity = structures
       .filter((s) => s.structureType === "storage" && s.level > 0)
       .reduce((total, structure) => {
@@ -32,9 +40,8 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       }, 0);
 
     return baseCapacity + bonusCapacity;
-  };
+  }
 
-  // Update storage capacity whenever structures change
   useEffect(() => {
     setResources((prev) =>
       prev.map((res) => ({
@@ -61,16 +68,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
 
   // STRUCTURES LOGIC
 
-  // Game loop - ticks every 100ms
-  useEffect(() => {
-    const interval = setInterval(() => {
-      generateResources();
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const generateResources = () => {
+  function generateResources() {
     const tickRate = 0.1;
 
     setStructures((prev) =>
@@ -117,9 +115,9 @@ function GameContextComposer({ children }: { children: ReactNode }) {
         return structure;
       })
     );
-  };
+  }
 
-  const purchaseStructure = (structureId: string) => {
+  function purchaseStructure(structureId: string) {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure) return;
 
@@ -138,16 +136,18 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     setStructures((prev) =>
       prev.map((s) => (s.id === structureId ? { ...s, level: 1 } : s))
     );
-  };
+  }
 
-  const collectResources = (structureId: string) => {
+  function collectResources(structureId: string) {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.accumulated < 1) return;
 
     const amountToCollect = Math.floor(structure.accumulated);
 
-    // Check storage capacity
-    const resource = resources.find((r) => r.value === structure.resourceType);
+    const resourceType = structure.structureType === "mining" ? "ore" : "alloy";
+    const resource = resources.find(
+      (r) => r.value === structure.resource && r.type === resourceType
+    );
     if (!resource) return;
 
     const spaceAvailable = resource.storageCapacity - resource.amount;
@@ -158,16 +158,14 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Add to resources (respecting storage limit)
     setResources((prev) =>
       prev.map((r) =>
-        r.value === structure.resourceType
+        r.value === structure.resource && r.type === resourceType
           ? { ...r, amount: r.amount + actualCollected }
           : r
       )
     );
 
-    // Deduct collected amount from structure's accumulated
     setStructures((prev) =>
       prev.map((s) =>
         s.id === structureId
@@ -175,9 +173,9 @@ function GameContextComposer({ children }: { children: ReactNode }) {
           : s
       )
     );
-  };
+  }
 
-  const refuelStructure = (structureId: string, amount: number) => {
+  function refuelStructure(structureId: string, amount: number) {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.structureType !== "smelting") {
       console.warn("Structure not found or is not a smelting structure");
@@ -209,9 +207,9 @@ function GameContextComposer({ children }: { children: ReactNode }) {
           : s
       )
     );
-  };
+  }
 
-  const inputOre = (structureId: string, amount: number) => {
+  function inputOre(structureId: string, amount: number) {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.structureType !== "smelting") {
       console.warn("Structure not found or is not a smelting structure");
@@ -261,7 +259,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
         s.id === structureId ? { ...s, currentOre: currentOre + oreToAdd } : s
       )
     );
-  };
+  }
 
   // OTHER
 

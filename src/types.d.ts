@@ -42,7 +42,7 @@ interface GameResourceAlloy extends GameResource {
 interface GameStructure {
   id: string;
   name: string;
-  resourceType: string;
+  resource: string;
   generationRate: number;
   cost: number;
   level: number;

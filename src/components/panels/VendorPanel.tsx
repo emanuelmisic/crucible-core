@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import { formatNumber } from "@/helpers/helperFunctions";
-import Image from "@/components/ui/Image";
 import TabBtn from "@/components/ui/TabBtn";
 import Dialog from "@/components/ui/Dialog";
+import ResourceImage from "../ui/image/ResourceImage";
 
 type VendorTab = "mining" | "smelting" | "storage";
 
@@ -104,14 +104,26 @@ const StructureItem: React.FC<StructureItemProps> = ({
 }) => {
   const isOwned = structure.level > 0;
   const canAfford = money >= structure.cost;
+  function getStructureResourceType() {
+    switch (structure.structureType) {
+      case "mining":
+        return "ore";
+      case "smelting":
+        return "alloy";
+    }
+  }
 
   return (
     <div className={`item ${isOwned ? "item__bought" : ""}`}>
       <span className="item__name">{structure.name}</span>
       <div className="item__details">
-        <p className="item__stat">
-          Output: {structure.generationRate}/s {structure.resourceType}
-        </p>
+        <div>
+          +
+          <ResourceImage
+            type={getStructureResourceType() ?? "ore"}
+            value={structure.resource ?? ""}
+          />
+        </div>
         {structure.recipe && (
           <p className="item__stat item__recipe">
             Consumes:{" "}
@@ -128,13 +140,12 @@ const StructureItem: React.FC<StructureItemProps> = ({
         </button>
       ) : (
         <>
-          <span className="item__price">${formatNumber(structure.cost)}</span>
           <button
-            className="btn btn--purchase"
+            className="btn"
             onClick={() => onPurchase(structure.id)}
             disabled={!canAfford}
           >
-            BUY
+            ${formatNumber(structure.cost)}
           </button>
         </>
       )}

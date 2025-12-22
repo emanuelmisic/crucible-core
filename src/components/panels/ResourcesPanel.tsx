@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { formatNumber } from "@/helpers/helperFunctions";
 import SelectResourcesDialog from "@/components/dialogs/SelectResourcesDialog";
-import Image from "@/components/ui/Image";
+import ResourceImage from "@/components/ui/image/ResourceImage";
 
 interface ResourcesPanelProps {
   ores: GameResourceOre[];
@@ -41,7 +41,7 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
           <>
             {displayedOres.map((ore) => (
               <p key={ore.name}>
-                <Image resource={ore} />
+                <ResourceImage type="ore" value={ore.value} />
                 {ore.storageCapacity > 0
                   ? `${formatNumber(ore.amount)} / ${formatNumber(
                       ore.storageCapacity
@@ -61,7 +61,7 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
           <>
             {displayedAlloys.map((alloy) => (
               <p key={alloy.name}>
-                <Image resource={alloy} />
+                <ResourceImage type="alloy" value={alloy.value} />
                 {alloy.storageCapacity > 0
                   ? `${formatNumber(alloy.amount)} / ${formatNumber(
                       alloy.storageCapacity
