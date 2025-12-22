@@ -20,6 +20,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: true,
     unlockedFor: 0,
     value: "iron",
+    storageCapacity: 50,
   },
   {
     active: false,
@@ -32,6 +33,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: true,
     unlockedFor: 0,
     value: "bronze",
+    storageCapacity: 50,
   },
   {
     active: false,
@@ -44,6 +46,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: true,
     unlockedFor: 0,
     value: "silver",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -56,6 +59,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 2000,
     value: "gold",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -68,6 +72,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 5000,
     value: "platinum",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -80,6 +85,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 10000,
     value: "diamond",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -92,6 +98,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 25000,
     value: "titanium",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -104,6 +111,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 25000,
     value: "crystal",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -116,6 +124,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 25000,
     value: "etherium",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -128,6 +137,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 25000,
     value: "oxidium",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -140,6 +150,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     unlocked: false,
     unlockedFor: 25000,
     value: "baseterium",
+    storageCapacity: 0,
   },
 ];
 
@@ -158,6 +169,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     unlocked: false,
     unlockedFor: 10,
     value: "iron",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -173,6 +185,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     unlocked: false,
     unlockedFor: 200,
     value: "bronze",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -188,6 +201,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     unlocked: false,
     unlockedFor: 200,
     value: "silver",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -203,6 +217,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     unlocked: false,
     unlockedFor: 200,
     value: "gold",
+    storageCapacity: 0,
   },
   {
     active: false,
@@ -218,6 +233,7 @@ const INITIAL_ALLOYS: GameResourceAlloy[] = [
     unlocked: false,
     unlockedFor: 200,
     value: "platinum",
+    storageCapacity: 0,
   },
 ];
 

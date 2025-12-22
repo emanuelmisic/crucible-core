@@ -15,6 +15,35 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
 
+  // STORAGE LOGIC
+
+  // Calculate storage capacity for a specific resource based on owned structures
+  const calculateStorageCapacity = (resourceType: string): number => {
+    // Get base capacity from initial resource definition
+    const initialResource = INITIAL_RESOURCES.find((r) => r.value === resourceType);
+    const baseCapacity = initialResource?.storageCapacity || 0;
+
+    // Add capacity from owned storage structures
+    const bonusCapacity = structures
+      .filter((s) => s.structureType === "storage" && s.level > 0)
+      .reduce((total, structure) => {
+        const providedCapacity = structure.storageProvided?.[resourceType] || 0;
+        return total + providedCapacity;
+      }, 0);
+
+    return baseCapacity + bonusCapacity;
+  };
+
+  // Update storage capacity whenever structures change
+  useEffect(() => {
+    setResources((prev) =>
+      prev.map((res) => ({
+        ...res,
+        storageCapacity: calculateStorageCapacity(res.value),
+      }))
+    );
+  }, [structures]);
+
   // MERCHANT LOGIC
 
   function sellAll(resource: GameResource) {
@@ -115,23 +144,36 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     const structure = structures.find((s) => s.id === structureId);
     if (!structure || structure.accumulated < 1) return;
 
-    const amount = Math.floor(structure.accumulated);
-    setResources((prev) => {
-      const existingResource = prev.find(
-        (r) => r.value === structure.resourceType
-      );
-      if (existingResource) {
-        return prev.map((r) =>
-          r.value === structure.resourceType
-            ? { ...r, amount: r.amount + amount }
-            : r
-        );
-      }
-      return prev;
-    });
+    const amountToCollect = Math.floor(structure.accumulated);
 
+    // Check storage capacity
+    const resource = resources.find((r) => r.value === structure.resourceType);
+    if (!resource) return;
+
+    const spaceAvailable = resource.storageCapacity - resource.amount;
+    const actualCollected = Math.min(amountToCollect, spaceAvailable);
+
+    if (actualCollected <= 0) {
+      console.warn("Storage is full - cannot collect resources");
+      return;
+    }
+
+    // Add to resources (respecting storage limit)
+    setResources((prev) =>
+      prev.map((r) =>
+        r.value === structure.resourceType
+          ? { ...r, amount: r.amount + actualCollected }
+          : r
+      )
+    );
+
+    // Deduct collected amount from structure's accumulated
     setStructures((prev) =>
-      prev.map((s) => (s.id === structureId ? { ...s, accumulated: 0 } : s))
+      prev.map((s) =>
+        s.id === structureId
+          ? { ...s, accumulated: s.accumulated - actualCollected }
+          : s
+      )
     );
   };
 

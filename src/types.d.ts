@@ -27,6 +27,7 @@ interface GameResource {
   unlocked: boolean;
   unlockedFor: number;
   value: string;
+  storageCapacity: number;
 }
 
 interface GameResourceOre extends GameResource {
@@ -53,6 +54,7 @@ interface GameStructure {
   currentFuel?: number;
   oreCapacity?: number;
   currentOre?: number;
+  storageProvided?: { [resource: string]: number };
 }
 
 interface DialogProps {

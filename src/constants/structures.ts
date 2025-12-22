@@ -50,4 +50,20 @@ export const STRUCTURES: GameStructure[] = [
     oreCapacity: 500,
     currentOre: 0,
   },
+
+  // Storage structures
+  {
+    id: "basic_warehouse",
+    name: "Basic Warehouse",
+    resourceType: "",
+    generationRate: 0,
+    cost: 400,
+    level: 0,
+    accumulated: 0,
+    structureType: "storage",
+    storageProvided: {
+      iron: 200,
+      bronze: 200,
+    },
+  },
 ];

@@ -17,6 +17,7 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
   );
   const [showOresDialog, setShowOresDialog] = useState(false);
   const [showAlloysDialog, setShowAlloysDialog] = useState(false);
+  const [showingOres, setShowingOres] = useState(true);
 
   useEffect(() => {
     setDisplayedOres(ores.filter((ore) => ore.isDisplayed));
@@ -36,22 +37,49 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
         closeDialog={() => setShowAlloysDialog(false)}
       />
       <div className="resources-panel__section">
-        {displayedOres.map((ore) => (
-          <p key={ore.name}>
-            <Image resource={ore} />
-            {formatNumber(ore.amount)}
-          </p>
-        ))}
-        <button onClick={() => setShowOresDialog(true)}>Choose ores</button>
-      </div>
-      <div className="resources-panel__section">
-        {displayedAlloys.map((alloy) => (
-          <p key={alloy.name}>
-            <Image resource={alloy} />
-            {alloy.amount}
-          </p>
-        ))}
-        <button onClick={() => setShowAlloysDialog(true)}>Choose alloys</button>
+        {showingOres ? (
+          <>
+            {displayedOres.map((ore) => (
+              <p key={ore.name}>
+                <Image resource={ore} />
+                {ore.storageCapacity > 0
+                  ? `${formatNumber(ore.amount)} / ${formatNumber(
+                      ore.storageCapacity
+                    )}`
+                  : formatNumber(ore.amount)}
+              </p>
+            ))}
+            <button
+              style={{ marginRight: "5rem" }}
+              onClick={() => setShowingOres(false)}
+            >
+              Show alloys
+            </button>
+            <button onClick={() => setShowOresDialog(true)}>Choose ores</button>
+          </>
+        ) : (
+          <>
+            {displayedAlloys.map((alloy) => (
+              <p key={alloy.name}>
+                <Image resource={alloy} />
+                {alloy.storageCapacity > 0
+                  ? `${formatNumber(alloy.amount)} / ${formatNumber(
+                      alloy.storageCapacity
+                    )}`
+                  : formatNumber(alloy.amount)}
+              </p>
+            ))}
+            <button
+              style={{ marginRight: "5rem" }}
+              onClick={() => setShowingOres(true)}
+            >
+              Show ores
+            </button>
+            <button onClick={() => setShowAlloysDialog(true)}>
+              Choose alloys
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
