@@ -12,6 +12,8 @@ interface GameContext {
   collectResources: (structureId: string) => void;
   refuelStructure: (structureId: string, amount: number) => void;
   inputOre: (structureId: string, amount: number) => void;
+  upgradeStructure: (structureId: string) => void;
+  getHQLevel: () => number;
 }
 
 interface GameResource {
@@ -43,18 +45,22 @@ interface GameStructure {
   id: string;
   name: string;
   resource: string;
-  generationRate: number;
-  cost: number;
+  generationRate: number | number[];
+  cost: number[];
   level: number;
   accumulated: number;
-  structureType: "mining" | "smelting" | "storage";
+  structureType: "mining" | "smelting" | "storage" | "hq";
   recipe?: { [resource: string]: number };
-  fuelConsumptionRate?: number;
+  fuelConsumptionRate?: number | number[];
   fuelCapacity?: number;
   currentFuel?: number;
   oreCapacity?: number;
   currentOre?: number;
-  storageProvided?: { [resource: string]: number };
+  storageProvided?: { [resource: string]: number | number[] };
+  unlocked?: boolean;
+  upgradeCost?: number;
+  upgradeResourceCost?: { [resource: string]: number };
+  maxLevel?: number;
 }
 
 interface DialogProps {

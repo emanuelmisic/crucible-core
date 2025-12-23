@@ -35,7 +35,15 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     const bonusCapacity = structures
       .filter((s) => s.structureType === "storage" && s.level > 0)
       .reduce((total, structure) => {
-        const providedCapacity = structure.storageProvided?.[resourceType] || 0;
+        const providedValue = structure.storageProvided?.[resourceType];
+        let providedCapacity = 0;
+
+        if (Array.isArray(providedValue)) {
+          providedCapacity = providedValue[structure.level - 1] || 0;
+        } else if (typeof providedValue === "number") {
+          providedCapacity = providedValue;
+        }
+
         return total + providedCapacity;
       }, 0);
 
@@ -76,7 +84,11 @@ function GameContextComposer({ children }: { children: ReactNode }) {
         if (structure.level === 0) return structure;
 
         if (structure.structureType === "mining") {
-          const generated = structure.generationRate * tickRate;
+          const generationRate = Array.isArray(structure.generationRate)
+            ? structure.generationRate[structure.level - 1] || 0
+            : structure.generationRate;
+
+          const generated = generationRate * tickRate;
           return {
             ...structure,
             accumulated: structure.accumulated + generated,
@@ -94,8 +106,18 @@ function GameContextComposer({ children }: { children: ReactNode }) {
             return structure;
           }
 
-          const generated = structure.generationRate * tickRate;
-          const fuelConsumed = (structure.fuelConsumptionRate || 0) * tickRate;
+          const generationRate = Array.isArray(structure.generationRate)
+            ? structure.generationRate[structure.level - 1] || 0
+            : structure.generationRate;
+
+          const fuelConsumptionRate = Array.isArray(
+            structure.fuelConsumptionRate
+          )
+            ? structure.fuelConsumptionRate[structure.level - 1] || 0
+            : structure.fuelConsumptionRate || 0;
+
+          const generated = generationRate * tickRate;
+          const fuelConsumed = fuelConsumptionRate * tickRate;
 
           const newAccumulated = structure.accumulated + generated;
 
@@ -126,12 +148,16 @@ function GameContextComposer({ children }: { children: ReactNode }) {
       return;
     }
 
-    if (money < structure.cost) {
+    const purchaseCost = Array.isArray(structure.cost)
+      ? structure.cost[0]
+      : structure.cost;
+
+    if (money < purchaseCost) {
       console.warn("Not enough money");
       return;
     }
 
-    setMoney((prev) => prev - structure.cost);
+    setMoney((prev) => prev - purchaseCost);
 
     setStructures((prev) =>
       prev.map((s) => (s.id === structureId ? { ...s, level: 1 } : s))
@@ -261,6 +287,167 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     );
   }
 
+  // HQ AND UPGRADE LOGIC
+
+  function getHQLevel(): number {
+    const hq = structures.find((s) => s.structureType === "hq");
+    return hq?.level || 1;
+  }
+
+  function calculateUpgradeCost(structure: GameStructure): number {
+    if (structure.structureType === "hq") {
+      if (structure.level === 1) return 2000;
+      return 0;
+    } else {
+      const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
+      if (baseStructure && Array.isArray(baseStructure.cost)) {
+        return baseStructure.cost[structure.level] || 0;
+      }
+      return 0;
+    }
+  }
+
+  function calculateMaxLevel(structureType: string, hqLevel: number): number {
+    if (structureType === "hq") return 2;
+    let maxLevel = 5;
+    if (hqLevel >= 2) maxLevel += 2;
+    return maxLevel;
+  }
+
+  function upgradeStructure(structureId: string) {
+    const structure = structures.find((s) => s.id === structureId);
+
+    if (!structure) return;
+    if (structure.level >= (structure.maxLevel || 5)) {
+      console.warn("Structure is already at max level");
+      return;
+    }
+
+    const upgradeCost = calculateUpgradeCost(structure);
+    const resourceCosts = structure.upgradeResourceCost || {};
+
+    if (money < upgradeCost) {
+      console.warn("Not enough money to upgrade");
+      return;
+    }
+
+    for (const [resourceId, amount] of Object.entries(resourceCosts)) {
+      const resource = resources.find((r) => r.value === resourceId);
+      if (!resource || resource.amount < amount) {
+        console.warn(`Not enough ${resourceId} to upgrade`);
+        return;
+      }
+    }
+
+    setMoney((prev) => prev - upgradeCost);
+
+    setResources((prev) =>
+      prev.map((r) => {
+        const cost = resourceCosts[r.value];
+        if (cost) {
+          return { ...r, amount: r.amount - cost };
+        }
+        return r;
+      })
+    );
+
+    setStructures((prev) =>
+      prev.map((s) => {
+        if (s.id !== structureId) return s;
+
+        const newLevel = s.level + 1;
+        const baseStructure = STRUCTURES.find((base) => base.id === s.id);
+        if (!baseStructure) return s;
+
+        const newStats: Partial<GameStructure> = {};
+
+        if (s.structureType === "mining") {
+          if (Array.isArray(baseStructure.generationRate)) {
+            newStats.generationRate = baseStructure.generationRate[newLevel - 1];
+          }
+        } else if (s.structureType === "smelting") {
+          if (Array.isArray(baseStructure.generationRate)) {
+            newStats.generationRate = baseStructure.generationRate[newLevel - 1];
+          }
+          if (Array.isArray(baseStructure.fuelConsumptionRate)) {
+            newStats.fuelConsumptionRate =
+              baseStructure.fuelConsumptionRate[newLevel - 1];
+          }
+        } else if (s.structureType === "storage") {
+          if (baseStructure.storageProvided) {
+            const newStorageProvided: { [resource: string]: number } = {};
+            for (const [resource, values] of Object.entries(
+              baseStructure.storageProvided
+            )) {
+              if (Array.isArray(values)) {
+                newStorageProvided[resource] = values[newLevel - 1];
+              }
+            }
+            newStats.storageProvided = newStorageProvided;
+          }
+        }
+
+        return {
+          ...s,
+          level: newLevel,
+          upgradeCost: calculateUpgradeCost({ ...s, level: newLevel }),
+          ...newStats,
+        };
+      })
+    );
+  }
+
+  function updateUnlocks() {
+    const hqLevel = getHQLevel();
+
+    setStructures((prev) =>
+      prev.map((structure) => {
+        const unlockRequirements: { [key: string]: number } = {
+          basic_iron_drill: 1,
+          basic_warehouse: 1,
+          basic_bronze_drill: 2,
+          basic_silver_drill: 2,
+          basic_iron_smelter: 2,
+        };
+
+        const requiredLevel = unlockRequirements[structure.id] || 1;
+        const isUnlocked = hqLevel >= requiredLevel;
+
+        const newMaxLevel = calculateMaxLevel(structure.structureType, hqLevel);
+
+        return {
+          ...structure,
+          unlocked: structure.structureType === "hq" ? true : isUnlocked,
+          maxLevel: newMaxLevel,
+        };
+      })
+    );
+
+    setResources((prev) =>
+      prev.map((resource) => {
+        const resourceUnlockRequirements: { [key: string]: number } = {
+          iron: 1,
+          "iron alloy": 2,
+          bronze: 2,
+          silver: 2,
+        };
+
+        const requiredLevel = resourceUnlockRequirements[resource.value] || 1;
+        const isUnlocked = hqLevel >= requiredLevel;
+
+        return {
+          ...resource,
+          unlocked: isUnlocked,
+          isDisplayed: isUnlocked,
+        };
+      })
+    );
+  }
+
+  useEffect(() => {
+    updateUnlocks();
+  }, [structures.find((s) => s.structureType === "hq")?.level]);
+
   // OTHER
 
   function setResource(
@@ -341,6 +528,8 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     collectResources,
     refuelStructure,
     inputOre,
+    upgradeStructure,
+    getHQLevel,
   };
 
   return (

@@ -1,0 +1,140 @@
+.hq-panel {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+  border: 2px solid #ffd700;
+  margin: 0 15rem;
+
+  .panel__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.hq-info {
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.hq-level {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.hq-level__value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.hq-level__max {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.hq-upgrade {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.hq-upgrade h3 {
+  margin: 0 0 0.35rem 0;
+  color: #ffd700;
+  font-size: 0.9rem;
+}
+
+.hq-upgrade__costs {
+  margin: 0.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hq-upgrade__cost {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: #4caf50;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.4rem;
+  border-radius: 3px;
+}
+
+.hq-upgrade__cost.insufficient {
+  color: #f44336;
+}
+
+.hq-upgrade__cost-label {
+  font-size: 0.85rem;
+}
+
+.btn--upgrade {
+  width: 100%;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #000;
+  font-weight: bold;
+  padding: 0.4rem;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.35rem;
+}
+
+.btn--upgrade:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+}
+
+.btn--upgrade:disabled {
+  background: #555;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.hq-max-level {
+  text-align: center;
+  padding: 1rem;
+  color: #ffd700;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.hq-max-level p {
+  margin: 0.25rem 0;
+}
+
+.hq-storage {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  border-radius: 4px;
+  min-width: 120px;
+}
+
+.hq-storage h3 {
+  margin: 0 0 0.4rem 0;
+  color: #ffd700;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.hq-storage__resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  justify-content: center;
+}
+
+.hq-storage__resource {
+  cursor: help;
+  transition: transform 0.1s;
+}
+
+.hq-storage__resource:hover {
+  transform: scale(1.1);
+}

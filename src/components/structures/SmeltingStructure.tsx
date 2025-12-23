@@ -1,4 +1,5 @@
-import { FUEL_COST_PER_UNIT } from "@/constants/structures";
+import { FUEL_COST_PER_UNIT, STRUCTURES } from "@/constants/structures";
+import { formatNumber } from "@/helpers/helperFunctions";
 
 interface SmeltingStructureProps {
   structure: GameStructure;
@@ -7,6 +8,7 @@ interface SmeltingStructureProps {
   onCollect: (id: string) => void;
   onRefuel: (id: string, amount: number) => void;
   onInputOre: (id: string, amount: number) => void;
+  onUpgrade: (id: string) => void;
 }
 
 function SmeltingStructure({
@@ -16,8 +18,29 @@ function SmeltingStructure({
   onCollect,
   onRefuel,
   onInputOre,
+  onUpgrade,
 }: SmeltingStructureProps) {
   const canCollect = structure.accumulated >= 1;
+
+  const calculateUpgradeCost = (): number => {
+    const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
+    if (baseStructure && Array.isArray(baseStructure.cost)) {
+      return baseStructure.cost[structure.level] || 0;
+    }
+    return 0;
+  };
+
+  const upgradeCost = calculateUpgradeCost();
+  const canAffordUpgrade = money >= upgradeCost;
+  const isMaxLevel = structure.level >= (structure.maxLevel || 5);
+
+  const generationRate = Array.isArray(structure.generationRate)
+    ? structure.generationRate[structure.level - 1]
+    : structure.generationRate;
+
+  const fuelConsumptionRate = Array.isArray(structure.fuelConsumptionRate)
+    ? structure.fuelConsumptionRate[structure.level - 1]
+    : structure.fuelConsumptionRate || 0;
 
   const currentFuel = structure.currentFuel || 0;
   const fuelCapacity = structure.fuelCapacity || 100;
@@ -68,6 +91,7 @@ function SmeltingStructure({
     >
       <div className="structure-card__header">
         <h4 className="structure-card__name">{structure.name}</h4>
+        <span className="structure-card__level">Level {structure.level}</span>
         <span
           className={`structure-card__status ${
             isOutOfFuel || isOutOfOre ? "status--stopped" : "status--active"
@@ -82,8 +106,12 @@ function SmeltingStructure({
           <div className="structure-card__stat">
             <span className="stat__label">Output:</span>
             <span className="stat__value">
-              {structure.generationRate}/s {structure.resourceType} ingots
+              {generationRate}/s {structure.resource} alloy
             </span>
+          </div>
+          <div className="structure-card__stat">
+            <span className="stat__label">Fuel consumption:</span>
+            <span className="stat__value">{fuelConsumptionRate.toFixed(3)}/s</span>
           </div>
           {structure.recipe && (
             <div className="structure-card__stat">
@@ -190,6 +218,21 @@ function SmeltingStructure({
             })}
           </div>
         </div>
+
+        {!isMaxLevel && (
+          <div className="structure-card__upgrade">
+            <button
+              className="btn btn--upgrade-sm"
+              onClick={() => onUpgrade(structure.id)}
+              disabled={!canAffordUpgrade}
+            >
+              Upgrade (${formatNumber(upgradeCost)})
+            </button>
+          </div>
+        )}
+        {isMaxLevel && (
+          <p className="structure-card__max-level">MAX LEVEL</p>
+        )}
 
         <button
           className="btn btn--collect"

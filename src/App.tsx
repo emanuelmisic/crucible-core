@@ -8,6 +8,7 @@ import ResourcesPanel from "@/components/panels/ResourcesPanel";
 import MerchantPanel from "@/components/panels/MerchantPanel";
 import VendorPanel from "@/components/panels/VendorPanel";
 import StructuresPanel from "@/components/panels/StructuresPanel";
+import HQPanel from "@/components/panels/HQPanel";
 
 function App() {
   const game = useGame();

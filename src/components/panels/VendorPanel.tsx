@@ -53,6 +53,7 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
                     key={structure.id}
                     structure={structure}
                     money={game.money}
+                    hqLevel={game.getHQLevel()}
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
@@ -68,6 +69,7 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
                     key={structure.id}
                     structure={structure}
                     money={game.money}
+                    hqLevel={game.getHQLevel()}
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
@@ -83,6 +85,7 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
                     key={structure.id}
                     structure={structure}
                     money={game.money}
+                    hqLevel={game.getHQLevel()}
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
@@ -97,16 +100,18 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
 interface StructureItemProps {
   structure: GameStructure;
   money: number;
+  hqLevel: number;
   onPurchase: (id: string) => void;
 }
 
 const StructureItem: React.FC<StructureItemProps> = ({
   structure,
   money,
+  hqLevel,
   onPurchase,
 }) => {
   const isOwned = structure.level > 0;
-  const canAfford = money >= structure.cost;
+  const canAfford = money >= structure.cost[hqLevel - 1];
 
   return (
     <div className={`item ${isOwned ? "item__bought" : ""}`}>
@@ -140,7 +145,7 @@ const StructureItem: React.FC<StructureItemProps> = ({
             onClick={() => onPurchase(structure.id)}
             disabled={!canAfford}
           >
-            ${formatNumber(structure.cost)}
+            ${formatNumber(structure.cost[hqLevel - 1])}
           </button>
         </>
       )}
