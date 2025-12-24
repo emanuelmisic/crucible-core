@@ -1,24 +1,19 @@
-import Image from "@/components/ui/image/ResourceImage";
 import { STRUCTURES } from "@/constants/structures";
 import { formatNumber } from "@/helpers/helperFunctions";
 
-interface MiningStructureProps {
+interface StorageStructureProps {
   structure: GameStructure;
   hqLevel: number;
   money: number;
-  onCollect: (id: string) => void;
   onUpgrade: (id: string) => void;
 }
 
-function MiningStructure({
+function StorageStructure({
   structure,
   hqLevel,
   money,
-  onCollect,
   onUpgrade,
-}: MiningStructureProps) {
-  const canCollect = structure.accumulated >= 1;
-
+}: StorageStructureProps) {
   function calculateUpgradeCost(): number {
     const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
     if (baseStructure && Array.isArray(baseStructure.cost)) {
@@ -32,13 +27,16 @@ function MiningStructure({
   const isMaxLevel = structure.level >= structure.maxLevel[hqLevel - 1];
 
   return (
-    <div className="structure-card structure-card--mining">
+    <div className="structure-card structure-card--storage">
       <div className="structure-card__header">
         <h4 className="structure-card__name">{structure.name}</h4>
         <span className="structure-card__level">Level {structure.level}</span>
       </div>
-
       <div className="structure-card__content">
+        <div className="storage-info">
+          <p>Provides {structure.storageProvided?.[hqLevel - 1]} storage</p>
+        </div>
+
         {!isMaxLevel && (
           <div className="structure-card__upgrade">
             <button
@@ -46,31 +44,14 @@ function MiningStructure({
               onClick={() => onUpgrade(structure.id)}
               disabled={!canAfford}
             >
-              Upgrade (💲{formatNumber(upgradeCost)})
+              Upgrade (${formatNumber(upgradeCost)})
             </button>
           </div>
         )}
         {isMaxLevel && <p className="structure-card__max-level">MAX LEVEL</p>}
       </div>
-
-      <div className="structure-card__actions">
-        <button
-          className="btn btn--collect"
-          onClick={() => onCollect(structure.id)}
-          disabled={!canCollect}
-        >
-          {canCollect ? (
-            <span>
-              + {Math.floor(structure.accumulated)}{" "}
-              <Image value={structure.resource} />
-            </span>
-          ) : (
-            "Not ready"
-          )}
-        </button>
-      </div>
     </div>
   );
 }
 
-export default MiningStructure;
+export default StorageStructure;

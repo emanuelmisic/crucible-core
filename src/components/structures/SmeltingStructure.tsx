@@ -3,6 +3,7 @@ import { formatNumber } from "@/helpers/helperFunctions";
 
 interface SmeltingStructureProps {
   structure: GameStructure;
+  hqLevel: number;
   money: number;
   resources: GameResource[];
   onCollect: (id: string) => void;
@@ -13,6 +14,7 @@ interface SmeltingStructureProps {
 
 function SmeltingStructure({
   structure,
+  hqLevel,
   money,
   resources,
   onCollect,
@@ -22,25 +24,17 @@ function SmeltingStructure({
 }: SmeltingStructureProps) {
   const canCollect = structure.accumulated >= 1;
 
-  const calculateUpgradeCost = (): number => {
+  function calculateUpgradeCost(): number {
     const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
     if (baseStructure && Array.isArray(baseStructure.cost)) {
       return baseStructure.cost[structure.level] || 0;
     }
     return 0;
-  };
+  }
 
   const upgradeCost = calculateUpgradeCost();
   const canAffordUpgrade = money >= upgradeCost;
-  const isMaxLevel = structure.level >= (structure.maxLevel || 5);
-
-  const generationRate = Array.isArray(structure.generationRate)
-    ? structure.generationRate[structure.level - 1]
-    : structure.generationRate;
-
-  const fuelConsumptionRate = Array.isArray(structure.fuelConsumptionRate)
-    ? structure.fuelConsumptionRate[structure.level - 1]
-    : structure.fuelConsumptionRate || 0;
+  const isMaxLevel = structure.level >= structure.maxLevel[hqLevel - 1];
 
   const currentFuel = structure.currentFuel || 0;
   const fuelCapacity = structure.fuelCapacity || 100;
@@ -102,29 +96,6 @@ function SmeltingStructure({
       </div>
 
       <div className="structure-card__content">
-        <div className="structure-card__stats">
-          <div className="structure-card__stat">
-            <span className="stat__label">Output:</span>
-            <span className="stat__value">
-              {generationRate}/s {structure.resource} alloy
-            </span>
-          </div>
-          <div className="structure-card__stat">
-            <span className="stat__label">Fuel consumption:</span>
-            <span className="stat__value">{fuelConsumptionRate.toFixed(3)}/s</span>
-          </div>
-          {structure.recipe && (
-            <div className="structure-card__stat">
-              <span className="stat__label">Consumes:</span>
-              <span className="stat__value">
-                {Object.entries(structure.recipe)
-                  .map(([res, amt]) => `${amt} ${res}`)
-                  .join(", ")}
-              </span>
-            </div>
-          )}
-        </div>
-
         <div className="fuel-section">
           <div className="fuel-header">
             <span className="fuel-label">Fuel</span>
@@ -230,9 +201,7 @@ function SmeltingStructure({
             </button>
           </div>
         )}
-        {isMaxLevel && (
-          <p className="structure-card__max-level">MAX LEVEL</p>
-        )}
+        {isMaxLevel && <p className="structure-card__max-level">MAX LEVEL</p>}
 
         <button
           className="btn btn--collect"

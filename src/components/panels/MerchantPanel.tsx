@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
 import TabBtn from "@/components/ui/TabBtn";
 import Dialog from "@/components/ui/Dialog";
-import ResourceImage from "@/components/ui/image/ResourceImage";
+import Image from "@/components/ui/image/ResourceImage";
 
 interface MerchantPanelProps {
   isOpen: boolean;
@@ -42,25 +42,12 @@ function MerchantPanel({ isOpen, onClose }: MerchantPanelProps) {
             .filter((res) => res.type === selectedTab && res.unlocked)
             .map((res) => (
               <div key={res.name} className="item">
-                <ResourceImage type={res.type} value={res.value} size={75} />
+                <Image value={res.value} size={75} />
                 <span className="item__price">${res.sellingPrice}</span>
                 <button onClick={() => game.sellHalf(res)}>SELL HALF</button>
                 <button onClick={() => game.sellAll(res)}>SELL ALL</button>
               </div>
             ))}
-          {
-            game.resources
-              .filter((res) => res.type === selectedTab && !res.unlocked)
-              .map((res) => (
-                <div key={res.name} className="item">
-                  <div className="item__empty">?</div>
-                  <span className="item__price">${res.unlockedFor}</span>
-                  <button onClick={() => game.unlockResource(res)}>
-                    DISCOVER
-                  </button>
-                </div>
-              ))[0]
-          }
         </div>
       </div>
     </Dialog>

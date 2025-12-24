@@ -1,10 +1,16 @@
 import { useGame } from "@/contexts/GameContext";
 import { formatNumber } from "@/helpers/helperFunctions";
-import ResourceImage from "@/components/ui/image/ResourceImage";
+import Image from "@/components/ui/image/ResourceImage";
 
-const HQPanel: React.FC = () => {
-  const { structures, money, resources, upgradeStructure, getHQLevel } =
-    useGame();
+function HQPanel() {
+  const {
+    structures,
+    money,
+    resources,
+    upgradeStructure,
+    getHQLevel,
+    getResourceCapacity,
+  } = useGame();
 
   const hq = structures.find((s) => s.structureType === "hq");
 
@@ -24,43 +30,31 @@ const HQPanel: React.FC = () => {
   );
 
   const canAfford = canAffordMoney && canAffordResources;
-  const isMaxLevel = hqLevel >= (hq.maxLevel || 10);
-
-  const unlockedResources = resources.filter((r) => r.unlocked);
+  const isMaxLevel = hqLevel >= hq.maxLevel[0];
 
   return (
     <div className="panel hq-panel">
       <div className="panel__header">
-        <h2>Mining HQ</h2>
-        <div className="hq-level">
-          <span className="hq-level__value">{hqLevel}</span>
-          {!isMaxLevel && <span className="hq-level__max">/ {hq.maxLevel}</span>}
-        </div>
+        <span>{hq.name}</span>
+        <div className="hq-level">level {hqLevel}</div>
       </div>
 
       <div className="hq-info">
-        <div className="hq-storage">
-          <h3>Storage</h3>
-          <div className="hq-storage__resources">
-            {unlockedResources.map((resource) => (
-              <div key={resource.value} className="hq-storage__resource" title={`${resource.name}: ${formatNumber(resource.amount)} / ${formatNumber(resource.storageCapacity)}`}>
-                <ResourceImage
-                  type={resource.type}
-                  value={resource.value}
-                  size={32}
-                />
-              </div>
-            ))}
-          </div>
+        <div className="hq-storage-info">
+          <span>Ores storage: {getResourceCapacity("ore")}</span>
+          <span>Alloys storage: {getResourceCapacity("alloy")}</span>
         </div>
 
         {!isMaxLevel && (
           <div className="hq-upgrade">
-            <h3>Upgrade to Level {hqLevel + 1}</h3>
+            <h3>Requirements for level {hqLevel + 1}</h3>
             <div className="hq-upgrade__costs">
-              <div className={`hq-upgrade__cost ${!canAffordMoney ? "insufficient" : ""}`}>
-                <span className="hq-upgrade__cost-label">Money:</span>
-                <span>${formatNumber(upgradeCost)}</span>
+              <div
+                className={`hq-upgrade__cost ${
+                  !canAffordMoney ? "insufficient" : ""
+                }`}
+              >
+                <span>💲{formatNumber(upgradeCost)}</span>
               </div>
               {Object.entries(resourceCosts).map(([resourceId, amount]) => {
                 const resource = resources.find((r) => r.value === resourceId);
@@ -68,13 +62,11 @@ const HQPanel: React.FC = () => {
                 return (
                   <div
                     key={resourceId}
-                    className={`hq-upgrade__cost ${!hasEnough ? "insufficient" : ""}`}
+                    className={`hq-upgrade__cost ${
+                      !hasEnough ? "insufficient" : ""
+                    }`}
                   >
-                    <ResourceImage
-                      type={resource?.type || "ore"}
-                      value={resourceId}
-                      size={20}
-                    />
+                    <Image value={resourceId} size={20} />
                     <span>{amount}</span>
                   </div>
                 );
@@ -86,7 +78,7 @@ const HQPanel: React.FC = () => {
               onClick={() => upgradeStructure(hq.id)}
               disabled={!canAfford}
             >
-              {canAfford ? "UPGRADE" : "INSUFFICIENT"}
+              {canAfford ? "UPGRADE" : "REQUIREMENTS NOT MET"}
             </button>
           </div>
         )}
@@ -99,6 +91,6 @@ const HQPanel: React.FC = () => {
       </div>
     </div>
   );
-};
+}
 
 export default HQPanel;

@@ -2,18 +2,20 @@ interface GameContext {
   money: number;
   setMoney: Dispatch<SetStateAction<number>>;
   resources: GameResource[];
-  structures: GameStructure[];
-  sellAll: (resource: GameResource) => void;
-  sellHalf: (resource: GameResource) => void;
-  unlockResource: (res: GameResource) => void;
+  collectResources: (structureId: string) => void;
   setResourceActiveState: (res: GameResource, value: boolean) => void;
   setResourceIsDisplayedState: (res: GameResource, value: boolean) => void;
+  sellAll: (resource: GameResource) => void;
+  sellHalf: (resource: GameResource) => void;
+  structures: GameStructure[];
   purchaseStructure: (structureId: string) => void;
-  collectResources: (structureId: string) => void;
+  upgradeStructure: (structureId: string) => void;
   refuelStructure: (structureId: string, amount: number) => void;
   inputOre: (structureId: string, amount: number) => void;
-  upgradeStructure: (structureId: string) => void;
+  options: GameOptions;
+  updateGameOption: (option: string, value: boolean) => void;
   getHQLevel: () => number;
+  getResourceCapacity: (type: "ore" | "alloy") => number;
 }
 
 interface GameResource {
@@ -27,9 +29,8 @@ interface GameResource {
   smeltingRecipe?: { [resource: string]: number };
   type: "ore" | "alloy";
   unlocked: boolean;
-  unlockedFor: number;
+  unlockedAtHqLevel: number;
   value: string;
-  storageCapacity: number;
 }
 
 interface GameResourceOre extends GameResource {
@@ -50,20 +51,26 @@ interface GameStructure {
   level: number;
   accumulated: number;
   structureType: "mining" | "smelting" | "storage" | "hq";
+  maxLevel: number[];
   recipe?: { [resource: string]: number };
   fuelConsumptionRate?: number | number[];
   fuelCapacity?: number;
   currentFuel?: number;
   oreCapacity?: number;
   currentOre?: number;
-  storageProvided?: { [resource: string]: number | number[] };
+  storageProvided?: number[];
   unlocked?: boolean;
   upgradeCost?: number;
   upgradeResourceCost?: { [resource: string]: number };
-  maxLevel?: number;
 }
 
 interface DialogProps {
   showDialog: boolean;
   closeDialog: () => void;
+}
+
+interface GameOptions {
+  showMiningStructures: boolean;
+  showSmeltingStructures: boolean;
+  showStorageStructures: boolean;
 }

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { formatNumber } from "@/helpers/helperFunctions";
 import SelectResourcesDialog from "@/components/dialogs/SelectResourcesDialog";
-import ResourceImage from "@/components/ui/image/ResourceImage";
+import Image from "@/components/ui/image/ResourceImage";
+import { useGame } from "@/contexts/GameContext";
 
 interface ResourcesPanelProps {
   ores: GameResourceOre[];
@@ -9,6 +10,7 @@ interface ResourcesPanelProps {
 }
 
 function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
+  const { getResourceCapacity } = useGame();
   const [displayedOres, setDisplayedOres] = useState<GameResourceOre[]>(
     ores.filter((ore) => ore.isDisplayed)
   );
@@ -23,6 +25,17 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
     setDisplayedOres(ores.filter((ore) => ore.isDisplayed));
     setDisplayedAlloys(alloys.filter((alloy) => alloy.isDisplayed));
   }, [ores]);
+
+  function getStorageColor(amount: number, capacity: number): string {
+    if (amount >= capacity) {
+      return "orangered";
+    } else if (amount > capacity / 2) {
+      return "orange";
+    }else if (amount > capacity / 3) {
+      return "yellow";
+    }
+    return "inherit";
+  }
 
   return (
     <div className="resources-panel">
@@ -39,16 +52,16 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
       <div className="resources-panel__section">
         {showingOres ? (
           <>
-            {displayedOres.map((ore) => (
-              <p key={ore.name}>
-                <ResourceImage type="ore" value={ore.value} />
-                {ore.storageCapacity > 0
-                  ? `${formatNumber(ore.amount)} / ${formatNumber(
-                      ore.storageCapacity
-                    )}`
-                  : formatNumber(ore.amount)}
-              </p>
-            ))}
+            {displayedOres.map((ore) => {
+              const capacity = getResourceCapacity("ore");
+              const color = getStorageColor(ore.amount, capacity);
+              return (
+                <p key={ore.name}>
+                  <Image value={ore.value} />
+                  <span style={{ color }}>{formatNumber(ore.amount)}</span>
+                </p>
+              );
+            })}
             <button
               style={{ marginRight: "5rem" }}
               onClick={() => setShowingOres(false)}
@@ -59,16 +72,16 @@ function ResourcesPanel({ ores, alloys }: ResourcesPanelProps) {
           </>
         ) : (
           <>
-            {displayedAlloys.map((alloy) => (
-              <p key={alloy.name}>
-                <ResourceImage type="alloy" value={alloy.value} />
-                {alloy.storageCapacity > 0
-                  ? `${formatNumber(alloy.amount)} / ${formatNumber(
-                      alloy.storageCapacity
-                    )}`
-                  : formatNumber(alloy.amount)}
-              </p>
-            ))}
+            {displayedAlloys.map((alloy) => {
+              const capacity = getResourceCapacity("alloy");
+              const color = getStorageColor(alloy.amount, capacity);
+              return (
+                <p key={alloy.name}>
+                  <Image value={alloy.value} />
+                  <span style={{ color }}>{formatNumber(alloy.amount)}</span>
+                </p>
+              );
+            })}
             <button
               style={{ marginRight: "5rem" }}
               onClick={() => setShowingOres(true)}

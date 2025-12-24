@@ -17,58 +17,48 @@ import goldAlloy from "@/assets/images/alloys/gold.png";
 import platinumAlloy from "@/assets/images/alloys/platinum.png";
 
 interface ResourceImageProps {
-  type: "ore" | "alloy";
   value: string;
   size?: number;
   className?: string;
 }
 
-function ResourceImage({ type, value, size = 25, className }: ResourceImageProps) {
-  function getResourceImage() {
-    if (type === "ore") return _getOreImage(value);
-    else if (type === "alloy") return _getAlloyImage(value);
-  }
-
-  function _getOreImage(value: string) {
+function Image({value, size = 25, className }: ResourceImageProps) {
+  function _getImage(value: string) {
     switch (value) {
-      case "iron":
+      // ORES
+      case "iron_ore":
         return ironOre;
-      case "bronze":
+      case "bronze_ore":
         return bronzeOre;
-      case "silver":
+      case "silver_ore":
         return silverOre;
-      case "gold":
+      case "gold_ore":
         return goldOre;
-      case "platinum":
+      case "platinum_ore":
         return platinumOre;
-      case "diamond":
+      case "diamond_ore":
         return diamondOre;
-      case "titanium":
+      case "titanium_ore":
         return titaniumOre;
-      case "crystal":
+      case "crystal_ore":
         return crystalOre;
-      case "etherium":
+      case "etherium_ore":
         return etheriumOre;
-      case "oxidium":
+      case "oxidium_ore":
         return oxidiumOre;
-      case "baseterium":
+      case "baseterium_ore":
         return baseteriumOre;
-      default:
-        return undefined;
-    }
-  }
 
-  function _getAlloyImage(value: string) {
-    switch (value) {
-      case "iron":
+      // ALLOYS
+      case "iron_alloy":
         return ironAlloy;
-      case "bronze":
+      case "bronze_alloy":
         return bronzeAlloy;
-      case "silver":
+      case "silver_alloy":
         return silverAlloy;
-      case "gold":
+      case "gold_alloy":
         return goldAlloy;
-      case "platinum":
+      case "platinum_alloy":
         return platinumAlloy;
       default:
         return undefined;
@@ -78,7 +68,7 @@ function ResourceImage({ type, value, size = 25, className }: ResourceImageProps
   return (
     <img
       className={className}
-      src={getResourceImage()}
+      src={_getImage(value)}
       alt={value}
       width={size}
       height={size}
@@ -86,4 +76,4 @@ function ResourceImage({ type, value, size = 25, className }: ResourceImageProps
   );
 }
 
-export default ResourceImage;
+export default Image;

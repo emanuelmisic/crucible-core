@@ -1,12 +1,3 @@
-function getStructureResourceType(structureType: string) {
-  switch (structureType) {
-    case "mining":
-      return "ore";
-    case "smelting":
-      return "alloy";
-  }
-}
-
 function formatNumber(number: number): string {
   let calculatedValue = "";
   if (number >= 10000 && number < 1000000) {
@@ -36,4 +27,4 @@ function _removeExcessZero(value: string): string {
   }
 }
 
-export { formatNumber, getStructureResourceType };
+export { formatNumber };

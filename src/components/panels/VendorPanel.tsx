@@ -1,12 +1,9 @@
 import { useState } from "react";
 import { useGame } from "@/contexts/GameContext";
-import {
-  formatNumber,
-  getStructureResourceType,
-} from "@/helpers/helperFunctions";
+import { formatNumber } from "@/helpers/helperFunctions";
 import TabBtn from "@/components/ui/TabBtn";
 import Dialog from "@/components/ui/Dialog";
-import ResourceImage from "@/components/ui/image/ResourceImage";
+import Image from "@/components/ui/image/ResourceImage";
 
 type VendorTab = "mining" | "smelting" | "storage";
 
@@ -119,10 +116,7 @@ const StructureItem: React.FC<StructureItemProps> = ({
       <div className="item__details">
         <div>
           +
-          <ResourceImage
-            type={getStructureResourceType(structure.structureType) ?? "ore"}
-            value={structure.resource ?? ""}
-          />
+          <Image value={structure.resource ?? ""} />
         </div>
         {structure.recipe && (
           <p className="item__stat item__recipe">

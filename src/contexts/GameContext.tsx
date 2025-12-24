@@ -7,6 +7,7 @@ import {
 } from "react";
 import { INITIAL_RESOURCES } from "@/constants/resources";
 import { STRUCTURES, FUEL_COST_PER_UNIT } from "@/constants/structures";
+import { INITIAL_OPTIONS } from "@/constants";
 
 const GameContextInstance = createContext<GameContext | undefined>(undefined);
 
@@ -14,6 +15,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   const [money, setMoney] = useState(1000);
   const [resources, setResources] = useState<GameResource[]>(INITIAL_RESOURCES);
   const [structures, setStructures] = useState<GameStructure[]>(STRUCTURES);
+  const [options, setOptions] = useState(INITIAL_OPTIONS);
 
   // Game loop - ticks every 100ms
   useEffect(() => {
@@ -26,38 +28,20 @@ function GameContextComposer({ children }: { children: ReactNode }) {
 
   // STORAGE LOGIC
 
-  function calculateStorageCapacity(resourceType: string): number {
-    const initialResource = INITIAL_RESOURCES.find(
-      (r) => r.value === resourceType
+  function getResourceCapacity(type: "ore" | "alloy"): number {
+    const hqCapacity = 50;
+
+    const storages = structures.filter(
+      (s) => s.structureType === "storage" && s.resource === type
     );
-    const baseCapacity = initialResource?.storageCapacity || 0;
 
-    const bonusCapacity = structures
-      .filter((s) => s.structureType === "storage" && s.level > 0)
-      .reduce((total, structure) => {
-        const providedValue = structure.storageProvided?.[resourceType];
-        let providedCapacity = 0;
+    const storagesCapacity = storages.reduce((total, s) => {
+      const providedStorage = s.storageProvided?.[s.level - 1] || 0;
+      return total + providedStorage;
+    }, 0);
 
-        if (Array.isArray(providedValue)) {
-          providedCapacity = providedValue[structure.level - 1] || 0;
-        } else if (typeof providedValue === "number") {
-          providedCapacity = providedValue;
-        }
-
-        return total + providedCapacity;
-      }, 0);
-
-    return baseCapacity + bonusCapacity;
+    return hqCapacity + storagesCapacity;
   }
-
-  useEffect(() => {
-    setResources((prev) =>
-      prev.map((res) => ({
-        ...res,
-        storageCapacity: calculateStorageCapacity(res.value),
-      }))
-    );
-  }, [structures]);
 
   // MERCHANT LOGIC
 
@@ -176,7 +160,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     );
     if (!resource) return;
 
-    const spaceAvailable = resource.storageCapacity - resource.amount;
+    const spaceAvailable = getResourceCapacity(resourceType) - resource.amount;
     const actualCollected = Math.min(amountToCollect, spaceAvailable);
 
     if (actualCollected <= 0) {
@@ -307,18 +291,11 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     }
   }
 
-  function calculateMaxLevel(structureType: string, hqLevel: number): number {
-    if (structureType === "hq") return 2;
-    let maxLevel = 5;
-    if (hqLevel >= 2) maxLevel += 2;
-    return maxLevel;
-  }
-
   function upgradeStructure(structureId: string) {
     const structure = structures.find((s) => s.id === structureId);
 
     if (!structure) return;
-    if (structure.level >= (structure.maxLevel || 5)) {
+    if (structure.level >= structure.maxLevel[getHQLevel() - 1]) {
       console.warn("Structure is already at max level");
       return;
     }
@@ -363,27 +340,17 @@ function GameContextComposer({ children }: { children: ReactNode }) {
 
         if (s.structureType === "mining") {
           if (Array.isArray(baseStructure.generationRate)) {
-            newStats.generationRate = baseStructure.generationRate[newLevel - 1];
+            newStats.generationRate =
+              baseStructure.generationRate[newLevel - 1];
           }
         } else if (s.structureType === "smelting") {
           if (Array.isArray(baseStructure.generationRate)) {
-            newStats.generationRate = baseStructure.generationRate[newLevel - 1];
+            newStats.generationRate =
+              baseStructure.generationRate[newLevel - 1];
           }
           if (Array.isArray(baseStructure.fuelConsumptionRate)) {
             newStats.fuelConsumptionRate =
               baseStructure.fuelConsumptionRate[newLevel - 1];
-          }
-        } else if (s.structureType === "storage") {
-          if (baseStructure.storageProvided) {
-            const newStorageProvided: { [resource: string]: number } = {};
-            for (const [resource, values] of Object.entries(
-              baseStructure.storageProvided
-            )) {
-              if (Array.isArray(values)) {
-                newStorageProvided[resource] = values[newLevel - 1];
-              }
-            }
-            newStats.storageProvided = newStorageProvided;
           }
         }
 
@@ -402,37 +369,18 @@ function GameContextComposer({ children }: { children: ReactNode }) {
 
     setStructures((prev) =>
       prev.map((structure) => {
-        const unlockRequirements: { [key: string]: number } = {
-          basic_iron_drill: 1,
-          basic_warehouse: 1,
-          basic_bronze_drill: 2,
-          basic_silver_drill: 2,
-          basic_iron_smelter: 2,
-        };
-
-        const requiredLevel = unlockRequirements[structure.id] || 1;
-        const isUnlocked = hqLevel >= requiredLevel;
-
-        const newMaxLevel = calculateMaxLevel(structure.structureType, hqLevel);
+        const isUnlocked = structure.maxLevel[hqLevel - 1] !== 0;
 
         return {
           ...structure,
           unlocked: structure.structureType === "hq" ? true : isUnlocked,
-          maxLevel: newMaxLevel,
         };
       })
     );
 
     setResources((prev) =>
       prev.map((resource) => {
-        const resourceUnlockRequirements: { [key: string]: number } = {
-          iron: 1,
-          "iron alloy": 2,
-          bronze: 2,
-          silver: 2,
-        };
-
-        const requiredLevel = resourceUnlockRequirements[resource.value] || 1;
+        const requiredLevel = resource.unlockedAtHqLevel;
         const isUnlocked = hqLevel >= requiredLevel;
 
         return {
@@ -465,33 +413,6 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     });
   }
 
-  function unlockResource(res: GameResource) {
-    if (money < res.unlockedFor) return;
-    setMoney(money - res.unlockedFor);
-    setResources((prevState) => {
-      return prevState.map((e) => {
-        if (e.value === res.value && e.type === res.type)
-          return { ...e, unlocked: true };
-        return e;
-      });
-    });
-    if (res.type === "ore") {
-      const ores = resources.filter(
-        (r) => r.type === "ore"
-      ) as GameResourceOre[];
-      if (ores.filter((o) => o.active).length < 3) {
-        setResourceActiveState(res, true);
-      }
-    } else {
-      const alloys = resources.filter(
-        (r) => r.type === "alloy"
-      ) as GameResourceAlloy[];
-      if (alloys.filter((a) => a.active).length === 0) {
-        setResourceActiveState(res, true);
-      }
-    }
-  }
-
   function setResourceActiveState(res: GameResource, value: boolean) {
     setResources((prevState) => {
       return prevState.map((e) => {
@@ -514,22 +435,34 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     });
   }
 
+  function updateGameOption(option: string, value: boolean) {
+    setOptions((prev) => {
+      return { ...prev, [option]: value };
+    });
+  }
+
   const contextValue: GameContext = {
     money,
     setMoney,
+
     resources,
-    structures,
-    sellAll,
-    sellHalf,
-    unlockResource,
+    collectResources,
     setResourceActiveState,
     setResourceIsDisplayedState,
+    sellAll,
+    sellHalf,
+
+    structures,
     purchaseStructure,
-    collectResources,
+    upgradeStructure,
     refuelStructure,
     inputOre,
-    upgradeStructure,
+
+    options,
+    updateGameOption,
+
     getHQLevel,
+    getResourceCapacity,
   };
 
   return (
