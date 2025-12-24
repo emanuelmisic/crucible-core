@@ -82,6 +82,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    color: #aaaaaa;
   }
 }
 
@@ -93,6 +94,27 @@
 .status--stopped {
   color: #f44336;
   background: rgba(244, 67, 54, 0.2);
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+
+  &__fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%);
+    transition: width 0.3s ease, background 0.3s ease;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  }
+
+  &__fill--low {
+    background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+  }
 }
 
 /* Fuel Section */
@@ -133,27 +155,6 @@
   50% {
     opacity: 0.6;
   }
-}
-
-.fuel-bar {
-  width: 100%;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  overflow: hidden;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.fuel-bar__fill {
-  height: 100%;
-  background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%);
-  transition: width 0.3s ease, background 0.3s ease;
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-}
-
-.fuel-bar__fill--low {
-  background: linear-gradient(90deg, #ff9800 0%, #ffb74d 100%);
-  box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
 }
 
 /* Refuel Section */

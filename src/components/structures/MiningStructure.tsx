@@ -1,6 +1,8 @@
 import Image from "@/components/ui/image/ResourceImage";
-import { STRUCTURES } from "@/constants/structures";
-import { formatNumber } from "@/helpers/helperFunctions";
+import {
+  calculateStructureUpgradeCost,
+  formatNumber,
+} from "@/helpers/helperFunctions";
 
 interface MiningStructureProps {
   structure: GameStructure;
@@ -17,28 +19,34 @@ function MiningStructure({
   onCollect,
   onUpgrade,
 }: MiningStructureProps) {
-  const canCollect = structure.accumulated >= 1;
-
-  function calculateUpgradeCost(): number {
-    const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
-    if (baseStructure && Array.isArray(baseStructure.cost)) {
-      return baseStructure.cost[structure.level] || 0;
-    }
-    return 0;
-  };
-
-  const upgradeCost = calculateUpgradeCost();
+  const upgradeCost = calculateStructureUpgradeCost(structure);
   const canAfford = money >= upgradeCost;
   const isMaxLevel = structure.level >= structure.maxLevel[hqLevel - 1];
+  const canCollect = structure.accumulated >= 1;
 
   return (
     <div className="structure-card structure-card--mining">
       <div className="structure-card__header">
+        <Image value={structure.resource} size={42} />
         <h4 className="structure-card__name">{structure.name}</h4>
         <span className="structure-card__level">Level {structure.level}</span>
       </div>
 
       <div className="structure-card__content">
+        <span>Accumulated: {Math.floor(structure.accumulated)}</span>
+        <div className="progress-bar">
+          <div className={`progress-bar__fill`} style={{ width: `${10}%` }} />
+        </div>
+        <button
+          className="btn btn--collect"
+          onClick={() => onCollect(structure.id)}
+          disabled={!canCollect}
+        >
+          Collect
+        </button>
+      </div>
+
+      <div className="structure-card__actions">
         {!isMaxLevel && (
           <div className="structure-card__upgrade">
             <button
@@ -51,23 +59,6 @@ function MiningStructure({
           </div>
         )}
         {isMaxLevel && <p className="structure-card__max-level">MAX LEVEL</p>}
-      </div>
-
-      <div className="structure-card__actions">
-        <button
-          className="btn btn--collect"
-          onClick={() => onCollect(structure.id)}
-          disabled={!canCollect}
-        >
-          {canCollect ? (
-            <span>
-              + {Math.floor(structure.accumulated)}{" "}
-              <Image value={structure.resource} />
-            </span>
-          ) : (
-            "Not ready"
-          )}
-        </button>
       </div>
     </div>
   );

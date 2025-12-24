@@ -8,13 +8,12 @@ export const STRUCTURES: GameStructure[] = [
     resource: "",
     generationRate: 0,
     level: 1,
-    cost: [],
+    cost: [0, 500, 2000],
     accumulated: 0,
     structureType: "hq",
     unlocked: true,
-    upgradeCost: 2000,
-    upgradeResourceCost: { iron_ore: 100, bronze_ore: 100 },
-    maxLevel: [2],
+    resourceCost: [{}, { iron_ore: 50 }, { iron_ore: 100, bronze_ore: 100 }],
+    maxLevel: [3],
   },
 
   // Mining structures

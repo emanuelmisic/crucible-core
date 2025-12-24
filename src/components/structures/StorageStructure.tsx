@@ -20,7 +20,7 @@ function StorageStructure({
       return baseStructure.cost[structure.level] || 0;
     }
     return 0;
-  };
+  }
 
   const upgradeCost = calculateUpgradeCost();
   const canAfford = money >= upgradeCost;
@@ -34,7 +34,9 @@ function StorageStructure({
       </div>
       <div className="structure-card__content">
         <div className="storage-info">
-          <p>Provides {structure.storageProvided?.[hqLevel - 1]} storage</p>
+          <p>
+            Provides {structure.storageProvided?.[structure.level - 1]} storage
+          </p>
         </div>
 
         {!isMaxLevel && (

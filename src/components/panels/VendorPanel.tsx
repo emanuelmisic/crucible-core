@@ -50,7 +50,6 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
                     key={structure.id}
                     structure={structure}
                     money={game.money}
-                    hqLevel={game.getHQLevel()}
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
@@ -66,7 +65,6 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
                     key={structure.id}
                     structure={structure}
                     money={game.money}
-                    hqLevel={game.getHQLevel()}
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
@@ -82,7 +80,6 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
                     key={structure.id}
                     structure={structure}
                     money={game.money}
-                    hqLevel={game.getHQLevel()}
                     onPurchase={game.purchaseStructure}
                   />
                 ))}
@@ -97,18 +94,12 @@ function VendorPanel({ isOpen, onClose }: VendorPanelProps) {
 interface StructureItemProps {
   structure: GameStructure;
   money: number;
-  hqLevel: number;
   onPurchase: (id: string) => void;
 }
 
-const StructureItem: React.FC<StructureItemProps> = ({
-  structure,
-  money,
-  hqLevel,
-  onPurchase,
-}) => {
+function StructureItem({ structure, money, onPurchase }: StructureItemProps) {
   const isOwned = structure.level > 0;
-  const canAfford = money >= structure.cost[hqLevel - 1];
+  const canAfford = money >= structure.cost[structure.level];
 
   return (
     <div className={`item ${isOwned ? "item__bought" : ""}`}>
@@ -139,12 +130,12 @@ const StructureItem: React.FC<StructureItemProps> = ({
             onClick={() => onPurchase(structure.id)}
             disabled={!canAfford}
           >
-            ${formatNumber(structure.cost[hqLevel - 1])}
+            ${formatNumber(structure.cost[0])}
           </button>
         </>
       )}
     </div>
   );
-};
+}
 
 export default VendorPanel;

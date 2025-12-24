@@ -1,5 +1,8 @@
-import { FUEL_COST_PER_UNIT, STRUCTURES } from "@/constants/structures";
-import { formatNumber } from "@/helpers/helperFunctions";
+import { FUEL_COST_PER_UNIT } from "@/constants/structures";
+import {
+  calculateStructureUpgradeCost,
+  formatNumber,
+} from "@/helpers/helperFunctions";
 
 interface SmeltingStructureProps {
   structure: GameStructure;
@@ -22,19 +25,11 @@ function SmeltingStructure({
   onInputOre,
   onUpgrade,
 }: SmeltingStructureProps) {
-  const canCollect = structure.accumulated >= 1;
-
-  function calculateUpgradeCost(): number {
-    const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
-    if (baseStructure && Array.isArray(baseStructure.cost)) {
-      return baseStructure.cost[structure.level] || 0;
-    }
-    return 0;
-  }
-
-  const upgradeCost = calculateUpgradeCost();
+  const upgradeCost = calculateStructureUpgradeCost(structure);
   const canAffordUpgrade = money >= upgradeCost;
   const isMaxLevel = structure.level >= structure.maxLevel[hqLevel - 1];
+
+  const canCollect = structure.accumulated >= 1;
 
   const currentFuel = structure.currentFuel || 0;
   const fuelCapacity = structure.fuelCapacity || 100;
@@ -105,10 +100,10 @@ function SmeltingStructure({
               {currentFuel.toFixed(1)} / {fuelCapacity}
             </span>
           </div>
-          <div className="fuel-bar">
+          <div className="progress-bar">
             <div
-              className={`fuel-bar__fill ${
-                isLowFuel ? "fuel-bar__fill--low" : ""
+              className={`progress-bar__fill ${
+                isLowFuel ? "progress-bar__fill--low" : ""
               }`}
               style={{ width: `${fuelPercentage}%` }}
             />
@@ -152,10 +147,10 @@ function SmeltingStructure({
               {currentOre.toFixed(1)} / {oreCapacity}
             </span>
           </div>
-          <div className="fuel-bar">
+          <div className="progress-bar">
             <div
-              className={`fuel-bar__fill ${
-                isLowOre ? "fuel-bar__fill--low" : ""
+              className={`progress-bar__fill ${
+                isLowOre ? "progress-bar__fill--low" : ""
               }`}
               style={{ width: `${orePercentage}%` }}
             />

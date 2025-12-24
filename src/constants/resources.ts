@@ -44,7 +44,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 20,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 2,
+    unlockedAtHqLevel: 3,
     value: "gold_ore",
   },
   {
@@ -56,7 +56,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 35,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 3,
+    unlockedAtHqLevel: 4,
     value: "platinum_ore",
   },
   {
@@ -68,7 +68,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 100,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 4,
+    unlockedAtHqLevel: 5,
     value: "diamond_ore",
   },
   {
@@ -80,7 +80,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 250,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 5,
+    unlockedAtHqLevel: 6,
     value: "titanium_ore",
   },
   {
@@ -92,7 +92,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 250,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 5,
+    unlockedAtHqLevel: 7,
     value: "crystal_ore",
   },
   {
@@ -104,7 +104,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 250,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 6,
+    unlockedAtHqLevel: 8,
     value: "etherium_ore",
   },
   {
@@ -116,7 +116,7 @@ const INITIAL_ORES: GameResourceOre[] = [
     sellingPrice: 250,
     type: "ore",
     unlocked: false,
-    unlockedAtHqLevel: 6,
+    unlockedAtHqLevel: 9,
     value: "oxidium_ore",
   },
   {

@@ -17,11 +17,10 @@ function HQPanel() {
   if (!hq) return null;
 
   const hqLevel = getHQLevel();
-  const upgradeCost = hq.upgradeCost || 0;
-  const resourceCosts = hq.upgradeResourceCost || {};
+  const upgradeCost = hq.cost[hqLevel];
+  const resourceCosts = hq.resourceCost?.[hqLevel] || {};
 
   const canAffordMoney = money >= upgradeCost;
-
   const canAffordResources = Object.entries(resourceCosts).every(
     ([resourceId, amount]) => {
       const resource = resources.find((r) => r.value === resourceId);

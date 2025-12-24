@@ -279,16 +279,11 @@ function GameContextComposer({ children }: { children: ReactNode }) {
   }
 
   function calculateUpgradeCost(structure: GameStructure): number {
-    if (structure.structureType === "hq") {
-      if (structure.level === 1) return 2000;
-      return 0;
-    } else {
-      const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
-      if (baseStructure && Array.isArray(baseStructure.cost)) {
-        return baseStructure.cost[structure.level] || 0;
-      }
-      return 0;
+    const baseStructure = STRUCTURES.find((s) => s.id === structure.id);
+    if (baseStructure && Array.isArray(baseStructure.cost)) {
+      return baseStructure.cost[structure.level] || 0;
     }
+    return 0;
   }
 
   function upgradeStructure(structureId: string) {
@@ -301,7 +296,7 @@ function GameContextComposer({ children }: { children: ReactNode }) {
     }
 
     const upgradeCost = calculateUpgradeCost(structure);
-    const resourceCosts = structure.upgradeResourceCost || {};
+    const resourceCosts = structure.resourceCost?.[structure.level] || {};
 
     if (money < upgradeCost) {
       console.warn("Not enough money to upgrade");

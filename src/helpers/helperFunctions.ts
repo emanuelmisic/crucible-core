@@ -1,3 +1,13 @@
+import { STRUCTURES } from "@/constants/structures";
+
+function calculateStructureUpgradeCost(str: GameStructure): number {
+  const baseStructure = STRUCTURES.find((s) => s.id === str.id);
+  if (baseStructure && Array.isArray(baseStructure.cost)) {
+    return baseStructure.cost[str.level] || 0;
+  }
+  return 0;
+}
+
 function formatNumber(number: number): string {
   let calculatedValue = "";
   if (number >= 10000 && number < 1000000) {
@@ -27,4 +37,4 @@ function _removeExcessZero(value: string): string {
   }
 }
 
-export { formatNumber };
+export { formatNumber, calculateStructureUpgradeCost };

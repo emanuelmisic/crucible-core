@@ -60,8 +60,7 @@ interface GameStructure {
   currentOre?: number;
   storageProvided?: number[];
   unlocked?: boolean;
-  upgradeCost?: number;
-  upgradeResourceCost?: { [resource: string]: number };
+  resourceCost?: { [resource: string]: number }[];
 }
 
 interface DialogProps {
